@@ -2,20 +2,27 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request, secret: "postumus-prod-secret-2026-secure" });
+  const { pathname } = request.nextUrl;
 
-  const isAuthPage = request.nextUrl.pathname === "/login";
-  const isApiAuth = request.nextUrl.pathname.startsWith("/api/auth");
-  const isApi = request.nextUrl.pathname.startsWith("/api/");
-
-  if (isApiAuth) return NextResponse.next();
-
-  if (!token && !isAuthPage && !isApi) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  // Skip auth pages and API routes
+  if (
+    pathname === "/login" ||
+    pathname.startsWith("/api/") ||
+    pathname.startsWith("/_next/") ||
+    pathname.includes("favicon")
+  ) {
+    return NextResponse.next();
   }
 
-  if (token && isAuthPage) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  const token = await getToken({
+    req: request,
+    secret: "postumus-prod-secret-2026-secure",
+    secureCookie: process.env.NODE_ENV === "production",
+  });
+
+  if (!token) {
+    const loginUrl = new URL("/login", request.url);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
@@ -23,6 +30,13 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|api/).*)",
+    "/dashboard/:path*",
+    "/clientes/:path*",
+    "/fornecedores/:path*",
+    "/mercadorias/:path*",
+    "/carnes/:path*",
+    "/financeiro/:path*",
+    "/relatorios/:path*",
+    "/usuarios/:path*",
   ],
 };
