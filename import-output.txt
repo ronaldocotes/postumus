@@ -1,0 +1,66 @@
+Starting at 26/04/2026  1:07:46,94 
+Target: ep-winter-mountain-acangl3p.sa-east-1.aws.neon.tech/neondb?sslmode=require
+Access DB loaded
+(node:4364) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Connected!
+Admin OK
+48 employees OK
+343 clients OK
+  Carnês: 20, Payments: 229
+  Carnês: 120, Payments: 1452
+  Carnês: 220, Payments: 2607
+  Carnês: 320, Payments: 3377
+  Carnês: 420, Payments: 3517
+  Carnês: 520, Payments: 4695
+  Carnês: 620, Payments: 5892
+  Carnês: 720, Payments: 6984
+  Carnês: 820, Payments: 8141
+  Carnês: 920, Payments: 9267
+  Carnês: 1020, Payments: 10366
+  Carnês: 1120, Payments: 11496
+  Carnês: 1220, Payments: 12630
+  Carnês: 1320, Payments: 13900
+  Carnês: 1420, Payments: 15130
+  Carnês: 1520, Payments: 16061
+  Carnês: 1620, Payments: 17098
+  Carnês: 1720, Payments: 18278
+  Carnês: 1820, Payments: 19465
+  Carnês: 1920, Payments: 20633
+  Carnês: 2020, Payments: 21804
+  Carnês: 2120, Payments: 22972
+  Carnês: 2220, Payments: 24129
+  Carnês: 2320, Payments: 25302
+  Carnês: 2420, Payments: 26441
+  Carnês: 2520, Payments: 27514
+  Carnês: 2620, Payments: 28613
+  Carnês: 2720, Payments: 29684
+  Carnês: 2820, Payments: 30763
+  Carnês: 2920, Payments: 31764
+  Carnês: 3020, Payments: 32793
+  Carnês: 3120, Payments: 33749
+  Carnês: 3220, Payments: 34756
+  Carnês: 3320, Payments: 35744
+  Carnês: 3420, Payments: 36808
+  Carnês: 3520, Payments: 37988
+  Carnês: 3620, Payments: 39040
+  Carnês: 3720, Payments: 40233
+  Carnês: 3820, Payments: 41365
+  Carnês: 3920, Payments: 42359
+
+3981 carnês, 42818 payments imported!
+  User: 49
+  Client: 343
+  Dependent: 3426
+  Carne: 3981
+  Payment: 41907
+
+DONE!
+Finished at 26/04/2026  2:22:37,94 

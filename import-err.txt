@@ -1,4 +1,4 @@
-(node:10932) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+(node:25052) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
 In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
 
 To prepare for this change:
@@ -7,3 +7,24 @@ To prepare for this change:
 
 See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
 (Use `node --trace-warnings ...` to show where the warning was created)
+node:events:487
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: Connection terminated unexpectedly
+    at Connection.<anonymous> (C:\Users\sdcot\funeraria-system\node_modules\pg\lib\client.js:180:73)
+    at Object.onceWrapper (node:events:630:28)
+    at Connection.emit (node:events:509:28)
+    at Socket.<anonymous> (C:\Users\sdcot\funeraria-system\node_modules\pg\lib\connection.js:61:12)
+    at Socket.emit (node:events:521:24)
+    at TCP.<anonymous> (node:net:350:12)
+Emitted 'error' event on Client instance at:
+    at Client._handleErrorEvent (C:\Users\sdcot\funeraria-system\node_modules\pg\lib\client.js:393:10)
+    at Connection.<anonymous> (C:\Users\sdcot\funeraria-system\node_modules\pg\lib\client.js:198:16)
+    at Object.onceWrapper (node:events:630:28)
+    at Connection.emit (node:events:509:28)
+    at Socket.<anonymous> (C:\Users\sdcot\funeraria-system\node_modules\pg\lib\connection.js:61:12)
+    at Socket.emit (node:events:521:24)
+    at TCP.<anonymous> (node:net:350:12)
+
+Node.js v24.15.0

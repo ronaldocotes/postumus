@@ -1,0 +1,15 @@
+Terminating stale connections...
+  Killing PID 5959
+Cleaning tables...
+  Payment cleaned
+  Carne cleaned
+  Dependent cleaned
+  Client cleaned
+  User cleaned
+  FinancialTransaction cleaned
+  User: 0
+  Client: 0
+  Dependent: 0
+  Carne: 0
+  Payment: 0
+CLEANUP DONE - ready for fresh import

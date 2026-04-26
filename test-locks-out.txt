@@ -1,0 +1,17 @@
+Checking locks...
+Active connections: 3
+  PID 2789: state=idle in transaction, wait=Client/ClientRead, query=
+          INSERT INTO "Payment" (
+            id, "carneId", installment, "dueDate", amount, "paidA
+  PID 5959: state=active, wait=Lock/transactionid, query=
+      INSERT INTO "User" (id, name, email, password, role, active, "createdAt", "updatedAt")
+      
+  PID 12439: state=active, wait=Lock/transactionid, query=
+    INSERT INTO "User" (id, name, email, password, role, active, "createdAt", "updatedAt")
+    VALU
+  Terminating PID 2789...
+
+Trying INSERT via pool.query...
+INSERT took 82ms, rowCount=1
+Cleanup done
+DONE

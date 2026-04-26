@@ -115,20 +115,20 @@ export default function RelatoriosPage() {
           {reportType === "clientes" && (
             <div>
               <p className="text-sm text-gray-500 mb-4">{report.data?.length || 0} clientes encontrados</p>
-              <table className="w-full text-sm">
-                <thead><tr className="border-b">
-                  <th className="py-2 text-left font-medium text-gray-600">Nome</th>
-                  <th className="py-2 text-left font-medium text-gray-600">CPF</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Telefone</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Cidade</th>
+              <table className="w-full text-sm text-gray-900">
+                <thead><tr className="border-b bg-gray-50">
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Nome</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">CPF</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Telefone</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Cidade</th>
                 </tr></thead>
                 <tbody>
                   {report.data?.map((c: any) => (
-                    <tr key={c.id} className="border-b border-gray-100">
-                      <td className="py-2">{c.name}</td>
-                      <td className="py-2">{c.cpf}</td>
-                      <td className="py-2">{c.cellphone || c.phone || "-"}</td>
-                      <td className="py-2">{c.city || "-"}</td>
+                    <tr key={c.id} className="border-b border-gray-200 hover:bg-gray-50">
+                      <td className="py-2 px-2 font-medium text-gray-900">{c.name}</td>
+                      <td className="py-2 px-2 text-gray-800">{c.cpf}</td>
+                      <td className="py-2 px-2 text-gray-800">{c.cellphone || c.phone || "-"}</td>
+                      <td className="py-2 px-2 text-gray-800">{c.city || "-"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -140,20 +140,20 @@ export default function RelatoriosPage() {
           {reportType === "fornecedores" && (
             <div>
               <p className="text-sm text-gray-500 mb-4">{report.data?.length || 0} fornecedores encontrados</p>
-              <table className="w-full text-sm">
-                <thead><tr className="border-b">
-                  <th className="py-2 text-left font-medium text-gray-600">Nome</th>
-                  <th className="py-2 text-left font-medium text-gray-600">CNPJ</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Telefone</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Contato</th>
+              <table className="w-full text-sm text-gray-900">
+                <thead><tr className="border-b bg-gray-50">
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Nome</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">CNPJ</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Telefone</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Contato</th>
                 </tr></thead>
                 <tbody>
                   {report.data?.map((s: any) => (
-                    <tr key={s.id} className="border-b border-gray-100">
-                      <td className="py-2">{s.name}</td>
-                      <td className="py-2">{s.cnpj || "-"}</td>
-                      <td className="py-2">{s.phone || "-"}</td>
-                      <td className="py-2">{s.contactName || "-"}</td>
+                    <tr key={s.id} className="border-b border-gray-200 hover:bg-gray-50">
+                      <td className="py-2 px-2 font-medium text-gray-900">{s.name}</td>
+                      <td className="py-2 px-2 text-gray-800">{s.cnpj || "-"}</td>
+                      <td className="py-2 px-2 text-gray-800">{s.phone || "-"}</td>
+                      <td className="py-2 px-2 text-gray-800">{s.contactName || "-"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -165,24 +165,24 @@ export default function RelatoriosPage() {
           {reportType === "mercadorias" && (
             <div>
               <p className="text-sm text-gray-500 mb-4">{report.data?.length || 0} mercadorias encontradas</p>
-              <table className="w-full text-sm">
-                <thead><tr className="border-b">
-                  <th className="py-2 text-left font-medium text-gray-600">Nome</th>
-                  <th className="py-2 text-left font-medium text-gray-600">SKU</th>
-                  <th className="py-2 text-right font-medium text-gray-600">Preço</th>
-                  <th className="py-2 text-right font-medium text-gray-600">Custo</th>
-                  <th className="py-2 text-right font-medium text-gray-600">Estoque</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Fornecedor</th>
+              <table className="w-full text-sm text-gray-900">
+                <thead><tr className="border-b bg-gray-50">
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Nome</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">SKU</th>
+                  <th className="py-2 px-2 text-right font-semibold text-gray-800">Preço</th>
+                  <th className="py-2 px-2 text-right font-semibold text-gray-800">Custo</th>
+                  <th className="py-2 px-2 text-right font-semibold text-gray-800">Estoque</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Fornecedor</th>
                 </tr></thead>
                 <tbody>
                   {report.data?.map((p: any) => (
-                    <tr key={p.id} className="border-b border-gray-100">
-                      <td className="py-2">{p.name}</td>
-                      <td className="py-2">{p.sku || "-"}</td>
-                      <td className="py-2 text-right">{fmt(p.price)}</td>
-                      <td className="py-2 text-right">{p.cost ? fmt(p.cost) : "-"}</td>
-                      <td className="py-2 text-right">{p.stock}</td>
-                      <td className="py-2">{p.supplier?.name || "-"}</td>
+                    <tr key={p.id} className="border-b border-gray-200 hover:bg-gray-50">
+                      <td className="py-2 px-2 font-medium text-gray-900">{p.name}</td>
+                      <td className="py-2 px-2 text-gray-800">{p.sku || "-"}</td>
+                      <td className="py-2 px-2 text-right text-gray-800">{fmt(p.price)}</td>
+                      <td className="py-2 px-2 text-right text-gray-800">{p.cost ? fmt(p.cost) : "-"}</td>
+                      <td className="py-2 px-2 text-right text-gray-800">{p.stock}</td>
+                      <td className="py-2 px-2 text-gray-800">{p.supplier?.name || "-"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -247,24 +247,24 @@ export default function RelatoriosPage() {
                   <p className={`font-bold ${(report.resumo?.balance || 0) >= 0 ? "text-blue-800" : "text-red-800"}`}>{fmt(report.resumo?.balance || 0)}</p>
                 </div>
               </div>
-              <table className="w-full text-sm">
-                <thead><tr className="border-b">
-                  <th className="py-2 text-left font-medium text-gray-600">Data</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Descrição</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Categoria</th>
-                  <th className="py-2 text-right font-medium text-gray-600">Valor</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Status</th>
+              <table className="w-full text-sm text-gray-900">
+                <thead><tr className="border-b bg-gray-50">
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Data</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Descrição</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Categoria</th>
+                  <th className="py-2 px-2 text-right font-semibold text-gray-800">Valor</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Status</th>
                 </tr></thead>
                 <tbody>
                   {report.data?.map((t: any) => (
-                    <tr key={t.id} className="border-b border-gray-100">
-                      <td className="py-2">{fmtDate(t.date)}</td>
-                      <td className="py-2">{t.description}</td>
-                      <td className="py-2">{t.category || "-"}</td>
-                      <td className={`py-2 text-right font-medium ${t.type === "INCOME" ? "text-green-600" : "text-red-600"}`}>
+                    <tr key={t.id} className="border-b border-gray-200 hover:bg-gray-50">
+                      <td className="py-2 px-2 text-gray-800">{fmtDate(t.date)}</td>
+                      <td className="py-2 px-2 font-medium text-gray-900">{t.description}</td>
+                      <td className="py-2 px-2 text-gray-800">{t.category || "-"}</td>
+                      <td className={`py-2 px-2 text-right font-medium ${t.type === "INCOME" ? "text-green-600" : "text-red-600"}`}>
                         {t.type === "INCOME" ? "+" : "-"}{fmt(t.amount)}
                       </td>
-                      <td className="py-2">{t.status === "PAID" ? "Pago" : "Pendente"}</td>
+                      <td className="py-2 px-2 text-gray-800">{t.status === "PAID" ? "Pago" : "Pendente"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -279,24 +279,24 @@ export default function RelatoriosPage() {
                 <p className="text-green-800 font-bold">Total recebido: {fmt(report.total || 0)}</p>
                 <p className="text-green-600 text-sm">{report.data?.length || 0} pagamentos no período</p>
               </div>
-              <table className="w-full text-sm">
-                <thead><tr className="border-b">
-                  <th className="py-2 text-left font-medium text-gray-600">Data Pgto</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Cliente</th>
-                  <th className="py-2 text-left font-medium text-gray-600">CPF</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Parcela</th>
-                  <th className="py-2 text-left font-medium text-gray-600">Método</th>
-                  <th className="py-2 text-right font-medium text-gray-600">Valor</th>
+              <table className="w-full text-sm text-gray-900">
+                <thead><tr className="border-b bg-gray-50">
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Data Pgto</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Cliente</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">CPF</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Parcela</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Método</th>
+                  <th className="py-2 px-2 text-right font-semibold text-gray-800">Valor</th>
                 </tr></thead>
                 <tbody>
                   {report.data?.map((p: any) => (
-                    <tr key={p.id} className="border-b border-gray-100">
-                      <td className="py-2">{p.paidAt ? fmtDate(p.paidAt) : "-"}</td>
-                      <td className="py-2">{p.carne?.client?.name}</td>
-                      <td className="py-2">{p.carne?.client?.cpf}</td>
-                      <td className="py-2">{p.installment}ª/{p.carne?.year}</td>
-                      <td className="py-2">{p.paymentMethod || "-"}</td>
-                      <td className="py-2 text-right">{fmt(p.paidAmount || p.amount)}</td>
+                    <tr key={p.id} className="border-b border-gray-200 hover:bg-gray-50">
+                      <td className="py-2 px-2 text-gray-800">{p.paidAt ? fmtDate(p.paidAt) : "-"}</td>
+                      <td className="py-2 px-2 font-medium text-gray-900">{p.carne?.client?.name}</td>
+                      <td className="py-2 px-2 text-gray-800">{p.carne?.client?.cpf}</td>
+                      <td className="py-2 px-2 text-gray-800">{p.installment}ª/{p.carne?.year}</td>
+                      <td className="py-2 px-2 text-gray-800">{p.paymentMethod || "-"}</td>
+                      <td className="py-2 px-2 text-right font-medium text-gray-900">{fmt(p.paidAmount || p.amount)}</td>
                     </tr>
                   ))}
                 </tbody>
