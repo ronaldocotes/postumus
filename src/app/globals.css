@@ -28,15 +28,36 @@ body {
 /* Garantir texto escuro em todos os inputs e selects */
 input, select, textarea, option {
   color: #111827 !important; /* gray-900 */
+  -webkit-text-fill-color: #111827 !important;
+  opacity: 1 !important;
 }
 
 input::placeholder, textarea::placeholder {
   color: #9ca3af !important; /* gray-400 */
+  -webkit-text-fill-color: #9ca3af !important;
+  opacity: 1 !important;
 }
 
 select option {
   color: #111827 !important;
-  background: #ffffff !important;
+  -webkit-text-fill-color: #111827 !important;
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Labels */
+label {
+  color: #374151 !important; /* gray-700 */
+}
+
+/* Headings inside modals/forms */
+h2, h3, h4 {
+  color: #111827;
+}
+
+/* Table cells */
+td, th {
+  color: #111827;
 }
 
 @media print {

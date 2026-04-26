@@ -140,9 +140,9 @@ export default function CarnesPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Cliente *</label>
                 <select value={form.clientId} onChange={(e) => setForm({ ...form, clientId: e.target.value })} required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
-                  <option value="">Selecione...</option>
-                  {clients.map(c => <option key={c.id} value={c.id}>{c.name} - {c.cpf}</option>)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" style={{color: '#111827'}}>
+                  <option value="" style={{color: '#111827'}}>Selecione...</option>
+                  {clients.map(c => <option key={c.id} value={c.id} style={{color: '#111827'}}>{c.name} - {c.cpf}</option>)}
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-4">
