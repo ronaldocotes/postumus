@@ -11,19 +11,31 @@ export async function POST(request: NextRequest) {
 
   const clients = await prisma.client.findMany({
     where: { id: { in: clientIds }, latitude: { not: null }, longitude: { not: null } },
-    select: { id: true, name: true, address: true, neighborhood: true, latitude: true, longitude: true, cellphone: true, phone: true },
+    select: {
+      id: true, name: true, address: true, neighborhood: true, latitude: true, longitude: true,
+      cellphone: true, phone: true,
+      billingAddressSame: true, billingAddress: true, billingNeighborhood: true,
+      billingLatitude: true, billingLongitude: true, billingReference: true,
+    },
   });
 
   if (clients.length === 0) {
     return NextResponse.json({ error: "Nenhum cliente com coordenadas encontrado" }, { status: 400 });
   }
 
+  // Use billing coords when available and different from home
+  function getCoords(c: any): { lat: number; lng: number } {
+    if (c.billingAddressSame === false && c.billingLatitude && c.billingLongitude) {
+      return { lat: c.billingLatitude, lng: c.billingLongitude };
+    }
+    return { lat: c.latitude, lng: c.longitude };
+  }
+
   // Build coordinates string: start + clients
-  // Default start: Macapá centro (-0.0346, -51.0694)
   const origin = { lat: startLat || 0.0346, lng: startLng || -51.0694 };
   const coords = [
     `${origin.lng},${origin.lat}`,
-    ...clients.map(c => `${c.longitude},${c.latitude}`),
+    ...clients.map(c => { const p = getCoords(c); return `${p.lng},${p.lat}`; }),
   ].join(";");
 
   try {

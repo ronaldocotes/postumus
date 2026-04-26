@@ -105,6 +105,17 @@ model Client {
   monthlyValue    Float?
   latitude        Float?
   longitude       Float?
+  billingAddressSame Boolean  @default(true)
+  billingAddress     String?
+  billingNumber      String?
+  billingComplement  String?
+  billingNeighborhood String?
+  billingCity        String?
+  billingState       String?
+  billingZipCode     String?
+  billingReference   String?
+  billingLatitude    Float?
+  billingLongitude   Float?
   notes           String?
   notes2          String?
   cobradorId      String?

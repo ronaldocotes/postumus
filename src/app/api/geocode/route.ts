@@ -44,42 +44,67 @@ export async function POST() {
   const clients = await prisma.client.findMany({
     where: {
       active: true,
-      latitude: null,
       address: { not: null },
     },
-    select: { id: true, address: true, neighborhood: true, city: true, state: true },
-    take: 50, // Nominatim rate limit: 1 request/second
+    select: {
+      id: true, address: true, neighborhood: true, city: true, state: true,
+      billingAddressSame: true, billingAddress: true, billingNeighborhood: true,
+      billingCity: true, billingState: true,
+      latitude: true, longitude: true, billingLatitude: true, billingLongitude: true,
+    },
+    take: 100,
   });
 
   let geocoded = 0;
   let failed = 0;
 
   for (const c of clients) {
-    const parts = [c.address, c.neighborhood, c.city, c.state].filter(Boolean);
-    if (parts.length === 0) continue;
-    const query = encodeURIComponent(parts.join(", "));
+    // Determine which addresses need geocoding
+    const needsHome = !c.latitude && c.address;
+    const needsBilling = c.billingAddressSame === false && !c.billingLatitude && c.billingAddress;
 
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1&countrycodes=br`,
-        { headers: { "User-Agent": "Postumus-Funeraria/1.0" } }
-      );
-      const data = await res.json();
+    if (!needsHome && !needsBilling) continue;
 
-      if (data && data.length > 0) {
-        await prisma.client.update({
-          where: { id: c.id },
-          data: { latitude: parseFloat(data[0].lat), longitude: parseFloat(data[0].lon) },
-        });
-        geocoded++;
-      } else {
-        failed++;
-      }
+    // Geocode home address
+    if (needsHome) {
+      const parts = [c.address, c.neighborhood, c.city, c.state].filter(Boolean);
+      const query = encodeURIComponent(parts.join(", "));
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1&countrycodes=br`,
+          { headers: { "User-Agent": "Postumus-Funeraria/1.0" } }
+        );
+        const data = await res.json();
+        if (data && data.length > 0) {
+          await prisma.client.update({
+            where: { id: c.id },
+            data: { latitude: parseFloat(data[0].lat), longitude: parseFloat(data[0].lon) },
+          });
+          geocoded++;
+        } else { failed++; }
+        await new Promise(r => setTimeout(r, 1100));
+      } catch { failed++; }
+    }
 
-      // Respect rate limit: 1 req/sec
-      await new Promise(r => setTimeout(r, 1100));
-    } catch {
-      failed++;
+    // Geocode billing address
+    if (needsBilling) {
+      const parts = [c.billingAddress, c.billingNeighborhood, c.billingCity || c.city, c.billingState || c.state].filter(Boolean);
+      const query = encodeURIComponent(parts.join(", "));
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1&countrycodes=br`,
+          { headers: { "User-Agent": "Postumus-Funeraria/1.0" } }
+        );
+        const data = await res.json();
+        if (data && data.length > 0) {
+          await prisma.client.update({
+            where: { id: c.id },
+            data: { billingLatitude: parseFloat(data[0].lat), billingLongitude: parseFloat(data[0].lon) },
+          });
+          geocoded++;
+        } else { failed++; }
+        await new Promise(r => setTimeout(r, 1100));
+      } catch { failed++; }
     }
   }
 

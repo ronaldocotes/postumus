@@ -11,6 +11,8 @@ interface Client {
   latitude?: number; longitude?: number; cellphone?: string; phone?: string;
   dueDay?: number; paymentLocation?: string; cobrador?: { name: string };
   status?: string;
+  billingAddressSame?: boolean; billingAddress?: string; billingNeighborhood?: string;
+  billingLatitude?: number; billingLongitude?: number; billingReference?: string;
 }
 
 export default function MapaPage() {
@@ -54,8 +56,19 @@ export default function MapaPage() {
     setLoading(false);
   }
 
-  const withCoords = useMemo(() => allClients.filter(c => c.latitude && c.longitude && c.status !== "CANCELLED"), [allClients]);
-  const withoutCoords = useMemo(() => allClients.filter(c => (!c.latitude || !c.longitude) && c.status !== "CANCELLED"), [allClients]);
+  // Use billing coordinates for route when billing address is different
+  function getRouteCoords(c: Client): { lat: number; lng: number } | null {
+    if (c.billingAddressSame === false && c.billingLatitude && c.billingLongitude) {
+      return { lat: c.billingLatitude, lng: c.billingLongitude };
+    }
+    if (c.latitude && c.longitude) {
+      return { lat: c.latitude, lng: c.longitude };
+    }
+    return null;
+  }
+
+  const withCoords = useMemo(() => allClients.filter(c => getRouteCoords(c) !== null && c.status !== "CANCELLED"), [allClients]);
+  const withoutCoords = useMemo(() => allClients.filter(c => getRouteCoords(c) === null && c.status !== "CANCELLED"), [allClients]);
 
   // Day counts for quick buttons
   const dayCounts = useMemo(() => {
@@ -151,9 +164,21 @@ export default function MapaPage() {
   }
 
   const displayClients = useMemo(() => {
-    if (orderedClients.length > 0) return orderedClients;
-    if (selectedIds.length > 0) return withCoords.filter(c => selectedIds.includes(c.id));
-    return withCoords;
+    const list = orderedClients.length > 0 ? orderedClients :
+      selectedIds.length > 0 ? withCoords.filter(c => selectedIds.includes(c.id)) : withCoords;
+    // Override latitude/longitude with billing coords for map display
+    return list.map(c => {
+      const coords = getRouteCoords(c);
+      if (!coords) return c;
+      const isBilling = c.billingAddressSame === false && c.billingLatitude && c.billingLongitude;
+      return {
+        ...c,
+        latitude: coords.lat,
+        longitude: coords.lng,
+        address: isBilling ? (c.billingAddress || c.address) : c.address,
+        neighborhood: isBilling ? (c.billingNeighborhood || c.neighborhood) : c.neighborhood,
+      };
+    });
   }, [orderedClients, selectedIds, withCoords]);
 
   const filteredList = withCoords.filter(c =>
@@ -360,6 +385,7 @@ export default function MapaPage() {
                         <p className="text-xs text-gray-500 truncate">
                           {c.neighborhood || c.address || "-"} | Dia {c.dueDay || "-"}
                           {c.paymentLocation === "LOJA" ? " | 🏪 Loja" : " | 🏠 Casa"}
+                          {c.billingAddressSame === false && " | 📍 End. cobrança diferente"}
                         </p>
                       </div>
                       <MapPin size={14} className="text-green-500 flex-shrink-0" />
