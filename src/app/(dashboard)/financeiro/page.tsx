@@ -106,9 +106,9 @@ export default function FinanceiroPage() {
 
       {/* Filter */}
       <div className="flex gap-2 mb-4">
-        <button onClick={() => setFilter("")} className={`px-3 py-1 rounded-lg text-sm font-medium ${!filter ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-900"}`}>Todos</button>
-        <button onClick={() => setFilter("INCOME")} className={`px-3 py-1 rounded-lg text-sm font-medium ${filter === "INCOME" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-900"}`}>Receitas</button>
-        <button onClick={() => setFilter("EXPENSE")} className={`px-3 py-1 rounded-lg text-sm font-medium ${filter === "EXPENSE" ? "bg-red-600 text-white" : "bg-gray-200 text-gray-900"}`}>Despesas</button>
+        <button onClick={() => setFilter("")} className={`px-3 py-1 rounded-lg text-sm font-semibold ${!filter ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-900"}`}>Todos</button>
+        <button onClick={() => setFilter("INCOME")} className={`px-3 py-1 rounded-lg text-sm font-semibold ${filter === "INCOME" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-900"}`}>Receitas</button>
+        <button onClick={() => setFilter("EXPENSE")} className={`px-3 py-1 rounded-lg text-sm font-semibold ${filter === "EXPENSE" ? "bg-red-600 text-white" : "bg-gray-200 text-gray-900"}`}>Despesas</button>
       </div>
 
       {/* Table */}

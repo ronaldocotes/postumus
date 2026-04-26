@@ -157,7 +157,7 @@ export default function UsuariosPage() {
           <div className="bg-white rounded-xl w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-gray-900">{editId ? "Editar Usuário" : "Novo Usuário"}</h2>
-              <button onClick={() => setShowForm(false)}><X size={20} /></button>
+              <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">

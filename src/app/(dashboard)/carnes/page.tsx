@@ -154,7 +154,7 @@ export default function CarnesPage() {
               </div>
               <div><label className="block text-sm font-medium text-gray-700 mb-1">Valor Total *</label><input type="number" step="0.01" value={form.totalValue} onChange={(e) => setForm({ ...form, totalValue: e.target.value })} required className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none" /></div>
               <div className="flex justify-end gap-3">
-                <button type="button" onClick={() => setShowNew(false)} className="px-4 py-2 border border-gray-300 rounded-lg">Cancelar</button>
+                <button type="button" onClick={() => setShowNew(false)} className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 font-medium">Cancelar</button>
                 <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">{loading ? "Gerando..." : "Gerar Carnê"}</button>
               </div>
             </form>
@@ -171,7 +171,7 @@ export default function CarnesPage() {
                 <h2 className="text-xl font-bold">{showDetail.client.name}</h2>
                 <p className="text-sm text-gray-500">Carnê {showDetail.year} - {fmt(showDetail.totalValue)}</p>
               </div>
-              <button onClick={() => setShowDetail(null)} className="text-gray-500 hover:text-gray-700">✕</button>
+              <button onClick={() => setShowDetail(null)} className="text-gray-400 hover:text-gray-600">✕</button>
             </div>
             <table className="w-full text-sm text-gray-900">
               <thead className="bg-gray-50">

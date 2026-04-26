@@ -131,15 +131,15 @@ export default function ClientesPage() {
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cód</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Telefone</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bairro</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Local Pgto</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cobrador</th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Dep.</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Cód</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Nome</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Telefone</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Bairro</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Local Pgto</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Cobrador</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-900 uppercase">Dep.</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Status</th>
+              <th className="px-4 py-3 text-right text-xs font-semibold text-gray-900 uppercase">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -199,7 +199,7 @@ export default function ClientesPage() {
                 <h2 className="text-xl font-bold">{showDetail.name}</h2>
                 <p className="text-sm text-gray-500">Código: {showDetail.code || "-"} | CPF: {showDetail.cpf || "-"}</p>
               </div>
-              <button onClick={() => setShowDetail(null)}><X size={20} /></button>
+              <button onClick={() => setShowDetail(null)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-sm mb-6">
