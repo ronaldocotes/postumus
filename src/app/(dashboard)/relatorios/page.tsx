@@ -338,20 +338,20 @@ export default function RelatoriosPage() {
                     </div>
                     <p className="font-bold text-red-600">{fmt(item.totalOverdue)}</p>
                   </div>
-                  <table className="w-full text-sm">
-                    <thead><tr className="border-b">
-                      <th className="py-1 text-left text-gray-500">Parcela</th>
-                      <th className="py-1 text-left text-gray-500">Ano</th>
-                      <th className="py-1 text-left text-gray-500">Vencimento</th>
-                      <th className="py-1 text-right text-gray-500">Valor</th>
+                  <table className="w-full text-sm text-gray-900">
+                    <thead><tr className="border-b bg-gray-50">
+                      <th className="py-1 px-2 text-left font-semibold text-gray-900">Parcela</th>
+                      <th className="py-1 px-2 text-left font-semibold text-gray-900">Ano</th>
+                      <th className="py-1 px-2 text-left font-semibold text-gray-900">Vencimento</th>
+                      <th className="py-1 px-2 text-right font-semibold text-gray-900">Valor</th>
                     </tr></thead>
                     <tbody>
                       {item.payments.map((p: any, j: number) => (
-                        <tr key={j} className="border-b border-gray-50">
-                          <td className="py-1">{p.installment}ª</td>
-                          <td className="py-1">{p.year}</td>
-                          <td className="py-1">{fmtDate(p.dueDate)}</td>
-                          <td className="py-1 text-right">{fmt(p.amount)}</td>
+                        <tr key={j} className="border-b border-gray-200 hover:bg-gray-50">
+                          <td className="py-1 px-2 text-gray-800">{p.installment}ª</td>
+                          <td className="py-1 px-2 text-gray-800">{p.year}</td>
+                          <td className="py-1 px-2 text-gray-800">{fmtDate(p.dueDate)}</td>
+                          <td className="py-1 px-2 text-right text-gray-800">{fmt(p.amount)}</td>
                         </tr>
                       ))}
                     </tbody>
