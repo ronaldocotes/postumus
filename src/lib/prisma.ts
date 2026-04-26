@@ -6,7 +6,9 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
-  const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL! });
+  let dbUrl = process.env.DATABASE_URL || "";
+  dbUrl = dbUrl.replace(/^\uFEFF/, "").trim();
+  const adapter = new PrismaNeon({ connectionString: dbUrl });
   return new PrismaClient({ adapter });
 }
 
