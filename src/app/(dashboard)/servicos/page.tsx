@@ -6,7 +6,7 @@ import { Plus, Edit2, Trash2, Wrench, ShoppingCart, X, Search } from "lucide-rea
 const fmt = (v: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 const fmtDate = (d: string) => new Intl.DateTimeFormat("pt-BR").format(new Date(d));
 
-const categories = ["Tanatopraxia", "Translado", "Ornamentação", "Velório", "Sepultamento", "Cremação", "Documentação", "Outro"];
+const categories = ["Tanatopraxia", "Translado", "Ornamentação", "Velório", "Sepultamento", "Cremação", "Documentação", "Aluguel de Capela", "Aluguel de Ônibus", "Aluguel", "Outro"];
 const paymentMethods = [
   { value: "CASH", label: "Dinheiro" },
   { value: "PIX", label: "Pix" },
