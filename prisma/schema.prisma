@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  EMPLOYEE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum PaymentMethod {
+  CASH
+  PIX
+  CARD
+  BANK_TRANSFER
+  OTHER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(EMPLOYEE)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payments Payment[]
+}
+
+model Client {
+  id          String   @id @default(cuid())
+  name        String
+  cpf         String   @unique
+  rg          String?
+  birthDate   DateTime?
+  phone       String?
+  cellphone   String?
+  email       String?
+  address     String?
+  number      String?
+  complement  String?
+  neighborhood String?
+  city        String?
+  state       String?
+  zipCode     String?
+  active      Boolean  @default(true)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  carnes       Carne[]
+  transactions FinancialTransaction[]
+}
+
+model Supplier {
+  id          String   @id @default(cuid())
+  name        String
+  cnpj        String?  @unique
+  phone       String?
+  email       String?
+  address     String?
+  city        String?
+  state       String?
+  contactName String?
+  notes       String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products     Product[]
+  transactions FinancialTransaction[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  sku         String?  @unique
+  price       Float
+  cost        Float?
+  stock       Int      @default(0)
+  minStock    Int      @default(0)
+  supplierId  String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  supplier Supplier? @relation(fields: [supplierId], references: [id])
+}
+
+model Carne {
+  id           String   @id @default(cuid())
+  clientId     String
+  year         Int
+  totalValue   Float
+  installments Int      @default(12)
+  description  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  client   Client    @relation(fields: [clientId], references: [id])
+  payments Payment[]
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  carneId       String
+  installment   Int
+  dueDate       DateTime
+  amount        Float
+  paidAmount    Float?
+  paidAt        DateTime?
+  status        PaymentStatus @default(PENDING)
+  paymentMethod PaymentMethod?
+  pixCode       String?
+  receivedById  String?
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  carne      Carne  @relation(fields: [carneId], references: [id])
+  receivedBy User?  @relation(fields: [receivedById], references: [id])
+}
+
+model FinancialTransaction {
+  id          String          @id @default(cuid())
+  type        TransactionType
+  description String
+  amount      Float
+  date        DateTime
+  dueDate     DateTime?
+  paidAt      DateTime?
+  status      PaymentStatus   @default(PENDING)
+  paymentMethod PaymentMethod?
+  category    String?
+  clientId    String?
+  supplierId  String?
+  notes       String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  client   Client?   @relation(fields: [clientId], references: [id])
+  supplier Supplier? @relation(fields: [supplierId], references: [id])
+}
