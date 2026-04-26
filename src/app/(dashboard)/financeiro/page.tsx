@@ -106,9 +106,9 @@ export default function FinanceiroPage() {
 
       {/* Filter */}
       <div className="flex gap-2 mb-4">
-        <button onClick={() => setFilter("")} className={`px-3 py-1 rounded-lg text-sm font-medium ${!filter ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"}`}>Todos</button>
-        <button onClick={() => setFilter("INCOME")} className={`px-3 py-1 rounded-lg text-sm font-medium ${filter === "INCOME" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-700"}`}>Receitas</button>
-        <button onClick={() => setFilter("EXPENSE")} className={`px-3 py-1 rounded-lg text-sm font-medium ${filter === "EXPENSE" ? "bg-red-600 text-white" : "bg-gray-200 text-gray-700"}`}>Despesas</button>
+        <button onClick={() => setFilter("")} className={`px-3 py-1 rounded-lg text-sm font-medium ${!filter ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-900"}`}>Todos</button>
+        <button onClick={() => setFilter("INCOME")} className={`px-3 py-1 rounded-lg text-sm font-medium ${filter === "INCOME" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-900"}`}>Receitas</button>
+        <button onClick={() => setFilter("EXPENSE")} className={`px-3 py-1 rounded-lg text-sm font-medium ${filter === "EXPENSE" ? "bg-red-600 text-white" : "bg-gray-200 text-gray-900"}`}>Despesas</button>
       </div>
 
       {/* Table */}
@@ -155,11 +155,11 @@ export default function FinanceiroPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
                 <div className="flex gap-2">
                   <button type="button" onClick={() => setForm({ ...form, type: "EXPENSE", clientId: "", supplierId: "" })}
-                    className={`flex-1 py-2 rounded-lg font-medium text-sm ${form.type === "EXPENSE" ? "bg-red-600 text-white" : "bg-gray-100 text-gray-700"}`}>
+                    className={`flex-1 py-2 rounded-lg font-medium text-sm ${form.type === "EXPENSE" ? "bg-red-600 text-white" : "bg-gray-200 text-gray-900"}`}>
                     Despesa (A Pagar)
                   </button>
                   <button type="button" onClick={() => setForm({ ...form, type: "INCOME", clientId: "", supplierId: "" })}
-                    className={`flex-1 py-2 rounded-lg font-medium text-sm ${form.type === "INCOME" ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700"}`}>
+                    className={`flex-1 py-2 rounded-lg font-medium text-sm ${form.type === "INCOME" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-900"}`}>
                     Receita (A Receber)
                   </button>
                 </div>

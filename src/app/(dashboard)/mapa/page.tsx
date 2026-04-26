@@ -225,7 +225,7 @@ export default function MapaPage() {
           <div className="flex items-center gap-3 mb-3">
             <Calendar size={18} className="text-blue-600" />
             <h2 className="font-bold text-gray-900">Selecione o dia de vencimento</h2>
-            <span className="text-xs text-gray-400">(clique para gerar rota automática)</span>
+            <span className="text-xs text-gray-600">(clique para gerar rota automática)</span>
           </div>
 
           {/* Location filter */}
@@ -258,7 +258,7 @@ export default function MapaPage() {
                       isToday ? "bg-blue-100 text-blue-800 border-2 border-blue-400 hover:bg-blue-200" :
                       "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}>
                   Dia {day}
-                  <span className={`ml-1 text-xs ${isSelected ? "text-blue-200" : "text-gray-400"}`}>({count})</span>
+                  <span className={`ml-1 text-xs ${isSelected ? "text-blue-200" : "text-gray-600"}`}>({count})</span>
                   {isToday && !isSelected && <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse" />}
                 </button>
               );
