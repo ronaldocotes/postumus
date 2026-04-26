@@ -68,7 +68,7 @@ export default function Sidebar() {
           {/* Logo */}
           <div className="p-6 border-b border-gray-200">
             <h1 className="text-xl font-bold">⚱️ Posthumous</h1>
-            <p className="text-sm text-gray-500 mt-1">Gestão Funerária</p>
+            <p className="text-sm text-gray-500 mt-1">Gestão de Serviços Póstumos</p>
           </div>
 
           {/* Navigation */}

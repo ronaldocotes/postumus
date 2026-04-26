@@ -105,7 +105,7 @@ export default function RelatoriosPage() {
             <div className="flex items-center justify-between border-b pb-4 print:pb-2">
               <div>
                 <h2 className="text-xl font-bold text-gray-900 print:text-lg">⚱️ Posthumous</h2>
-                <p className="text-sm text-gray-500">Gestão Funerária</p>
+                <p className="text-sm text-gray-500">Gestão de Serviços Póstumos</p>
               </div>
               <div className="text-right">
                 <h3 className="font-bold text-gray-900">{report.title}</h3>
