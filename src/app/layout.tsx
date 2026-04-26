@@ -26,15 +26,16 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      style={{ colorScheme: "light" }}
+      style={{ colorScheme: "only light" }}
       data-theme="light"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased light`}
     >
       <head>
-        <meta name="color-scheme" content="light only" />
+        <meta name="color-scheme" content="only light" />
         <meta name="theme-color" content="#ffffff" />
       </head>
-      <body className="min-h-full flex flex-col bg-white text-gray-900" style={{ backgroundColor: "#ffffff", color: "#111827" }}>
+      <body className="min-h-full flex flex-col bg-white text-gray-900" style={{ backgroundColor: "#ffffff", color: "#111827", colorScheme: "only light" }}>
         <Providers>{children}</Providers>
       </body>
     </html>

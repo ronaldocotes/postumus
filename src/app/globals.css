@@ -1,9 +1,13 @@
 @import "tailwindcss";
 
+/* Desabilitar completamente a variante dark do Tailwind v4
+   Seletor impossivel garante que dark: nunca vai ser aplicado */
+@custom-variant dark (&:where(.__never__));
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  color-scheme: light !important;
+  --foreground: #111827;
+  color-scheme: light only;
 }
 
 @theme inline {
@@ -13,42 +17,42 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ffffff;
-    --foreground: #171717;
-    color-scheme: light !important;
-  }
-}
-
-html {
-  color-scheme: light !important;
+html,
+:host {
+  color-scheme: light only !important;
 }
 
 body {
   background: #ffffff !important;
   color: #111827 !important;
   font-family: Arial, Helvetica, sans-serif;
-  -webkit-text-fill-color: #111827;
+  -webkit-text-fill-color: #111827 !important;
+  color-scheme: light only !important;
 }
 
-/* Forçar TODOS os textos escuros */
-*, *::before, *::after {
-  --tw-text-opacity: 1 !important;
+/* Forcar color-scheme light em todos elementos - evita UA dark styles do Chrome */
+*,
+*::before,
+*::after {
+  color-scheme: light !important;
 }
 
-/* Inputs, selects, textareas */
-input, select, textarea, option {
+/* Inputs, selects, textareas - forcar estilos light mesmo em OS dark mode */
+input,
+select,
+textarea {
   color: #111827 !important;
   -webkit-text-fill-color: #111827 !important;
   opacity: 1 !important;
   background-color: #ffffff !important;
+  color-scheme: light !important;
 }
 
-input::placeholder, textarea::placeholder {
-  color: #9ca3af !important;
-  -webkit-text-fill-color: #9ca3af !important;
-  opacity: 1 !important;
+option {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  background-color: #ffffff !important;
+  color-scheme: light !important;
 }
 
 select option {
@@ -57,7 +61,20 @@ select option {
   background-color: #ffffff !important;
 }
 
-/* Títulos - sempre preto */
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+  opacity: 1 !important;
+}
+
+/* Botoes */
+button {
+  opacity: 1 !important;
+  color-scheme: light !important;
+}
+
+/* Titulos - sempre escuros */
 h1, h2, h3, h4, h5, h6 {
   color: #111827 !important;
   -webkit-text-fill-color: #111827 !important;
@@ -74,41 +91,50 @@ td, th {
   color: #111827 !important;
 }
 
-/* Parágrafos e spans dentro de formulários */
-p, span, div, a, li {
-  -webkit-text-fill-color: inherit;
-}
-
-/* Botões com borda (como Cancelar) */
-button {
-  opacity: 1 !important;
-}
-
 /* Sidebar links */
 nav a, aside a {
   opacity: 1 !important;
 }
 
-/* Modais - fundo branco garantido */
-[class*="bg-white"] {
+/* Modais e fundos brancos */
+[class*="bg-white"],
+.bg-white {
   background-color: #ffffff !important;
 }
 
-/* Fix para dark mode do Chrome não afetar o fundo */
+/* Sobrescrever qualquer estilo que o Chrome tente aplicar em dark mode do SO */
 @media (prefers-color-scheme: dark) {
-  body, main, div, section, article, aside, nav, header, footer, form {
-    background-color: inherit;
-    color: inherit;
+  html, :host {
+    color-scheme: light only !important;
+    background-color: #ffffff !important;
+    color: #111827 !important;
   }
-  
+
+  body {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+  }
+
+  input,
+  select,
+  textarea,
+  option,
+  button {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+    color-scheme: light !important;
+  }
+
   .bg-white, [class*="bg-white"] {
     background-color: #ffffff !important;
   }
-  
+
   .bg-gray-50, [class*="bg-gray-50"] {
     background-color: #f9fafb !important;
   }
-  
+
   .border, [class*="border"] {
     border-color: #e5e7eb !important;
   }
