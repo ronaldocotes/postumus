@@ -26,12 +26,17 @@ body {
 }
 
 /* Garantir texto escuro em todos os inputs e selects */
-input, select, textarea {
+input, select, textarea, option {
   color: #111827 !important; /* gray-900 */
 }
 
 input::placeholder, textarea::placeholder {
   color: #9ca3af !important; /* gray-400 */
+}
+
+select option {
+  color: #111827 !important;
+  background: #ffffff !important;
 }
 
 @media print {

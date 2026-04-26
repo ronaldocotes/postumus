@@ -38,7 +38,7 @@ export default function CarnesPage() {
   }
 
   async function loadClients() {
-    const res = await fetch("/api/clientes?search=");
+    const res = await fetch("/api/clientes?limit=999");
     const data = await res.json();
     setClients(data.clients || []);
   }
@@ -135,7 +135,7 @@ export default function CarnesPage() {
       {showNew && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl w-full max-w-md p-6">
-            <h2 className="text-xl font-bold mb-4">Gerar Novo Carnê</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Gerar Novo Carnê</h2>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Cliente *</label>
@@ -170,23 +170,23 @@ export default function CarnesPage() {
               </div>
               <button onClick={() => setShowDetail(null)} className="text-gray-500 hover:text-gray-700">✕</button>
             </div>
-            <table className="w-full">
+            <table className="w-full text-sm text-gray-900">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Parcela</th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Vencimento</th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Ação</th>
+                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-800 uppercase">Parcela</th>
+                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-800 uppercase">Vencimento</th>
+                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-800 uppercase">Valor</th>
+                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-800 uppercase">Status</th>
+                  <th className="px-4 py-2 text-right text-xs font-semibold text-gray-800 uppercase">Ação</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {showDetail.payments.map((p) => (
-                  <tr key={p.id}>
-                    <td className="px-4 py-3 text-sm">{p.installment}/{showDetail.installments}</td>
-                    <td className="px-4 py-3 text-sm">{fmtDate(p.dueDate)}</td>
-                    <td className="px-4 py-3 text-sm">{fmt(p.amount)}</td>
-                    <td className="px-4 py-3 text-sm flex items-center gap-1">{statusIcon(p.status)} {statusLabel[p.status]}</td>
+                  <tr key={p.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{p.installment}/{showDetail.installments}</td>
+                    <td className="px-4 py-3 text-sm text-gray-800">{fmtDate(p.dueDate)}</td>
+                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{fmt(p.amount)}</td>
+                    <td className="px-4 py-3 text-sm flex items-center gap-1 text-gray-800">{statusIcon(p.status)} {statusLabel[p.status]}</td>
                     <td className="px-4 py-3 text-right">
                       {p.status !== "PAID" && (
                         <button onClick={() => handlePay(p.id)} className="text-green-600 hover:text-green-800 text-sm font-medium">
