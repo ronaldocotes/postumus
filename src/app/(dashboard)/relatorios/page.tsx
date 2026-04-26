@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileText, Users, Truck, Package, AlertTriangle, DollarSign, CreditCard, Printer } from "lucide-react";
+import { FileText, Users, Truck, Package, AlertTriangle, DollarSign, CreditCard, Printer, Heart, ShoppingBag } from "lucide-react";
 
 const fmt = (v: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 const fmtDate = (d: string) => new Intl.DateTimeFormat("pt-BR").format(new Date(d));
@@ -35,6 +35,8 @@ export default function RelatoriosPage() {
 
   const reportCards = [
     { type: "clientes", label: "Clientes Ativos", icon: Users, color: "bg-blue-500", desc: "Lista completa de todos os clientes ativos" },
+    { type: "contribuintes", label: "Contribuintes (Carnê)", icon: Heart, color: "bg-teal-500", desc: "Clientes que pagam carnê do plano funerário" },
+    { type: "compradores", label: "Compradores de Mercadoria", icon: ShoppingBag, color: "bg-indigo-500", desc: "Clientes que compraram produtos/serviços avulsos" },
     { type: "fornecedores", label: "Fornecedores", icon: Truck, color: "bg-green-500", desc: "Lista de todos os fornecedores cadastrados" },
     { type: "mercadorias", label: "Mercadorias", icon: Package, color: "bg-purple-500", desc: "Estoque e preços de todas as mercadorias" },
     { type: "inadimplentes", label: "Inadimplentes", icon: AlertTriangle, color: "bg-red-500", desc: "Clientes com parcelas em atraso" },
@@ -133,6 +135,86 @@ export default function RelatoriosPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {/* Contribuintes */}
+          {reportType === "contribuintes" && (
+            <div>
+              <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-4">
+                <p className="text-teal-800 font-bold">{report.total || report.data?.length || 0} contribuintes ativos</p>
+                <p className="text-teal-600 text-sm">Clientes com carnê do plano funerário</p>
+              </div>
+              <table className="w-full text-sm text-gray-900">
+                <thead><tr className="border-b bg-gray-50">
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Cód</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Nome</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Telefone</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Bairro</th>
+                  <th className="py-2 px-2 text-center font-semibold text-gray-800">Venc.</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Local</th>
+                  <th className="py-2 px-2 text-left font-semibold text-gray-800">Cobrador</th>
+                  <th className="py-2 px-2 text-center font-semibold text-gray-800">Dep.</th>
+                  <th className="py-2 px-2 text-right font-semibold text-gray-800">Pendente</th>
+                </tr></thead>
+                <tbody>
+                  {report.data?.map((c: any) => (
+                    <tr key={c.id} className="border-b border-gray-200 hover:bg-gray-50">
+                      <td className="py-2 px-2 text-gray-800">{c.code || "-"}</td>
+                      <td className="py-2 px-2 font-medium text-gray-900">{c.name}</td>
+                      <td className="py-2 px-2 text-gray-800">{c.cellphone || c.phone || "-"}</td>
+                      <td className="py-2 px-2 text-gray-800">{c.neighborhood || "-"}</td>
+                      <td className="py-2 px-2 text-center text-gray-800">Dia {c.dueDay || "-"}</td>
+                      <td className="py-2 px-2 text-gray-800">{c.paymentLocation === "LOJA" ? "Loja" : "Residência"}</td>
+                      <td className="py-2 px-2 text-gray-800">{c.cobrador || "-"}</td>
+                      <td className="py-2 px-2 text-center text-gray-800">{c.totalDependents}</td>
+                      <td className={`py-2 px-2 text-right font-medium ${c.pendingAmount > 0 ? "text-red-600" : "text-green-600"}`}>
+                        {c.pendingAmount > 0 ? fmt(c.pendingAmount) : "Em dia"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Compradores de Mercadoria */}
+          {reportType === "compradores" && (
+            <div>
+              <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-4">
+                <p className="text-indigo-800 font-bold">Total: {fmt(report.totalGeral || 0)}</p>
+                <p className="text-indigo-600 text-sm">{report.data?.length || 0} compradores</p>
+              </div>
+              {report.data?.length === 0 && (
+                <p className="text-center text-gray-500 py-8">Nenhum comprador de mercadoria encontrado. Registre vendas no módulo Financeiro com categoria diferente de &quot;CARNE&quot; e vinculando um cliente.</p>
+              )}
+              {report.data?.map((item: any, i: number) => (
+                <div key={i} className="mb-6 border-b pb-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="font-bold text-gray-900">{item.client.name}</h4>
+                      <p className="text-sm text-gray-600">CPF: {item.client.cpf || "-"} | Tel: {item.client.cellphone || item.client.phone || "-"}</p>
+                    </div>
+                    <p className="font-bold text-indigo-700">{fmt(item.totalSpent)}</p>
+                  </div>
+                  <table className="w-full text-sm text-gray-900">
+                    <thead><tr className="border-b bg-gray-50">
+                      <th className="py-1 px-2 text-left font-semibold text-gray-800">Data</th>
+                      <th className="py-1 px-2 text-left font-semibold text-gray-800">Descrição</th>
+                      <th className="py-1 px-2 text-right font-semibold text-gray-800">Valor</th>
+                    </tr></thead>
+                    <tbody>
+                      {item.purchases.map((p: any, j: number) => (
+                        <tr key={j} className="border-b border-gray-100">
+                          <td className="py-1 px-2 text-gray-800">{fmtDate(p.date)}</td>
+                          <td className="py-1 px-2 text-gray-800">{p.description}</td>
+                          <td className="py-1 px-2 text-right text-gray-800">{fmt(p.amount)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
             </div>
           )}
 

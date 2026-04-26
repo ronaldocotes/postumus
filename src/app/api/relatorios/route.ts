@@ -8,9 +8,108 @@ export async function GET(request: NextRequest) {
   if (type === "clientes") {
     const clients = await prisma.client.findMany({
       where: { active: true },
+      include: {
+        carnes: { select: { id: true } },
+        _count: { select: { carnes: true, dependents: true } },
+      },
       orderBy: { name: "asc" },
     });
     return NextResponse.json({ title: "Relatório de Clientes", data: clients });
+  }
+
+  if (type === "contribuintes") {
+    const clients = await prisma.client.findMany({
+      where: {
+        active: true,
+        carnes: { some: {} },
+      },
+      include: {
+        _count: { select: { carnes: true, dependents: true } },
+        carnes: {
+          orderBy: { year: "desc" },
+          take: 1,
+          include: {
+            payments: {
+              where: { status: { in: ["PENDING", "OVERDUE"] } },
+              select: { amount: true },
+            },
+          },
+        },
+        cobrador: { select: { name: true } },
+      },
+      orderBy: { name: "asc" },
+    });
+
+    const data = clients.map(c => {
+      const lastCarne = c.carnes[0];
+      const pendingAmount = lastCarne?.payments.reduce((s: number, p: any) => s + p.amount, 0) || 0;
+      return {
+        id: c.id,
+        code: c.code,
+        name: c.name,
+        cpf: c.cpf,
+        cellphone: c.cellphone,
+        phone: c.phone,
+        neighborhood: c.neighborhood,
+        city: c.city,
+        dueDay: c.dueDay,
+        paymentLocation: c.paymentLocation,
+        cobrador: c.cobrador?.name || null,
+        totalCarnes: c._count.carnes,
+        totalDependents: c._count.dependents,
+        lastCarneYear: lastCarne?.year || null,
+        pendingAmount,
+        status: c.status,
+      };
+    });
+
+    return NextResponse.json({
+      title: "Relatório de Contribuintes (Carnê)",
+      data,
+      total: data.length,
+    });
+  }
+
+  if (type === "compradores") {
+    const transactions = await prisma.financialTransaction.findMany({
+      where: {
+        clientId: { not: null },
+        type: "INCOME",
+        category: { not: "CARNE" },
+      },
+      include: {
+        client: { select: { name: true, cpf: true, cellphone: true, phone: true, city: true } },
+      },
+      orderBy: { date: "desc" },
+    });
+
+    // Group by client
+    const grouped: Record<string, any> = {};
+    for (const t of transactions) {
+      if (!t.clientId || !t.client) continue;
+      if (!grouped[t.clientId]) {
+        grouped[t.clientId] = {
+          client: t.client,
+          purchases: [],
+          totalSpent: 0,
+        };
+      }
+      grouped[t.clientId].purchases.push({
+        date: t.date,
+        description: t.description,
+        amount: t.amount,
+      });
+      grouped[t.clientId].totalSpent += t.amount;
+    }
+
+    const data = Object.values(grouped);
+    const totalGeral = data.reduce((s: number, d: any) => s + d.totalSpent, 0);
+
+    return NextResponse.json({
+      title: "Relatório de Compradores de Mercadoria",
+      data,
+      totalGeral,
+    });
   }
 
   if (type === "fornecedores") {
