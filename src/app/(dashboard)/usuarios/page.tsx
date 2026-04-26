@@ -12,14 +12,15 @@ interface User {
   createdAt: string;
 }
 
-const roleLabels: Record<string, string> = { ADMIN: "Administrador", MANAGER: "Gerente", EMPLOYEE: "Funcionário" };
+const roleLabels: Record<string, string> = { ADMIN: "Administrador", SECRETARIA: "Secretária", COBRADOR: "Cobrador", AGENTE_FUNERARIO: "Agente Funerário" };
 const roleColors: Record<string, string> = {
   ADMIN: "bg-red-100 text-red-700",
-  MANAGER: "bg-blue-100 text-blue-700",
-  EMPLOYEE: "bg-gray-100 text-gray-700",
+  SECRETARIA: "bg-blue-100 text-blue-700",
+  COBRADOR: "bg-amber-100 text-amber-700",
+  AGENTE_FUNERARIO: "bg-purple-100 text-purple-700",
 };
 
-const emptyForm = { name: "", email: "", password: "", role: "EMPLOYEE" };
+const emptyForm = { name: "", email: "", password: "", role: "SECRETARIA" };
 
 export default function UsuariosPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -77,7 +78,7 @@ export default function UsuariosPage() {
   async function handleEdit(id: string) {
     const res = await fetch(`/api/usuarios/${id}`);
     const u = await res.json();
-    setForm({ name: u.name || "", email: u.email || "", password: "", role: u.role || "EMPLOYEE" });
+    setForm({ name: u.name || "", email: u.email || "", password: "", role: u.role || "SECRETARIA" });
     setEditId(id);
     setShowForm(true);
   }
@@ -122,7 +123,7 @@ export default function UsuariosPage() {
             {users.map((u) => (
               <tr key={u.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm font-medium text-gray-900 flex items-center gap-2">
-                  {u.role === "ADMIN" ? <ShieldCheck size={16} className="text-red-500" /> : u.role === "MANAGER" ? <UserCog size={16} className="text-blue-500" /> : <Shield size={16} className="text-gray-400" />}
+                  {u.role === "ADMIN" ? <ShieldCheck size={16} className="text-red-500" /> : u.role === "COBRADOR" ? <UserCog size={16} className="text-amber-500" /> : <Shield size={16} className="text-blue-400" />}
                   {u.name}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">{u.email}</td>
@@ -185,14 +186,16 @@ export default function UsuariosPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Perfil de Acesso *</label>
                 <select name="role" value={form.role} onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                  <option value="EMPLOYEE">Funcionário</option>
-                  <option value="MANAGER">Gerente</option>
+                  <option value="SECRETARIA">Secretária</option>
+                  <option value="COBRADOR">Cobrador</option>
+                  <option value="AGENTE_FUNERARIO">Agente Funerário</option>
                   <option value="ADMIN">Administrador</option>
                 </select>
                 <p className="text-xs text-gray-500 mt-1">
                   {form.role === "ADMIN" && "Acesso total ao sistema"}
-                  {form.role === "MANAGER" && "Gerencia equipe e relatórios"}
-                  {form.role === "EMPLOYEE" && "Acesso básico - cadastros e carnês"}
+                  {form.role === "SECRETARIA" && "Cadastros, carnês e atendimento"}
+                  {form.role === "COBRADOR" && "Carnês, pagamentos e rotas de cobrança"}
+                  {form.role === "AGENTE_FUNERARIO" && "Atendimento funerário e serviços"}
                 </p>
               </div>
 

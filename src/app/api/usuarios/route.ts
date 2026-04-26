@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       name: data.name,
       email: data.email,
       password: hashedPassword,
-      role: data.role || "EMPLOYEE",
+      role: data.role || "SECRETARIA",
     },
     select: { id: true, name: true, email: true, role: true, active: true },
   });
