@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('ADMIN', 'MANAGER', 'EMPLOYEE');
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'GERENTE', 'SECRETARIA', 'COBRADOR', 'AGENTE_FUNERARIO');
 
 -- CreateEnum
 CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'PAID', 'OVERDUE', 'CANCELLED');
@@ -10,13 +10,22 @@ CREATE TYPE "TransactionType" AS ENUM ('INCOME', 'EXPENSE');
 -- CreateEnum
 CREATE TYPE "PaymentMethod" AS ENUM ('CASH', 'PIX', 'CARD', 'BANK_TRANSFER', 'OTHER');
 
+-- CreateEnum
+CREATE TYPE "ClientStatus" AS ENUM ('ACTIVE', 'CANCELLED', 'SUSPENDED');
+
+-- CreateEnum
+CREATE TYPE "PaymentLocation" AS ENUM ('LOJA', 'RESIDENCIA');
+
+-- CreateEnum
+CREATE TYPE "Parentesco" AS ENUM ('CONJUGE', 'FILHO', 'FILHA', 'PAI', 'MAE', 'IRMAO', 'IRMA', 'NETO', 'NETA', 'OUTRO');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'EMPLOYEE',
+    "role" "Role" NOT NULL DEFAULT 'SECRETARIA',
     "active" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -27,8 +36,9 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Client" (
     "id" TEXT NOT NULL,
+    "code" TEXT,
     "name" TEXT NOT NULL,
-    "cpf" TEXT NOT NULL,
+    "cpf" TEXT,
     "rg" TEXT,
     "birthDate" TIMESTAMP(3),
     "phone" TEXT,
@@ -41,12 +51,44 @@ CREATE TABLE "Client" (
     "city" TEXT,
     "state" TEXT,
     "zipCode" TEXT,
-    "active" BOOLEAN NOT NULL DEFAULT true,
+    "civilStatus" TEXT,
+    "profession" TEXT,
+    "workplace" TEXT,
+    "fatherName" TEXT,
+    "motherName" TEXT,
+    "spouseName" TEXT,
+    "dueDay" INTEGER DEFAULT 10,
+    "paymentLocation" "PaymentLocation" DEFAULT 'RESIDENCIA',
+    "contractDate" TIMESTAMP(3),
+    "cancelDate" TIMESTAMP(3),
+    "cancelReason" TEXT,
+    "status" "ClientStatus" NOT NULL DEFAULT 'ACTIVE',
+    "monthlyValue" DOUBLE PRECISION,
     "notes" TEXT,
+    "notes2" TEXT,
+    "cobradorId" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Client_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Dependent" (
+    "id" TEXT NOT NULL,
+    "clientId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "birthDate" TIMESTAMP(3),
+    "relationship" "Parentesco" NOT NULL DEFAULT 'OUTRO',
+    "cpf" TEXT,
+    "phone" TEXT,
+    "notes" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Dependent_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -111,8 +153,11 @@ CREATE TABLE "Payment" (
     "paidAt" TIMESTAMP(3),
     "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
     "paymentMethod" "PaymentMethod",
+    "paymentLocation" "PaymentLocation",
     "pixCode" TEXT,
     "receivedById" TEXT,
+    "latitude" DOUBLE PRECISION,
+    "longitude" DOUBLE PRECISION,
     "notes" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -145,6 +190,9 @@ CREATE TABLE "FinancialTransaction" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Client_code_key" ON "Client"("code");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Client_cpf_key" ON "Client"("cpf");
 
 -- CreateIndex
@@ -152,6 +200,12 @@ CREATE UNIQUE INDEX "Supplier_cnpj_key" ON "Supplier"("cnpj");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Product_sku_key" ON "Product"("sku");
+
+-- AddForeignKey
+ALTER TABLE "Client" ADD CONSTRAINT "Client_cobradorId_fkey" FOREIGN KEY ("cobradorId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Dependent" ADD CONSTRAINT "Dependent_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Product" ADD CONSTRAINT "Product_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "Supplier"("id") ON DELETE SET NULL ON UPDATE CASCADE;

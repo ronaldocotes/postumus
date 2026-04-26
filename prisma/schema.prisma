@@ -35,6 +35,30 @@ enum PaymentMethod {
   OTHER
 }
 
+enum ClientStatus {
+  ACTIVE
+  CANCELLED
+  SUSPENDED
+}
+
+enum PaymentLocation {
+  LOJA
+  RESIDENCIA
+}
+
+enum Parentesco {
+  CONJUGE
+  FILHO
+  FILHA
+  PAI
+  MAE
+  IRMAO
+  IRMA
+  NETO
+  NETA
+  OUTRO
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String
@@ -45,32 +69,67 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  payments Payment[]
+  payments         Payment[]
+  assignedClients  Client[]  @relation("CobradorCliente")
 }
 
 model Client {
-  id          String   @id @default(cuid())
-  name        String
-  cpf         String   @unique
-  rg          String?
-  birthDate   DateTime?
-  phone       String?
-  cellphone   String?
-  email       String?
-  address     String?
-  number      String?
-  complement  String?
-  neighborhood String?
-  city        String?
-  state       String?
-  zipCode     String?
-  active      Boolean  @default(true)
-  notes       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String       @id @default(cuid())
+  code            String?      @unique
+  name            String
+  cpf             String?      @unique
+  rg              String?
+  birthDate       DateTime?
+  phone           String?
+  cellphone       String?
+  email           String?
+  address         String?
+  number          String?
+  complement      String?
+  neighborhood    String?
+  city            String?
+  state           String?
+  zipCode         String?
+  civilStatus     String?
+  profession      String?
+  workplace       String?
+  fatherName      String?
+  motherName      String?
+  spouseName      String?
+  dueDay          Int?         @default(10)
+  paymentLocation PaymentLocation? @default(RESIDENCIA)
+  contractDate    DateTime?
+  cancelDate      DateTime?
+  cancelReason    String?
+  status          ClientStatus @default(ACTIVE)
+  monthlyValue    Float?
+  notes           String?
+  notes2          String?
+  cobradorId      String?
+  active          Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
+  cobrador     User?        @relation("CobradorCliente", fields: [cobradorId], references: [id])
+  dependents   Dependent[]
   carnes       Carne[]
   transactions FinancialTransaction[]
+}
+
+model Dependent {
+  id           String     @id @default(cuid())
+  clientId     String
+  name         String
+  birthDate    DateTime?
+  relationship Parentesco @default(OUTRO)
+  cpf          String?
+  phone        String?
+  notes        String?
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  client Client @relation(fields: [clientId], references: [id])
 }
 
 model Supplier {
@@ -124,41 +183,44 @@ model Carne {
 }
 
 model Payment {
-  id            String        @id @default(cuid())
-  carneId       String
-  installment   Int
-  dueDate       DateTime
-  amount        Float
-  paidAmount    Float?
-  paidAt        DateTime?
-  status        PaymentStatus @default(PENDING)
-  paymentMethod PaymentMethod?
-  pixCode       String?
-  receivedById  String?
-  notes         String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id              String          @id @default(cuid())
+  carneId         String
+  installment     Int
+  dueDate         DateTime
+  amount          Float
+  paidAmount      Float?
+  paidAt          DateTime?
+  status          PaymentStatus   @default(PENDING)
+  paymentMethod   PaymentMethod?
+  paymentLocation PaymentLocation?
+  pixCode         String?
+  receivedById    String?
+  latitude        Float?
+  longitude       Float?
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
 
   carne      Carne  @relation(fields: [carneId], references: [id])
   receivedBy User?  @relation(fields: [receivedById], references: [id])
 }
 
 model FinancialTransaction {
-  id          String          @id @default(cuid())
-  type        TransactionType
-  description String
-  amount      Float
-  date        DateTime
-  dueDate     DateTime?
-  paidAt      DateTime?
-  status      PaymentStatus   @default(PENDING)
+  id            String          @id @default(cuid())
+  type          TransactionType
+  description   String
+  amount        Float
+  date          DateTime
+  dueDate       DateTime?
+  paidAt        DateTime?
+  status        PaymentStatus   @default(PENDING)
   paymentMethod PaymentMethod?
-  category    String?
-  clientId    String?
-  supplierId  String?
-  notes       String?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  category      String?
+  clientId      String?
+  supplierId    String?
+  notes         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 
   client   Client?   @relation(fields: [clientId], references: [id])
   supplier Supplier? @relation(fields: [supplierId], references: [id])
