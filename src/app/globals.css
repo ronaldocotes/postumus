@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  color-scheme: light !important;
 }
 
 @theme inline {
@@ -16,24 +17,36 @@
   :root {
     --background: #ffffff;
     --foreground: #171717;
+    color-scheme: light !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+html {
+  color-scheme: light !important;
 }
 
-/* Garantir texto escuro em todos os inputs e selects */
+body {
+  background: #ffffff !important;
+  color: #111827 !important;
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-text-fill-color: #111827;
+}
+
+/* Forçar TODOS os textos escuros */
+*, *::before, *::after {
+  --tw-text-opacity: 1 !important;
+}
+
+/* Inputs, selects, textareas */
 input, select, textarea, option {
-  color: #111827 !important; /* gray-900 */
+  color: #111827 !important;
   -webkit-text-fill-color: #111827 !important;
   opacity: 1 !important;
+  background-color: #ffffff !important;
 }
 
 input::placeholder, textarea::placeholder {
-  color: #9ca3af !important; /* gray-400 */
+  color: #9ca3af !important;
   -webkit-text-fill-color: #9ca3af !important;
   opacity: 1 !important;
 }
@@ -42,29 +55,70 @@ select option {
   color: #111827 !important;
   -webkit-text-fill-color: #111827 !important;
   background-color: #ffffff !important;
-  opacity: 1 !important;
+}
+
+/* Títulos - sempre preto */
+h1, h2, h3, h4, h5, h6 {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
 }
 
 /* Labels */
 label {
-  color: #374151 !important; /* gray-700 */
+  color: #374151 !important;
+  -webkit-text-fill-color: #374151 !important;
 }
 
-/* Headings inside modals/forms */
-h2, h3, h4 {
-  color: #111827;
-}
-
-/* Table cells */
+/* Tabelas */
 td, th {
-  color: #111827;
+  color: #111827 !important;
+}
+
+/* Parágrafos e spans dentro de formulários */
+p, span, div, a, li {
+  -webkit-text-fill-color: inherit;
+}
+
+/* Botões com borda (como Cancelar) */
+button {
+  opacity: 1 !important;
+}
+
+/* Sidebar links */
+nav a, aside a {
+  opacity: 1 !important;
+}
+
+/* Modais - fundo branco garantido */
+[class*="bg-white"] {
+  background-color: #ffffff !important;
+}
+
+/* Fix para dark mode do Chrome não afetar o fundo */
+@media (prefers-color-scheme: dark) {
+  body, main, div, section, article, aside, nav, header, footer, form {
+    background-color: inherit;
+    color: inherit;
+  }
+  
+  .bg-white, [class*="bg-white"] {
+    background-color: #ffffff !important;
+  }
+  
+  .bg-gray-50, [class*="bg-gray-50"] {
+    background-color: #f9fafb !important;
+  }
+  
+  .border, [class*="border"] {
+    border-color: #e5e7eb !important;
+  }
 }
 
 @media print {
   body { background: white !important; }
-  aside, .print\\:hidden, button { display: none !important; }
+  aside, .print\:hidden, button { display: none !important; }
   main { margin-left: 0 !important; padding: 0 !important; }
-  .print\\:shadow-none { box-shadow: none !important; }
-  .print\\:border-none { border: none !important; }
-  .print\\:p-0 { padding: 0 !important; }
+  .print\:shadow-none { box-shadow: none !important; }
+  .print\:border-none { border: none !important; }
+  .print\:p-0 { padding: 0 !important; }
 }

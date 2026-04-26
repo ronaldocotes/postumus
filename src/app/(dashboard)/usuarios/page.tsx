@@ -204,7 +204,7 @@ export default function UsuariosPage() {
 
               <div className="flex justify-end gap-3 pt-4">
                 <button type="button" onClick={() => setShowForm(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
+                  className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 font-medium">Cancelar</button>
                 <button type="submit" disabled={loading}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
                   {loading ? "Salvando..." : "Salvar"}
