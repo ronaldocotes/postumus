@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Search, Edit, Trash2, X } from "lucide-react";
+import SearchSelect from "@/components/ui/SearchSelect";
 
 interface Product {
   id: string;
@@ -12,10 +13,13 @@ interface Product {
   supplier?: { name: string };
 }
 
+interface Supplier { id: string; name: string; cnpj?: string; }
+
 const emptyForm = { name: "", description: "", sku: "", price: "", cost: "", stock: "0", minStock: "0", supplierId: "" };
 
 export default function MercadoriasPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -28,7 +32,13 @@ export default function MercadoriasPage() {
     setProducts(data.products || []);
   }
 
-  useEffect(() => { load(); }, [search]);
+  async function loadSuppliers() {
+    const res = await fetch("/api/fornecedores?search=");
+    const data = await res.json();
+    setSuppliers(data.suppliers || []);
+  }
+
+  useEffect(() => { load(); loadSuppliers(); }, [search]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -83,25 +93,25 @@ export default function MercadoriasPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <table className="w-full">
+        <table className="w-full text-sm text-gray-900">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Preço</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estoque</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fornecedor</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Nome</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">SKU</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Preço</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Estoque</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Fornecedor</th>
+              <th className="px-6 py-3 text-right text-xs font-semibold text-gray-800 uppercase">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {products.map((p) => (
               <tr key={p.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">{p.name}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{p.sku || "-"}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{fmt(p.price)}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{p.stock}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{p.supplier?.name || "-"}</td>
+                <td className="px-6 py-4 font-medium text-gray-900">{p.name}</td>
+                <td className="px-6 py-4 text-gray-800">{p.sku || "-"}</td>
+                <td className="px-6 py-4 text-gray-800">{fmt(p.price)}</td>
+                <td className="px-6 py-4 text-gray-800">{p.stock}</td>
+                <td className="px-6 py-4 text-gray-800">{p.supplier?.name || "-"}</td>
                 <td className="px-6 py-4 text-right space-x-2">
                   <button onClick={() => handleEdit(p.id)} className="text-blue-600 hover:text-blue-800"><Edit size={16} /></button>
                   <button onClick={() => handleDelete(p.id)} className="text-red-600 hover:text-red-800"><Trash2 size={16} /></button>
@@ -117,8 +127,8 @@ export default function MercadoriasPage() {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold">{editId ? "Editar Mercadoria" : "Nova Mercadoria"}</h2>
-              <button onClick={() => setShowForm(false)}><X size={20} /></button>
+              <h2 className="text-xl font-bold text-gray-900">{editId ? "Editar Mercadoria" : "Nova Mercadoria"}</h2>
+              <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -128,6 +138,15 @@ export default function MercadoriasPage() {
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Custo</label><input name="cost" type="number" step="0.01" value={form.cost} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Estoque</label><input name="stock" type="number" value={form.stock} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Estoque Mínimo</label><input name="minStock" type="number" value={form.minStock} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Fornecedor</label>
+                  <SearchSelect
+                    options={suppliers.map(s => ({ value: s.id, label: s.name, sub: s.cnpj || undefined }))}
+                    value={form.supplierId}
+                    onChange={(val) => setForm({ ...form, supplierId: val })}
+                    placeholder="Buscar fornecedor..."
+                  />
+                </div>
                 <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700 mb-1">Descrição</label><textarea name="description" value={form.description} onChange={handleChange} rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
               </div>
               <div className="flex justify-end gap-3 pt-4">

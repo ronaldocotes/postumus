@@ -109,15 +109,15 @@ export default function UsuariosPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <table className="w-full">
+        <table className="w-full text-sm text-gray-900">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Perfil</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Criado em</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Nome</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Email</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Perfil</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Criado em</th>
+              <th className="px-6 py-3 text-right text-xs font-semibold text-gray-800 uppercase">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -127,7 +127,7 @@ export default function UsuariosPage() {
                   {u.role === "ADMIN" ? <ShieldCheck size={16} className="text-red-500" /> : u.role === "COBRADOR" ? <UserCog size={16} className="text-amber-500" /> : <Shield size={16} className="text-blue-400" />}
                   {u.name}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600">{u.email}</td>
+                <td className="px-6 py-4 text-sm text-gray-800">{u.email}</td>
                 <td className="px-6 py-4">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${roleColors[u.role]}`}>
                     {roleLabels[u.role]}
@@ -138,7 +138,7 @@ export default function UsuariosPage() {
                     {u.active ? "Ativo" : "Inativo"}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600">{fmtDate(u.createdAt)}</td>
+                <td className="px-6 py-4 text-sm text-gray-800">{fmtDate(u.createdAt)}</td>
                 <td className="px-6 py-4 text-right space-x-2">
                   <button onClick={() => handleEdit(u.id)} className="text-blue-600 hover:text-blue-800"><Edit size={16} /></button>
                   <button onClick={() => handleDelete(u.id)} className="text-red-600 hover:text-red-800"><Trash2 size={16} /></button>
@@ -156,7 +156,7 @@ export default function UsuariosPage() {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold">{editId ? "Editar Usuário" : "Novo Usuário"}</h2>
+              <h2 className="text-xl font-bold text-gray-900">{editId ? "Editar Usuário" : "Novo Usuário"}</h2>
               <button onClick={() => setShowForm(false)}><X size={20} /></button>
             </div>
 

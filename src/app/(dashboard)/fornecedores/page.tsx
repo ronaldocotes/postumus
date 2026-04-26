@@ -78,23 +78,23 @@ export default function FornecedoresPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <table className="w-full">
+        <table className="w-full text-sm text-gray-900">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CNPJ</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Telefone</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cidade</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Nome</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">CNPJ</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Telefone</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Cidade</th>
+              <th className="px-6 py-3 text-right text-xs font-semibold text-gray-800 uppercase">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {suppliers.map((s) => (
               <tr key={s.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">{s.name}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{s.cnpj || "-"}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{s.phone || "-"}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{s.city || "-"}</td>
+                <td className="px-6 py-4 font-medium text-gray-900">{s.name}</td>
+                <td className="px-6 py-4 text-gray-800">{s.cnpj || "-"}</td>
+                <td className="px-6 py-4 text-gray-800">{s.phone || "-"}</td>
+                <td className="px-6 py-4 text-gray-800">{s.city || "-"}</td>
                 <td className="px-6 py-4 text-right space-x-2">
                   <button onClick={() => handleEdit(s.id)} className="text-blue-600 hover:text-blue-800"><Edit size={16} /></button>
                   <button onClick={() => handleDelete(s.id)} className="text-red-600 hover:text-red-800"><Trash2 size={16} /></button>
@@ -110,15 +110,12 @@ export default function FornecedoresPage() {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold">{editId ? "Editar Fornecedor" : "Novo Fornecedor"}</h2>
-              <button onClick={() => setShowForm(false)}><X size={20} /></button>
+              <h2 className="text-xl font-bold text-gray-900">{editId ? "Editar Fornecedor" : "Novo Fornecedor"}</h2>
+              <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nome *</label>
-                  <input name="name" value={form.name} onChange={handleChange} required className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
-                </div>
+                <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700 mb-1">Nome *</label><input name="name" value={form.name} onChange={handleChange} required className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">CNPJ</label><input name="cnpj" value={form.cnpj} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label><input name="phone" value={form.phone} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Email</label><input name="email" value={form.email} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
