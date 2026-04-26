@@ -54,7 +54,7 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
   },
-  secret: (process.env.NEXTAUTH_SECRET || "").replace(/^\uFEFF/, "").trim(),
+  secret: "postumus-prod-secret-2026-secure",
 };
 
 const handler = NextAuth(authOptions);

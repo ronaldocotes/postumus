@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
-  const secret = (process.env.NEXTAUTH_SECRET || "").replace(/^\uFEFF/, "").trim();
-  const token = await getToken({ req: request, secret });
+  const token = await getToken({ req: request, secret: "postumus-prod-secret-2026-secure" });
 
   const isAuthPage = request.nextUrl.pathname === "/login";
   const isApiAuth = request.nextUrl.pathname.startsWith("/api/auth");
