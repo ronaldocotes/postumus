@@ -103,6 +103,8 @@ model Client {
   cancelReason    String?
   status          ClientStatus @default(ACTIVE)
   monthlyValue    Float?
+  latitude        Float?
+  longitude       Float?
   notes           String?
   notes2          String?
   cobradorId      String?

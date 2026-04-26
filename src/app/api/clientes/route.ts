@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   const search = searchParams.get("search") || "";
   const status = searchParams.get("status") || "";
   const page = parseInt(searchParams.get("page") || "1");
-  const limit = 20;
+  const limit = Math.min(parseInt(searchParams.get("limit") || "20"), 1000);
 
   const where: any = {};
   if (search) {

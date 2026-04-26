@@ -16,6 +16,7 @@ import {
   Menu,
   X,
   Wrench,
+  MapPin,
 } from "lucide-react";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
@@ -28,6 +29,7 @@ const menuItems = [
   { href: "/servicos", label: "Serviços", icon: Wrench },
   { href: "/carnes", label: "Carnês", icon: FileText },
   { href: "/financeiro", label: "Financeiro", icon: DollarSign },
+  { href: "/mapa", label: "Mapa / Rotas", icon: MapPin },
   { href: "/relatorios", label: "Relatórios", icon: BarChart3 },
   { href: "/usuarios", label: "Usuários", icon: Shield },
 ];
