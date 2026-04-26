@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileText, Users, Truck, Package, AlertTriangle, DollarSign, CreditCard, Printer, Heart, ShoppingBag } from "lucide-react";
+import { FileText, Users, Truck, Package, AlertTriangle, DollarSign, CreditCard, Printer, Heart, ShoppingBag, Wrench } from "lucide-react";
 
 const fmt = (v: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 const fmtDate = (d: string) => new Intl.DateTimeFormat("pt-BR").format(new Date(d));
@@ -37,6 +37,7 @@ export default function RelatoriosPage() {
     { type: "clientes", label: "Clientes Ativos", icon: Users, color: "bg-blue-500", desc: "Lista completa de todos os clientes ativos" },
     { type: "contribuintes", label: "Contribuintes (Carnê)", icon: Heart, color: "bg-teal-500", desc: "Clientes que pagam carnê do plano funerário" },
     { type: "compradores", label: "Compradores de Mercadoria", icon: ShoppingBag, color: "bg-indigo-500", desc: "Clientes que compraram produtos/serviços avulsos" },
+    { type: "servicos", label: "Vendas de Serviços", icon: Wrench, color: "bg-violet-500", desc: "Tanatopraxia, translado, ornamentação e outros serviços" },
     { type: "fornecedores", label: "Fornecedores", icon: Truck, color: "bg-green-500", desc: "Lista de todos os fornecedores cadastrados" },
     { type: "mercadorias", label: "Mercadorias", icon: Package, color: "bg-purple-500", desc: "Estoque e preços de todas as mercadorias" },
     { type: "inadimplentes", label: "Inadimplentes", icon: AlertTriangle, color: "bg-red-500", desc: "Clientes com parcelas em atraso" },
@@ -209,6 +210,54 @@ export default function RelatoriosPage() {
                           <td className="py-1 px-2 text-gray-800">{fmtDate(p.date)}</td>
                           <td className="py-1 px-2 text-gray-800">{p.description}</td>
                           <td className="py-1 px-2 text-right text-gray-800">{fmt(p.amount)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Vendas de Serviços */}
+          {reportType === "servicos" && (
+            <div>
+              <div className="bg-violet-50 border border-violet-200 rounded-lg p-4 mb-4">
+                <p className="text-violet-800 font-bold">Total: {fmt(report.totalGeral || 0)}</p>
+                <p className="text-violet-600 text-sm">{report.totalVendas || 0} vendas realizadas</p>
+              </div>
+              {(!report.data || report.data.length === 0) && (
+                <p className="text-center text-gray-500 py-8">Nenhuma venda de serviço registrada. Use o módulo Serviços para registrar vendas.</p>
+              )}
+              {report.data?.map((item: any, i: number) => (
+                <div key={i} className="mb-6 border-b pb-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="font-bold text-gray-900">{item.service.name}</h4>
+                      <p className="text-sm text-gray-600">Categoria: {item.service.category || "Geral"} | {item.totalQty} vendas</p>
+                    </div>
+                    <p className="font-bold text-violet-700">{fmt(item.totalRevenue)}</p>
+                  </div>
+                  <table className="w-full text-sm text-gray-900">
+                    <thead><tr className="border-b bg-gray-50">
+                      <th className="py-1 px-2 text-left font-semibold text-gray-800">Data</th>
+                      <th className="py-1 px-2 text-left font-semibold text-gray-800">Cliente</th>
+                      <th className="py-1 px-2 text-center font-semibold text-gray-800">Qtd</th>
+                      <th className="py-1 px-2 text-right font-semibold text-gray-800">Valor</th>
+                      <th className="py-1 px-2 text-center font-semibold text-gray-800">Status</th>
+                    </tr></thead>
+                    <tbody>
+                      {item.sales.map((s: any, j: number) => (
+                        <tr key={j} className="border-b border-gray-100">
+                          <td className="py-1 px-2 text-gray-800">{fmtDate(s.date)}</td>
+                          <td className="py-1 px-2 text-gray-800">{s.client}</td>
+                          <td className="py-1 px-2 text-center text-gray-800">{s.quantity}</td>
+                          <td className="py-1 px-2 text-right font-medium text-gray-900">{fmt(s.totalPrice)}</td>
+                          <td className="py-1 px-2 text-center">
+                            <span className={`px-2 py-0.5 rounded-full text-xs ${s.status === "PAID" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
+                              {s.status === "PAID" ? "Pago" : "Pendente"}
+                            </span>
+                          </td>
                         </tr>
                       ))}
                     </tbody>

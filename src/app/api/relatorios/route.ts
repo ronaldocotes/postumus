@@ -231,5 +231,49 @@ export async function GET(request: NextRequest) {
     });
   }
 
+  if (type === "servicos") {
+    const sales = await prisma.serviceSale.findMany({
+      include: {
+        service: { select: { name: true, category: true } },
+        client: { select: { name: true, cpf: true, cellphone: true, phone: true } },
+      },
+      orderBy: { date: "desc" },
+    });
+
+    // Group by service
+    const grouped: Record<string, any> = {};
+    for (const s of sales) {
+      const svcId = s.serviceId;
+      if (!grouped[svcId]) {
+        grouped[svcId] = {
+          service: s.service,
+          sales: [],
+          totalRevenue: 0,
+          totalQty: 0,
+        };
+      }
+      grouped[svcId].sales.push({
+        date: s.date,
+        client: s.client?.name || s.clientName || "Avulso",
+        quantity: s.quantity,
+        totalPrice: s.totalPrice,
+        status: s.status,
+        paymentMethod: s.paymentMethod,
+      });
+      grouped[svcId].totalRevenue += s.totalPrice;
+      grouped[svcId].totalQty += s.quantity;
+    }
+
+    const data = Object.values(grouped);
+    const totalGeral = sales.reduce((s, x) => s + x.totalPrice, 0);
+
+    return NextResponse.json({
+      title: "Relatório de Vendas de Serviços",
+      data,
+      totalGeral,
+      totalVendas: sales.length,
+    });
+  }
+
   return NextResponse.json({ error: "Tipo de relatório inválido" }, { status: 400 });
 }

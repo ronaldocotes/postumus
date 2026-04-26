@@ -114,6 +114,7 @@ model Client {
   dependents   Dependent[]
   carnes       Carne[]
   transactions FinancialTransaction[]
+  serviceSales ServiceSale[]
 }
 
 model Dependent {
@@ -166,6 +167,41 @@ model Product {
   updatedAt   DateTime @updatedAt
 
   supplier Supplier? @relation(fields: [supplierId], references: [id])
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  cost        Float?
+  category    String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sales ServiceSale[]
+}
+
+model ServiceSale {
+  id            String         @id @default(cuid())
+  serviceId     String
+  clientId      String?
+  clientName    String?
+  quantity      Int            @default(1)
+  unitPrice     Float
+  totalPrice    Float
+  discount      Float?
+  date          DateTime       @default(now())
+  paymentMethod PaymentMethod?
+  status        PaymentStatus  @default(PENDING)
+  paidAt        DateTime?
+  notes         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  service Service @relation(fields: [serviceId], references: [id])
+  client  Client? @relation(fields: [clientId], references: [id])
 }
 
 model Carne {
