@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     // OSRM trip endpoint (TSP solver) - optimizes order
     const res = await fetch(
       `https://router.project-osrm.org/trip/v1/driving/${coords}?overview=full&geometries=geojson&source=first&roundtrip=false`,
-      { headers: { "User-Agent": "Postumus-Funeraria/1.0" } }
+      { headers: { "User-Agent": "Posthumous-Funeraria/1.0" } }
     );
     const data = await res.json();
 

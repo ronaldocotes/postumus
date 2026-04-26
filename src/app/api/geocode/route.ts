@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const query = encodeURIComponent(address);
     const res = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1&countrycodes=br`,
-      { headers: { "User-Agent": "Postumus-Funeraria/1.0" } }
+      { headers: { "User-Agent": "Posthumous-Funeraria/1.0" } }
     );
     const data = await res.json();
 
@@ -72,7 +72,7 @@ export async function POST() {
       try {
         const res = await fetch(
           `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1&countrycodes=br`,
-          { headers: { "User-Agent": "Postumus-Funeraria/1.0" } }
+          { headers: { "User-Agent": "Posthumous-Funeraria/1.0" } }
         );
         const data = await res.json();
         if (data && data.length > 0) {
@@ -93,7 +93,7 @@ export async function POST() {
       try {
         const res = await fetch(
           `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1&countrycodes=br`,
-          { headers: { "User-Agent": "Postumus-Funeraria/1.0" } }
+          { headers: { "User-Agent": "Posthumous-Funeraria/1.0" } }
         );
         const data = await res.json();
         if (data && data.length > 0) {

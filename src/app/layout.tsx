@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Postumus - Gestão Funerária",
+  title: "Posthumous - Gestão Funerária",
   description: "Sistema de gestão para funerária",
 };
 
