@@ -118,7 +118,7 @@ export default function MercadoriasPage() {
                 </td>
               </tr>
             ))}
-            {products.length === 0 && <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-500">Nenhuma mercadoria encontrada</td></tr>}
+            {products.length === 0 && <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-600">Nenhuma mercadoria encontrada</td></tr>}
           </tbody>
         </table>
       </div>

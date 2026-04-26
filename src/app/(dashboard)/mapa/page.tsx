@@ -230,7 +230,7 @@ export default function MapaPage() {
 
           {/* Location filter */}
           <div className="flex items-center gap-2 mb-3">
-            <label className="text-xs text-gray-500">Local de pagamento:</label>
+            <label className="text-xs text-gray-600">Local de pagamento:</label>
             <button onClick={() => { setLocationFilter(""); }}
               className={`px-3 py-1 rounded-full text-xs font-medium ${!locationFilter ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
               Todos
@@ -335,7 +335,7 @@ export default function MapaPage() {
                     </span>
                     <div className="flex-1 min-w-0">
                       <p className={`text-sm font-medium truncate ${visited ? "text-green-700 line-through" : "text-gray-900"}`}>{c.name}</p>
-                      <p className="text-xs text-gray-500 truncate">{c.address || c.neighborhood || "-"}</p>
+                      <p className="text-xs text-gray-600 truncate">{c.address || c.neighborhood || "-"}</p>
                       {c.cellphone && (
                         <a href={`tel:${c.cellphone}`} className="text-xs text-blue-600 flex items-center gap-1 mt-0.5">
                           <Phone size={10} /> {c.cellphone}
@@ -361,7 +361,7 @@ export default function MapaPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500 mb-2" />
                 {mode === "mapa" && (
                   <div className="flex gap-2 items-center">
-                    <label className="text-xs text-gray-500">Dia:</label>
+                    <label className="text-xs text-gray-600">Dia:</label>
                     <select value={dayFilter} onChange={e => selectByDay(e.target.value)}
                       className="px-2 py-1 border border-gray-300 rounded text-sm outline-none flex-1">
                       <option value="">Todos</option>

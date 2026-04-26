@@ -101,7 +101,7 @@ export default function FornecedoresPage() {
                 </td>
               </tr>
             ))}
-            {suppliers.length === 0 && <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-500">Nenhum fornecedor encontrado</td></tr>}
+            {suppliers.length === 0 && <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-600">Nenhum fornecedor encontrado</td></tr>}
           </tbody>
         </table>
       </div>

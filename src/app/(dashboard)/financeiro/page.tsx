@@ -138,7 +138,7 @@ export default function FinanceiroPage() {
                 <td className="px-6 py-4">{t.status === "PAID" ? <span className="flex items-center gap-1 text-green-600 font-medium"><CheckCircle size={14} /> Pago</span> : <span className="flex items-center gap-1 text-yellow-600 font-medium"><Clock size={14} /> Pendente</span>}</td>
               </tr>
             ))}
-            {transactions.length === 0 && <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-500">Nenhuma transação encontrada</td></tr>}
+            {transactions.length === 0 && <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-600">Nenhuma transação encontrada</td></tr>}
           </tbody>
         </table>
       </div>

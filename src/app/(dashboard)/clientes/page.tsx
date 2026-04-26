@@ -103,7 +103,7 @@ export default function ClientesPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Clientes</h1>
-          <p className="text-sm text-gray-500">{total} clientes encontrados</p>
+          <p className="text-sm text-gray-600">{total} clientes encontrados</p>
         </div>
         <button onClick={() => { setShowForm(true); setEditId(null); setForm(emptyForm); }}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
@@ -145,7 +145,7 @@ export default function ClientesPage() {
           <tbody className="divide-y divide-gray-200">
             {clients.map((c) => (
               <tr key={c.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 text-sm text-gray-500">{c.code || "-"}</td>
+                <td className="px-4 py-3 text-sm text-gray-700">{c.code || "-"}</td>
                 <td className="px-4 py-3 text-sm font-medium text-gray-900">{c.name}</td>
                 <td className="px-4 py-3 text-sm text-gray-600">{c.cellphone || c.phone || "-"}</td>
                 <td className="px-4 py-3 text-sm text-gray-600">{c.neighborhood || "-"}</td>
@@ -174,7 +174,7 @@ export default function ClientesPage() {
                 </td>
               </tr>
             ))}
-            {clients.length === 0 && <tr><td colSpan={9} className="px-6 py-8 text-center text-gray-500">Nenhum cliente encontrado</td></tr>}
+            {clients.length === 0 && <tr><td colSpan={9} className="px-6 py-8 text-center text-gray-600">Nenhum cliente encontrado</td></tr>}
           </tbody>
         </table>
       </div>
@@ -203,18 +203,18 @@ export default function ClientesPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-sm mb-6">
-              <div><span className="text-gray-500">Endereço:</span> {showDetail.address || "-"}, {showDetail.neighborhood || "-"}</div>
-              <div><span className="text-gray-500">Cidade:</span> {showDetail.city || "-"}/{showDetail.state || "-"}</div>
-              <div><span className="text-gray-500">Celular:</span> {showDetail.cellphone || "-"}</div>
-              <div><span className="text-gray-500">Telefone:</span> {showDetail.phone || "-"}</div>
-              <div><span className="text-gray-500">Estado Civil:</span> {showDetail.civilStatus || "-"}</div>
-              <div><span className="text-gray-500">Profissão:</span> {showDetail.profession || "-"}</div>
-              <div><span className="text-gray-500">Cônjuge:</span> {showDetail.spouseName || "-"}</div>
-              <div><span className="text-gray-500">Dia Vencimento:</span> {showDetail.dueDay || "-"}</div>
-              <div><span className="text-gray-500">Local Pagamento:</span> {showDetail.paymentLocation === "LOJA" ? "Loja" : "Residência"}</div>
-              <div><span className="text-gray-500">Cobrador:</span> {showDetail.cobrador?.name || "-"}</div>
-              <div><span className="text-gray-500">Pai:</span> {showDetail.fatherName || "-"}</div>
-              <div><span className="text-gray-500">Mãe:</span> {showDetail.motherName || "-"}</div>
+              <div><span className="text-gray-700">Endereço:</span> {showDetail.address || "-"}, {showDetail.neighborhood || "-"}</div>
+              <div><span className="text-gray-700">Cidade:</span> {showDetail.city || "-"}/{showDetail.state || "-"}</div>
+              <div><span className="text-gray-700">Celular:</span> {showDetail.cellphone || "-"}</div>
+              <div><span className="text-gray-700">Telefone:</span> {showDetail.phone || "-"}</div>
+              <div><span className="text-gray-700">Estado Civil:</span> {showDetail.civilStatus || "-"}</div>
+              <div><span className="text-gray-700">Profissão:</span> {showDetail.profession || "-"}</div>
+              <div><span className="text-gray-700">Cônjuge:</span> {showDetail.spouseName || "-"}</div>
+              <div><span className="text-gray-700">Dia Vencimento:</span> {showDetail.dueDay || "-"}</div>
+              <div><span className="text-gray-700">Local Pagamento:</span> {showDetail.paymentLocation === "LOJA" ? "Loja" : "Residência"}</div>
+              <div><span className="text-gray-700">Cobrador:</span> {showDetail.cobrador?.name || "-"}</div>
+              <div><span className="text-gray-700">Pai:</span> {showDetail.fatherName || "-"}</div>
+              <div><span className="text-gray-700">Mãe:</span> {showDetail.motherName || "-"}</div>
             </div>
 
             {/* Endereço de Cobrança */}

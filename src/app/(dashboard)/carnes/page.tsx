@@ -111,7 +111,7 @@ export default function CarnesPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-bold text-gray-900">{c.client.name}</h3>
-                  <p className="text-sm text-gray-500">CPF: {c.client.cpf} | Ano: {c.year}</p>
+                  <p className="text-sm text-gray-600">CPF: {c.client.cpf} | Ano: {c.year}</p>
                   <p className="text-sm text-gray-600 mt-1">
                     Total: {fmt(c.totalValue)} | {c.installments}x de {fmt(c.totalValue / c.installments)}
                   </p>
@@ -129,7 +129,7 @@ export default function CarnesPage() {
             </div>
           );
         })}
-        {carnes.length === 0 && <p className="text-center text-gray-500 py-8">Nenhum carnê encontrado</p>}
+        {carnes.length === 0 && <p className="text-center text-gray-600 py-8">Nenhum carnê encontrado</p>}
       </div>
 
       {/* New Carne Modal */}
