@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -16,17 +16,25 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: "/dashboard",
+      });
 
-    if (result?.error) {
-      setError("Email ou senha inválidos");
+      if (result?.error) {
+        setError("Email ou senha inválidos");
+        setLoading(false);
+      } else if (result?.url) {
+        window.location.href = result.url;
+      } else {
+        window.location.href = "/dashboard";
+      }
+    } catch (err) {
+      setError("Erro ao conectar. Tente novamente.");
       setLoading(false);
-    } else {
-      router.push("/dashboard");
     }
   }
 
@@ -46,9 +54,7 @@ export default function LoginPage() {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input
               type="email"
               value={email}
@@ -60,9 +66,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Senha
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
             <input
               type="password"
               value={password}
