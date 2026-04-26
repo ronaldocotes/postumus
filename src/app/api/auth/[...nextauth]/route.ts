@@ -3,9 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-const useSecureCookies = process.env.NODE_ENV === "production";
-const hostName = "funeraria-system.vercel.app";
-
 export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
@@ -51,28 +48,14 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
-  cookies: {
-    sessionToken: {
-      name: useSecureCookies
-        ? `__Secure-next-auth.session-token`
-        : `next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: useSecureCookies,
-        domain: useSecureCookies ? hostName : undefined,
-      },
-    },
-  },
   pages: {
     signIn: "/login",
   },
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
   },
   secret: "postumus-prod-secret-2026-secure",
-  debug: true,
 };
 
 const handler = NextAuth(authOptions);
