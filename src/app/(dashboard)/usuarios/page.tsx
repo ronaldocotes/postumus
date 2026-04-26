@@ -12,9 +12,10 @@ interface User {
   createdAt: string;
 }
 
-const roleLabels: Record<string, string> = { ADMIN: "Administrador", SECRETARIA: "Secretária", COBRADOR: "Cobrador", AGENTE_FUNERARIO: "Agente Funerário" };
+const roleLabels: Record<string, string> = { ADMIN: "Administrador", GERENTE: "Gerente", SECRETARIA: "Secretária", COBRADOR: "Cobrador", AGENTE_FUNERARIO: "Agente Funerário" };
 const roleColors: Record<string, string> = {
   ADMIN: "bg-red-100 text-red-700",
+  GERENTE: "bg-green-100 text-green-700",
   SECRETARIA: "bg-blue-100 text-blue-700",
   COBRADOR: "bg-amber-100 text-amber-700",
   AGENTE_FUNERARIO: "bg-purple-100 text-purple-700",
@@ -189,10 +190,12 @@ export default function UsuariosPage() {
                   <option value="SECRETARIA">Secretária</option>
                   <option value="COBRADOR">Cobrador</option>
                   <option value="AGENTE_FUNERARIO">Agente Funerário</option>
+                  <option value="GERENTE">Gerente</option>
                   <option value="ADMIN">Administrador</option>
                 </select>
                 <p className="text-xs text-gray-500 mt-1">
                   {form.role === "ADMIN" && "Acesso total ao sistema"}
+                  {form.role === "GERENTE" && "Gerencia equipe, relatórios e financeiro"}
                   {form.role === "SECRETARIA" && "Cadastros, carnês e atendimento"}
                   {form.role === "COBRADOR" && "Carnês, pagamentos e rotas de cobrança"}
                   {form.role === "AGENTE_FUNERARIO" && "Atendimento funerário e serviços"}

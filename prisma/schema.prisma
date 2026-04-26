@@ -9,6 +9,7 @@ datasource db {
 
 enum Role {
   ADMIN
+  GERENTE
   SECRETARIA
   COBRADOR
   AGENTE_FUNERARIO
