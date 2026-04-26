@@ -28,9 +28,13 @@ export default function RootLayout({
       lang="pt-BR"
       style={{ colorScheme: "light" }}
       data-theme="light"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased light`}
     >
-      <body className="min-h-full flex flex-col bg-white text-gray-900">
+      <head>
+        <meta name="color-scheme" content="light only" />
+        <meta name="theme-color" content="#ffffff" />
+      </head>
+      <body className="min-h-full flex flex-col bg-white text-gray-900" style={{ backgroundColor: "#ffffff", color: "#111827" }}>
         <Providers>{children}</Providers>
       </body>
     </html>
