@@ -32,7 +32,6 @@ const menuItems = [
   { href: "/financeiro", label: "Financeiro", icon: DollarSign },
   { href: "/mapa", label: "Mapa / Rotas", icon: MapPin },
   { href: "/relatorios", label: "Relatórios", icon: BarChart3 },
-  { href: "/usuarios", label: "Usuários", icon: Shield },
   { href: "/admin", label: "Administração", icon: Settings },
 ];
 
