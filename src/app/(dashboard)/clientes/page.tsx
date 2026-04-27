@@ -50,13 +50,21 @@ export default function ClientesPage() {
   const [newDependent, setNewDependent] = useState({ name: "", relationship: "OUTRO", cpf: "", phone: "", birthDate: "" });
 
   async function loadClients() {
-    const params = new URLSearchParams({ search, page: String(page) });
-    if (statusFilter) params.set("status", statusFilter);
-    const res = await fetch(`/api/clientes?${params}`);
-    const data = await res.json();
-    setClients(data.clients || []);
-    setTotal(data.total || 0);
-    setPages(data.pages || 1);
+    try {
+      const params = new URLSearchParams({ search, page: String(page) });
+      if (statusFilter) params.set("status", statusFilter);
+      const res = await fetch(`/api/clientes?${params}`);
+      if (!res.ok) throw new Error("Erro ao carregar clientes");
+      const data = await res.json();
+      setClients(data.clients || []);
+      setTotal(data.total || 0);
+      setPages(data.pages || 1);
+    } catch (err) {
+      console.error("Erro ao carregar clientes:", err);
+      setClients([]);
+      setTotal(0);
+      setPages(1);
+    }
   }
 
   useEffect(() => { loadClients(); }, [search, statusFilter, page]);
