@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Search, Edit, Trash2, X, Eye, Users, MapPin } from "lucide-react";
+import { useGeolocation } from "@/hooks/useGeolocation";
+import { estados, cidadesPorEstado, bairrosPorCidade, estadosCivis, getCidades, getBairros } from "@/lib/location-data";
 
 interface Client {
   id: string;
@@ -48,6 +50,51 @@ export default function ClientesPage() {
   const [pages, setPages] = useState(1);
   const [dependents, setDependents] = useState<any[]>([]);
   const [newDependent, setNewDependent] = useState({ name: "", relationship: "OUTRO", cpf: "", phone: "", birthDate: "" });
+  
+  // Geolocalização
+  const { cidade: geoCidade, estado: geoEstado, loading: geoLoading } = useGeolocation();
+  
+  // Estados para dropdowns
+  const [cidadesDisponiveis, setCidadesDisponiveis] = useState<string[]>([]);
+  const [bairrosDisponiveis, setBairrosDisponiveis] = useState<string[]>([]);
+  
+  // Atualizar cidades quando estado mudar
+  useEffect(() => {
+    if (form.state) {
+      const cidades = getCidades(form.state);
+      setCidadesDisponiveis(cidades);
+      // Se a cidade atual não estiver na lista, limpar
+      if (form.city && !cidades.includes(form.city)) {
+        setForm(prev => ({ ...prev, city: "", neighborhood: "" }));
+        setBairrosDisponiveis([]);
+      }
+    } else {
+      setCidadesDisponiveis([]);
+    }
+  }, [form.state]);
+  
+  // Atualizar bairros quando cidade mudar
+  useEffect(() => {
+    if (form.city) {
+      const bairros = getBairros(form.city);
+      setBairrosDisponiveis(bairros);
+      // Se o bairro atual não estiver na lista, limpar
+      if (form.neighborhood && !bairros.includes(form.neighborhood)) {
+        setForm(prev => ({ ...prev, neighborhood: "" }));
+      }
+    } else {
+      setBairrosDisponiveis([]);
+    }
+  }, [form.city]);
+  
+  // Preencher cidade via geolocalização quando disponível
+  useEffect(() => {
+    if (geoCidade && !form.city && !editId) {
+      // Verificar se a cidade está na lista de cidades do estado
+      const estadoSigla = geoEstado === "Amapá" ? "AP" : geoEstado === "Pará" ? "PA" : "AP";
+      setForm(prev => ({ ...prev, city: geoCidade, state: estadoSigla }));
+    }
+  }, [geoCidade, geoEstado, editId]);
 
   async function loadClients() {
     try {
@@ -351,11 +398,84 @@ export default function ClientesPage() {
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Celular</label><input name="cellphone" value={form.cellphone} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label><input name="phone" value={form.phone} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700 mb-1">Endereço</label><input name="address" value={form.address} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Bairro</label><input name="neighborhood" value={form.neighborhood} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Cidade</label><input name="city" value={form.city} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Estado</label><input name="state" value={form.state} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                
+                {/* Estado */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                  <select 
+                    name="state" 
+                    value={form.state} 
+                    onChange={handleChange} 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Selecione</option>
+                    {estados.map(e => (
+                      <option key={e.sigla} value={e.sigla}>{e.nome}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Cidade */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Cidade {geoLoading && <span className="text-xs text-blue-500">(detectando...)</span>}</label>
+                  <select 
+                    name="city" 
+                    value={form.city} 
+                    onChange={handleChange} 
+                    disabled={!form.state}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                  >
+                    <option value="">{form.state ? "Selecione" : "Selecione o estado primeiro"}</option>
+                    {cidadesDisponiveis.map(cidade => (
+                      <option key={cidade} value={cidade}>{cidade}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Bairro */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Bairro</label>
+                  <select 
+                    name="neighborhood" 
+                    value={form.neighborhood} 
+                    onChange={handleChange} 
+                    disabled={!form.city}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                  >
+                    <option value="">{form.city ? "Selecione" : "Selecione a cidade primeiro"}</option>
+                    {bairrosDisponiveis.map(bairro => (
+                      <option key={bairro} value={bairro}>{bairro}</option>
+                    ))}
+                    <option value="OUTRO">Outro (digitar manualmente)</option>
+                  </select>
+                  {form.neighborhood === "OUTRO" && (
+                    <input
+                      type="text"
+                      placeholder="Digite o bairro"
+                      value={form.neighborhood === "OUTRO" ? "" : form.neighborhood}
+                      onChange={e => setForm({ ...form, neighborhood: e.target.value })}
+                      className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  )}
+                </div>
+                
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">CEP</label><input name="zipCode" value={form.zipCode} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Estado Civil</label><input name="civilStatus" value={form.civilStatus} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                
+                {/* Estado Civil */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Estado Civil</label>
+                  <select 
+                    name="civilStatus" 
+                    value={form.civilStatus} 
+                    onChange={handleChange} 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Selecione</option>
+                    {estadosCivis.map(ec => (
+                      <option key={ec} value={ec}>{ec}</option>
+                    ))}
+                  </select>
+                </div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Profissão</label><input name="profession" value={form.profession} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Cônjuge</label><input name="spouseName" value={form.spouseName} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Pai</label><input name="fatherName" value={form.fatherName} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
