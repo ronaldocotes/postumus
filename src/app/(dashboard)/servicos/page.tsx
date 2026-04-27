@@ -37,14 +37,24 @@ export default function ServicosPage() {
 
   async function loadData() {
     setLoading(true);
-    const [sRes, salesRes, cRes] = await Promise.all([
-      fetch("/api/servicos"), fetch("/api/servicos/vendas"), fetch("/api/clientes"),
-    ]);
-    setServices(await sRes.json());
-    setSales(await salesRes.json());
-    const cData = await cRes.json();
-    setClients(Array.isArray(cData) ? cData : cData.data || []);
-    setLoading(false);
+    try {
+      const [sRes, salesRes, cRes] = await Promise.all([
+        fetch("/api/servicos"), fetch("/api/servicos/vendas"), fetch("/api/clientes"),
+      ]);
+      if (!sRes.ok || !salesRes.ok || !cRes.ok) {
+        throw new Error("Erro ao carregar dados");
+      }
+      const sData = await sRes.json();
+      const salesData = await salesRes.json();
+      const cData = await cRes.json();
+      setServices(Array.isArray(sData) ? sData : sData.data || []);
+      setSales(Array.isArray(salesData) ? salesData : salesData.data || []);
+      setClients(Array.isArray(cData) ? cData : cData.data || []);
+    } catch (err) {
+      console.error("Erro ao carregar serviços:", err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {

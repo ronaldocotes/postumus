@@ -163,30 +163,30 @@ export default function ClientesPage() {
         </select>
       </div>
 
-      <div className="bg-slate-800 rounded-xl shadow-lg border border-slate-700 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
         <table className="w-full">
-          <thead className="bg-slate-900">
+          <thead className="bg-[#4a6fa5]">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Cód</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Nome</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Telefone</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Bairro</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Local Pgto</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Cobrador</th>
-              <th className="px-4 py-3 text-center text-xs font-semibold text-amber-400 uppercase">Dep.</th>
-              <th className="px-4 py-3 text-center text-xs font-semibold text-amber-400 uppercase">Assegurado</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Status</th>
-              <th className="px-4 py-3 text-right text-xs font-semibold text-amber-400 uppercase">Ações</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-white uppercase">Cód</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-white uppercase">Nome</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-white uppercase">Telefone</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-white uppercase">Bairro</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-white uppercase">Local Pgto</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-white uppercase">Cobrador</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-white uppercase">Dep.</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-white uppercase">Assegurado</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-white uppercase">Status</th>
+              <th className="px-4 py-3 text-right text-xs font-semibold text-white uppercase">Ações</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-700">
+          <tbody className="divide-y divide-slate-200">
             {clients.map((c) => (
-              <tr key={c.id} className="hover:bg-slate-700">
-                <td className="px-4 py-3 text-sm text-slate-300">{c.code || "-"}</td>
-                <td className="px-4 py-3 text-sm font-medium text-slate-100">{c.name}</td>
-                <td className="px-4 py-3 text-sm text-slate-400">{c.cellphone || c.phone || "-"}</td>
-                <td className="px-4 py-3 text-sm text-slate-400">{c.neighborhood || "-"}</td>
-                <td className="px-4 py-3 text-sm text-slate-300">
+              <tr key={c.id} className="hover:bg-[#d4e4f7]">
+                <td className="px-4 py-3 text-sm text-slate-600">{c.code || "-"}</td>
+                <td className="px-4 py-3 text-sm font-medium text-slate-900">{c.name}</td>
+                <td className="px-4 py-3 text-sm text-slate-500">{c.cellphone || c.phone || "-"}</td>
+                <td className="px-4 py-3 text-sm text-slate-500">{c.neighborhood || "-"}</td>
+                <td className="px-4 py-3 text-sm text-slate-600">
                   <span className="flex items-center gap-1">
                     <MapPin size={12} /> {c.paymentLocation === "LOJA" ? "Loja" : "Residência"}
                   </span>
@@ -203,22 +203,22 @@ export default function ClientesPage() {
                   {c.isAssured ? (
                     <span className="px-2 py-1 rounded-full text-xs font-medium bg-emerald-900 text-emerald-300">✓ Sim</span>
                   ) : (
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-slate-700 text-slate-400">Não</span>
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-slate-200 text-slate-600">Não</span>
                   )}
                 </td>
                 <td className="px-4 py-3">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[c.status] || "bg-slate-700"}`}>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[c.status] || "bg-slate-200 text-slate-600"}`}>
                     {statusLabels[c.status] || c.status}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-right space-x-1">
-                  <button onClick={() => handleDetail(c.id)} className="text-emerald-400 hover:text-emerald-300"><Eye size={16} /></button>
-                  <button onClick={() => handleEdit(c.id)} className="text-amber-400 hover:text-amber-300"><Edit size={16} /></button>
-                  <button onClick={() => handleDelete(c.id)} className="text-red-400 hover:text-red-300"><Trash2 size={16} /></button>
+                  <button onClick={() => handleDetail(c.id)} className="text-emerald-600 hover:text-emerald-800"><Eye size={16} /></button>
+                  <button onClick={() => handleEdit(c.id)} className="text-amber-600 hover:text-amber-800"><Edit size={16} /></button>
+                  <button onClick={() => handleDelete(c.id)} className="text-red-600 hover:text-red-800"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
-            {clients.length === 0 && <tr><td colSpan={10} className="px-6 py-8 text-center text-slate-400">Nenhum cliente encontrado</td></tr>}
+            {clients.length === 0 && <tr><td colSpan={10} className="px-6 py-8 text-center text-slate-500 bg-slate-50">Nenhum cliente encontrado</td></tr>}
           </tbody>
         </table>
       </div>
@@ -228,58 +228,58 @@ export default function ClientesPage() {
         <div className="flex justify-center gap-2 mt-4">
           {Array.from({ length: Math.min(pages, 10) }, (_, i) => i + 1).map(p => (
             <button key={p} onClick={() => setPage(p)}
-              className={`px-3 py-1 rounded ${p === page ? "bg-amber-600 text-slate-900" : "bg-slate-700 text-slate-300 hover:bg-slate-600"}`}>{p}</button>
+              className={`px-3 py-1 rounded ${p === page ? "bg-[#4a6fa5] text-white" : "bg-slate-200 text-slate-700 hover:bg-slate-300"}`}>{p}</button>
           ))}
-          {pages > 10 && <span className="px-2 py-1 text-slate-400">...</span>}
+          {pages > 10 && <span className="px-2 py-1 text-slate-500">...</span>}
         </div>
       )}
 
       {/* Detail Modal */}
       {showDetail && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-800 rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 border border-slate-700">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 border border-slate-200 shadow-xl">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-xl font-bold text-amber-400">{showDetail.name}</h2>
-                <p className="text-sm text-slate-400">Código: {showDetail.code || "-"} | CPF: {showDetail.cpf || "-"}</p>
+                <h2 className="text-xl font-bold text-[#4a6fa5]">{showDetail.name}</h2>
+                <p className="text-sm text-slate-500">Código: {showDetail.code || "-"} | CPF: {showDetail.cpf || "-"}</p>
               </div>
-              <button onClick={() => setShowDetail(null)} className="text-slate-400 hover:text-slate-300"><X size={20} /></button>
+              <button onClick={() => setShowDetail(null)} className="text-slate-400 hover:text-slate-600"><X size={20} /></button>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-sm mb-6">
-              <div><span className="text-amber-400">Endereço:</span> <span className="text-slate-300">{showDetail.address || "-"}, {showDetail.neighborhood || "-"}</span></div>
-              <div><span className="text-amber-400">Cidade:</span> <span className="text-slate-300">{showDetail.city || "-"}/{showDetail.state || "-"}</span></div>
-              <div><span className="text-amber-400">Celular:</span> <span className="text-slate-300">{showDetail.cellphone || "-"}</span></div>
-              <div><span className="text-amber-400">Telefone:</span> <span className="text-slate-300">{showDetail.phone || "-"}</span></div>
-              <div><span className="text-amber-400">Estado Civil:</span> <span className="text-slate-300">{showDetail.civilStatus || "-"}</span></div>
-              <div><span className="text-amber-400">Profissão:</span> <span className="text-slate-300">{showDetail.profession || "-"}</span></div>
-              <div><span className="text-amber-400">Cônjuge:</span> <span className="text-slate-300">{showDetail.spouseName || "-"}</span></div>
-              <div><span className="text-amber-400">Dia Vencimento:</span> <span className="text-slate-300">{showDetail.dueDay || "-"}</span></div>
-              <div><span className="text-amber-400">Local Pagamento:</span> <span className="text-slate-300">{showDetail.paymentLocation === "LOJA" ? "Loja" : "Residência"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Endereço:</span> <span className="text-slate-700">{showDetail.address || "-"}, {showDetail.neighborhood || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Cidade:</span> <span className="text-slate-700">{showDetail.city || "-"}/{showDetail.state || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Celular:</span> <span className="text-slate-700">{showDetail.cellphone || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Telefone:</span> <span className="text-slate-700">{showDetail.phone || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Estado Civil:</span> <span className="text-slate-700">{showDetail.civilStatus || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Profissão:</span> <span className="text-slate-700">{showDetail.profession || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Cônjuge:</span> <span className="text-slate-700">{showDetail.spouseName || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Dia Vencimento:</span> <span className="text-slate-700">{showDetail.dueDay || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Local Pagamento:</span> <span className="text-slate-700">{showDetail.paymentLocation === "LOJA" ? "Loja" : "Residência"}</span></div>
               <div>
-                <span className="text-amber-400">Cliente Assegurado:</span>
+                <span className="text-[#4a6fa5] font-medium">Cliente Assegurado:</span>
                 <span className="ml-2 px-2 py-1 rounded-full text-xs font-medium" style={{
-                  backgroundColor: showDetail.isAssured ? '#064e3b' : '#334155',
-                  color: showDetail.isAssured ? '#86efac' : '#cbd5e1'
+                  backgroundColor: showDetail.isAssured ? '#d1fae5' : '#f1f5f9',
+                  color: showDetail.isAssured ? '#065f46' : '#64748b'
                 }}>
                   {showDetail.isAssured ? "✓ Sim" : "Não"}
                 </span>
               </div>
-              <div><span className="text-amber-400">Cobrador:</span> <span className="text-slate-300">{showDetail.cobrador?.name || "-"}</span></div>
-              <div><span className="text-amber-400">Pai:</span> <span className="text-slate-300">{showDetail.fatherName || "-"}</span></div>
-              <div><span className="text-amber-400">Mãe:</span> <span className="text-slate-300">{showDetail.motherName || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Cobrador:</span> <span className="text-slate-700">{showDetail.cobrador?.name || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Pai:</span> <span className="text-slate-700">{showDetail.fatherName || "-"}</span></div>
+              <div><span className="text-[#4a6fa5] font-medium">Mãe:</span> <span className="text-slate-700">{showDetail.motherName || "-"}</span></div>
             </div>
 
             {/* Endereço de Cobrança */}
             {showDetail.billingAddressSame === false && showDetail.billingAddress && (
-              <div className="bg-slate-900 border border-amber-700 rounded-lg p-4 mb-6">
-                <h3 className="font-bold text-amber-400 mb-2 flex items-center gap-2"><MapPin size={16} /> Endereço de Cobrança (diferente do residencial)</h3>
+              <div className="bg-[#d4e4f7] border border-[#4a6fa5] rounded-lg p-4 mb-6">
+                <h3 className="font-bold text-[#4a6fa5] mb-2 flex items-center gap-2"><MapPin size={16} /> Endereço de Cobrança (diferente do residencial)</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div><span className="text-amber-400">Endereço:</span> <span className="text-slate-300">{showDetail.billingAddress}{showDetail.billingNumber ? `, ${showDetail.billingNumber}` : ""}</span></div>
-                  {showDetail.billingComplement && <div><span className="text-amber-400">Complemento:</span> <span className="text-slate-300">{showDetail.billingComplement}</span></div>}
-                  <div><span className="text-amber-400">Bairro:</span> <span className="text-slate-300">{showDetail.billingNeighborhood || "-"}</span></div>
-                  <div><span className="text-amber-400">Cidade:</span> <span className="text-slate-300">{showDetail.billingCity || showDetail.city || "-"}/{showDetail.billingState || showDetail.state || "-"}</span></div>
-                  {showDetail.billingReference && <div className="col-span-2"><span className="text-amber-400">Referência:</span> <span className="text-slate-300">{showDetail.billingReference}</span></div>}
+                  <div><span className="text-[#4a6fa5] font-medium">Endereço:</span> <span className="text-slate-700">{showDetail.billingAddress}{showDetail.billingNumber ? `, ${showDetail.billingNumber}` : ""}</span></div>
+                  {showDetail.billingComplement && <div><span className="text-[#4a6fa5] font-medium">Complemento:</span> <span className="text-slate-700">{showDetail.billingComplement}</span></div>}
+                  <div><span className="text-[#4a6fa5] font-medium">Bairro:</span> <span className="text-slate-700">{showDetail.billingNeighborhood || "-"}</span></div>
+                  <div><span className="text-[#4a6fa5] font-medium">Cidade:</span> <span className="text-slate-700">{showDetail.billingCity || showDetail.city || "-"}/{showDetail.billingState || showDetail.state || "-"}</span></div>
+                  {showDetail.billingReference && <div className="col-span-2"><span className="text-[#4a6fa5] font-medium">Referência:</span> <span className="text-slate-700">{showDetail.billingReference}</span></div>}
                 </div>
               </div>
             )}
@@ -287,12 +287,12 @@ export default function ClientesPage() {
             {/* Dependents */}
             {showDetail.dependents?.length > 0 && (
               <div className="mb-6">
-                <h3 className="font-bold text-amber-400 mb-2 flex items-center gap-2"><Users size={16} /> Dependentes ({showDetail.dependents.length})</h3>
-                <div className="bg-slate-900 rounded-lg p-3 border border-slate-700">
+                <h3 className="font-bold text-[#4a6fa5] mb-2 flex items-center gap-2"><Users size={16} /> Dependentes ({showDetail.dependents.length})</h3>
+                <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
                   {showDetail.dependents.map((d: any) => (
-                    <div key={d.id} className="flex justify-between py-1 border-b border-slate-700 last:border-0">
-                      <span className="text-sm text-slate-300">{d.name}</span>
-                      <span className="text-xs text-slate-400">{d.relationship}</span>
+                    <div key={d.id} className="flex justify-between py-1 border-b border-slate-200 last:border-0">
+                      <span className="text-sm text-slate-700">{d.name}</span>
+                      <span className="text-xs text-slate-500">{d.relationship}</span>
                     </div>
                   ))}
                 </div>
@@ -302,18 +302,18 @@ export default function ClientesPage() {
             {/* Carnês */}
             {showDetail.carnes?.length > 0 && (
               <div>
-                <h3 className="font-bold text-amber-400 mb-2">Carnês</h3>
+                <h3 className="font-bold text-[#4a6fa5] mb-2">Carnês</h3>
                 {showDetail.carnes.slice(0, 3).map((c: any) => {
                   const paid = c.payments.filter((p: any) => p.status === "PAID").length;
                   const total = c.payments.length;
                   return (
-                    <div key={c.id} className="bg-slate-900 rounded-lg p-3 mb-2 border border-slate-700">
+                    <div key={c.id} className="bg-slate-50 rounded-lg p-3 mb-2 border border-slate-200">
                       <div className="flex justify-between">
-                        <span className="font-medium text-slate-300">{c.year}</span>
-                        <span className="text-sm text-emerald-400">{paid}/{total} pagos</span>
+                        <span className="font-medium text-slate-700">{c.year}</span>
+                        <span className="text-sm text-emerald-600">{paid}/{total} pagos</span>
                       </div>
-                      <div className="w-full bg-slate-700 rounded-full h-2 mt-1">
-                        <div className="bg-emerald-600 h-2 rounded-full" style={{ width: `${(paid / total) * 100}%` }}></div>
+                      <div className="w-full bg-slate-200 rounded-full h-2 mt-1">
+                        <div className="bg-emerald-500 h-2 rounded-full" style={{ width: `${(paid / total) * 100}%` }}></div>
                       </div>
                     </div>
                   );
@@ -321,7 +321,7 @@ export default function ClientesPage() {
               </div>
             )}
 
-            {showDetail.notes && <p className="text-sm text-slate-400 mt-4"><strong className="text-amber-400">Obs:</strong> {showDetail.notes}</p>}
+            {showDetail.notes && <p className="text-sm text-slate-500 mt-4"><strong className="text-[#4a6fa5]">Obs:</strong> {showDetail.notes}</p>}
           </div>
         </div>
       )}
