@@ -59,17 +59,17 @@ export default function Sidebar() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed top-0 left-0 z-40 h-screen w-64 bg-slate-900 text-slate-100 border-r border-slate-800 transition-transform duration-300",
+          "fixed top-0 left-0 z-40 h-screen w-64 bg-white text-slate-800 border-r border-slate-200 transition-transform duration-300",
           "md:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="p-6 border-b border-slate-800 bg-gradient-to-b from-slate-800 to-slate-900">
+          <div className="p-6 border-b border-slate-200 bg-gradient-to-b from-[#d4e4f7] to-white">
             <img src="/logo-oficial.png" alt="Posthumous" className="w-16 h-16 mx-auto mb-2" />
-            <h1 className="text-xl font-bold text-center text-amber-400">Posthumous</h1>
-            <p className="text-xs text-slate-400 mt-1 text-center">Gestão de Serviços Póstumos</p>
+            <h1 className="text-xl font-bold text-center text-[#4a6fa5]">Posthumous</h1>
+            <p className="text-xs text-slate-500 mt-1 text-center">Gestão de Serviços Póstumos</p>
           </div>
 
           {/* Navigation */}
@@ -88,8 +88,8 @@ export default function Sidebar() {
                   className={cn(
                     "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
                     isActive
-                      ? "bg-amber-600 hover:bg-amber-700 text-slate-900 shadow-lg"
-                      : "text-slate-300 hover:bg-slate-800 hover:text-amber-400"
+                      ? "bg-[#4a6fa5] hover:bg-[#3d5a87] text-white shadow-lg"
+                      : "text-slate-600 hover:bg-[#d4e4f7] hover:text-[#4a6fa5]"
                   )}
                 >
                   <Icon size={18} />
@@ -100,10 +100,10 @@ export default function Sidebar() {
           </nav>
 
           {/* Logout */}
-          <div className="p-4 border-t border-slate-800">
+          <div className="p-4 border-t border-slate-200">
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-amber-400 w-full transition-colors"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 hover:bg-[#d4e4f7] hover:text-[#4a6fa5] w-full transition-colors"
             >
               <LogOut size={18} />
               Sair

@@ -5,12 +5,12 @@
 @custom-variant dark (&:where(.__never__));
 
 :root {
-  --background: #0f172a;
-  --foreground: #f8fafc;
-  --primary: #d4af37;
-  --primary-dark: #b8941e;
-  --secondary: #1e293b;
-  --accent: #64748b;
+  --background: #fafafa;
+  --foreground: #1e293b;
+  --primary: #4a6fa5;
+  --primary-dark: #3d5a87;
+  --secondary: #d4e4f7;
+  --accent: #c0c0c0;
   color-scheme: light only;
 }
 
@@ -27,10 +27,10 @@ html,
 }
 
 body {
-  background: #0f172a !important;
-  color: #f8fafc !important;
+  background: #fafafa !important;
+  color: #1e293b !important;
   font-family: Arial, Helvetica, sans-serif;
-  -webkit-text-fill-color: #f8fafc !important;
+  -webkit-text-fill-color: #1e293b !important;
   color-scheme: light only !important;
 }
 
@@ -45,12 +45,12 @@ body {
 input,
 select,
 textarea {
-  color: #0f172a !important;
-  -webkit-text-fill-color: #0f172a !important;
+  color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
   opacity: 1 !important;
-  background-color: #1e293b !important;
+  background-color: #ffffff !important;
   color-scheme: light !important;
-  border-color: #475569 !important;
+  border-color: #c0c0c0 !important;
 }
 
 option {
