@@ -18,7 +18,6 @@ interface Client {
   dueDay?: number;
   paymentLocation?: string;
   isAssured?: boolean;
-  cobrador?: { name: string };
   _count?: { dependents: number };
 }
 
@@ -227,7 +226,6 @@ export default function ClientesPage() {
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Telefone</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Bairro</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Local Pgto</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Cobrador</th>
               <th className="px-4 py-3 text-center text-xs font-semibold text-gray-800 uppercase">Dep.</th>
               <th className="px-4 py-3 text-center text-xs font-semibold text-gray-800 uppercase">Assegurado</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-800 uppercase">Status</th>
@@ -246,7 +244,6 @@ export default function ClientesPage() {
                     <MapPin size={12} /> {c.paymentLocation === "LOJA" ? "Loja" : "Residência"}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-600">{c.cobrador?.name || "-"}</td>
                 <td className="px-4 py-3 text-sm text-center">
                   {(c._count?.dependents || 0) > 0 && (
                     <span className="flex items-center justify-center gap-1 text-blue-600">
@@ -320,7 +317,6 @@ export default function ClientesPage() {
                   {showDetail.isAssured ? "✓ Sim" : "Não"}
                 </span>
               </div>
-              <div><span className="text-[#4a6fa5] font-medium">Cobrador:</span> <span className="text-gray-900">{showDetail.cobrador?.name || "-"}</span></div>
               <div><span className="text-[#4a6fa5] font-medium">Pai:</span> <span className="text-gray-900">{showDetail.fatherName || "-"}</span></div>
               <div><span className="text-[#4a6fa5] font-medium">Mãe:</span> <span className="text-gray-900">{showDetail.motherName || "-"}</span></div>
             </div>
