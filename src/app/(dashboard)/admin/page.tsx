@@ -390,8 +390,11 @@ export default function AdminPage() {
                         <span className="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded">Custom</span>
                       )}
                       <button
+                        type="button"
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
+                          console.log("Editando perfil:", role.name);
                           handleEditPermissions(role);
                         }}
                         className="p-1 text-blue-600 hover:bg-blue-50 rounded"
