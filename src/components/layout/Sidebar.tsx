@@ -17,6 +17,7 @@ import {
   X,
   Wrench,
   MapPin,
+  Settings,
 } from "lucide-react";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
@@ -32,6 +33,7 @@ const menuItems = [
   { href: "/mapa", label: "Mapa / Rotas", icon: MapPin },
   { href: "/relatorios", label: "Relatórios", icon: BarChart3 },
   { href: "/usuarios", label: "Usuários", icon: Shield },
+  { href: "/admin", label: "Administração", icon: Settings },
 ];
 
 export default function Sidebar() {
