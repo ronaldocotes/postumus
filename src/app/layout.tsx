@@ -34,7 +34,7 @@ export default function RootLayout({
       <head>
         <meta name="color-scheme" content="only light" />
         <meta name="theme-color" content="#ffffff" />
-        <link rel="icon" href="/dove-icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/logo-oficial.png" type="image/png" />
       </head>
       <body className="min-h-full flex flex-col bg-white text-gray-900" style={{ backgroundColor: "#ffffff", color: "#111827", colorScheme: "only light" }}>
         <Providers>{children}</Providers>

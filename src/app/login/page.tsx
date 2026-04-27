@@ -42,7 +42,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
         <div className="text-center mb-8">
-          <img src="/dove-icon.svg" alt="Posthumous" className="w-16 h-16 mx-auto mb-4" />
+          <img src="/logo-oficial.png" alt="Posthumous" className="w-20 h-20 mx-auto mb-4" />
           <h1 className="text-3xl font-bold text-gray-900">Posthumous</h1>
           <p className="text-gray-500 mt-2">Gestão de Serviços Póstumos</p>
         </div>
