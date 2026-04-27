@@ -505,7 +505,58 @@ export default function ClientesPage() {
                   </label>
                 </div>
 
-                {/* Dependentes */}
+                {/* Endereço de Cobrança */}
+                <div className="md:col-span-2 border-t pt-4 mt-2">
+                  <div className="flex items-center gap-3 mb-3">
+                    <MapPin size={18} className="text-blue-600" />
+                    <h3 className="font-bold text-gray-900">Endereço de Cobrança</h3>
+                  </div>
+                  <label className="flex items-center gap-2 mb-3 cursor-pointer">
+                    <input type="checkbox" checked={form.billingAddressSame}
+                      onChange={e => setForm({ ...form, billingAddressSame: e.target.checked })}
+                      className="rounded border-gray-300" />
+                    <span className="text-sm text-gray-700">Mesmo endereço residencial</span>
+                  </label>
+                </div>
+
+                {!form.billingAddressSame && (
+                  <>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Endereço de Cobrança</label>
+                      <input name="billingAddress" value={form.billingAddress} onChange={handleChange} placeholder="Rua, Av..." className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Número</label>
+                      <input name="billingNumber" value={form.billingNumber} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Complemento</label>
+                      <input name="billingComplement" value={form.billingComplement} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Bairro</label>
+                      <input name="billingNeighborhood" value={form.billingNeighborhood} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
+                      <input name="billingCity" value={form.billingCity} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                      <input name="billingState" value={form.billingState} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">CEP</label>
+                      <input name="billingZipCode" value={form.billingZipCode} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Ponto de Referência</label>
+                      <input name="billingReference" value={form.billingReference} onChange={handleChange} placeholder="Próximo a..." className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                  </>
+                )}
+
+                {/* Dependentes - ÚLTIMO NO FORMULÁRIO */}
                 <div className="md:col-span-2 border-t pt-4 mt-2">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
@@ -604,57 +655,6 @@ export default function ClientesPage() {
                     </div>
                   ))}
                 </div>
-
-                {/* Endereço de Cobrança */}
-                <div className="md:col-span-2 border-t pt-4 mt-2">
-                  <div className="flex items-center gap-3 mb-3">
-                    <MapPin size={18} className="text-blue-600" />
-                    <h3 className="font-bold text-gray-900">Endereço de Cobrança</h3>
-                  </div>
-                  <label className="flex items-center gap-2 mb-3 cursor-pointer">
-                    <input type="checkbox" checked={form.billingAddressSame}
-                      onChange={e => setForm({ ...form, billingAddressSame: e.target.checked })}
-                      className="rounded border-gray-300" />
-                    <span className="text-sm text-gray-700">Mesmo endereço residencial</span>
-                  </label>
-                </div>
-
-                {!form.billingAddressSame && (
-                  <>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Endereço de Cobrança</label>
-                      <input name="billingAddress" value={form.billingAddress} onChange={handleChange} placeholder="Rua, Av..." className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Número</label>
-                      <input name="billingNumber" value={form.billingNumber} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Complemento</label>
-                      <input name="billingComplement" value={form.billingComplement} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Bairro</label>
-                      <input name="billingNeighborhood" value={form.billingNeighborhood} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
-                      <input name="billingCity" value={form.billingCity} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-                      <input name="billingState" value={form.billingState} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">CEP</label>
-                      <input name="billingZipCode" value={form.billingZipCode} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Ponto de Referência</label>
-                      <input name="billingReference" value={form.billingReference} onChange={handleChange} placeholder="Próximo a..." className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                  </>
-                )}
 
                 <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700 mb-1">Observações</label><textarea name="notes" value={form.notes} onChange={handleChange} rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
               </div>
