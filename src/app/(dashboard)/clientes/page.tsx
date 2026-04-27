@@ -15,20 +15,22 @@ interface Client {
   status: string;
   dueDay?: number;
   paymentLocation?: string;
+  isAssured?: boolean;
   cobrador?: { name: string };
   _count?: { dependents: number };
 }
 
 const statusLabels: Record<string, string> = { ACTIVE: "Ativo", CANCELLED: "Cancelado", SUSPENDED: "Suspenso" };
-const statusColors: Record<string, string> = { ACTIVE: "bg-green-100 text-green-700", CANCELLED: "bg-red-100 text-red-700", SUSPENDED: "bg-yellow-100 text-yellow-700" };
+const statusColors: Record<string, string> = { ACTIVE: "bg-emerald-900 text-emerald-300", CANCELLED: "bg-red-900 text-red-300", SUSPENDED: "bg-amber-900 text-amber-300" };
 
 const emptyForm: any = {
   name: "", cpf: "", rg: "", phone: "", cellphone: "", email: "",
   address: "", number: "", complement: "", neighborhood: "", city: "", state: "", zipCode: "",
   civilStatus: "", profession: "", workplace: "", fatherName: "", motherName: "", spouseName: "",
-  dueDay: "10", paymentLocation: "RESIDENCIA", notes: "",
+  dueDay: "10", paymentLocation: "RESIDENCIA", notes: "", isAssured: false,
   billingAddressSame: true, billingAddress: "", billingNumber: "", billingComplement: "",
   billingNeighborhood: "", billingCity: "", billingState: "", billingZipCode: "", billingReference: "",
+  dependents: [],
 };
 
 export default function ClientesPage() {
@@ -37,12 +39,15 @@ export default function ClientesPage() {
   const [statusFilter, setStatusFilter] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [showDetail, setShowDetail] = useState<any>(null);
+  const [showDependents, setShowDependents] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
+  const [dependents, setDependents] = useState<any[]>([]);
+  const [newDependent, setNewDependent] = useState({ name: "", relationship: "OUTRO", cpf: "", phone: "", birthDate: "" });
 
   async function loadClients() {
     const params = new URLSearchParams({ search, page: String(page) });
@@ -81,7 +86,9 @@ export default function ClientesPage() {
     f.dueDay = String(c.dueDay || 10);
     f.paymentLocation = c.paymentLocation || "RESIDENCIA";
     f.billingAddressSame = c.billingAddressSame !== false;
+    f.isAssured = c.isAssured || false;
     setForm(f);
+    setDependents(c.dependents || []);
     setEditId(id);
     setShowForm(true);
   }
@@ -98,28 +105,57 @@ export default function ClientesPage() {
     loadClients();
   }
 
+  async function addDependent() {
+    if (!newDependent.name.trim()) {
+      alert("Nome do dependente é obrigatório");
+      return;
+    }
+    if (!editId) {
+      setDependents([...dependents, { ...newDependent, id: Date.now().toString() }]);
+    } else {
+      const res = await fetch(`/api/dependents`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clientId: editId, ...newDependent }),
+      });
+      if (res.ok) {
+        const dependent = await res.json();
+        setDependents([...dependents, dependent]);
+      }
+    }
+    setNewDependent({ name: "", relationship: "OUTRO", cpf: "", phone: "", birthDate: "" });
+  }
+
+  async function deleteDependent(depId: string) {
+    if (!confirm("Deseja remover este dependente?")) return;
+    if (depId.length > 10) {
+      await fetch(`/api/dependents/${depId}`, { method: "DELETE" });
+    }
+    setDependents(dependents.filter(d => d.id !== depId));
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Clientes</h1>
-          <p className="text-sm text-gray-600">{total} clientes encontrados</p>
+          <h1 className="text-2xl font-bold text-amber-400">Clientes</h1>
+          <p className="text-sm text-slate-400">{total} clientes encontrados</p>
         </div>
         <button onClick={() => { setShowForm(true); setEditId(null); setForm(emptyForm); }}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          className="flex items-center gap-2 bg-amber-600 text-slate-900 px-4 py-2 rounded-lg hover:bg-amber-700 font-medium">
           <Plus size={18} /> Novo Cliente
         </button>
       </div>
 
       <div className="flex gap-4 mb-6">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input type="text" placeholder="Buscar por nome, CPF, código ou celular..." value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+            className="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-amber-500 outline-none" />
         </div>
         <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-          className="px-3 py-2 border border-gray-300 rounded-lg outline-none">
+          className="px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 outline-none">
           <option value="">Todos</option>
           <option value="ACTIVE">Ativos</option>
           <option value="CANCELLED">Cancelados</option>
@@ -127,54 +163,62 @@ export default function ClientesPage() {
         </select>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-slate-800 rounded-xl shadow-lg border border-slate-700 overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-slate-900">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Cód</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Nome</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Telefone</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Bairro</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Local Pgto</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Cobrador</th>
-              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-900 uppercase">Dep.</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase">Status</th>
-              <th className="px-4 py-3 text-right text-xs font-semibold text-gray-900 uppercase">Ações</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Cód</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Nome</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Telefone</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Bairro</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Local Pgto</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Cobrador</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-amber-400 uppercase">Dep.</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-amber-400 uppercase">Assegurado</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-amber-400 uppercase">Status</th>
+              <th className="px-4 py-3 text-right text-xs font-semibold text-amber-400 uppercase">Ações</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-slate-700">
             {clients.map((c) => (
-              <tr key={c.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 text-sm text-gray-700">{c.code || "-"}</td>
-                <td className="px-4 py-3 text-sm font-medium text-gray-900">{c.name}</td>
-                <td className="px-4 py-3 text-sm text-gray-600">{c.cellphone || c.phone || "-"}</td>
-                <td className="px-4 py-3 text-sm text-gray-600">{c.neighborhood || "-"}</td>
-                <td className="px-4 py-3 text-sm">
+              <tr key={c.id} className="hover:bg-slate-700">
+                <td className="px-4 py-3 text-sm text-slate-300">{c.code || "-"}</td>
+                <td className="px-4 py-3 text-sm font-medium text-slate-100">{c.name}</td>
+                <td className="px-4 py-3 text-sm text-slate-400">{c.cellphone || c.phone || "-"}</td>
+                <td className="px-4 py-3 text-sm text-slate-400">{c.neighborhood || "-"}</td>
+                <td className="px-4 py-3 text-sm text-slate-300">
                   <span className="flex items-center gap-1">
                     <MapPin size={12} /> {c.paymentLocation === "LOJA" ? "Loja" : "Residência"}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-600">{c.cobrador?.name || "-"}</td>
+                <td className="px-4 py-3 text-sm text-slate-400">{c.cobrador?.name || "-"}</td>
                 <td className="px-4 py-3 text-sm text-center">
                   {(c._count?.dependents || 0) > 0 && (
-                    <span className="flex items-center justify-center gap-1 text-blue-600">
+                    <span className="flex items-center justify-center gap-1 text-amber-400">
                       <Users size={12} /> {c._count?.dependents}
                     </span>
                   )}
                 </td>
+                <td className="px-4 py-3 text-sm text-center">
+                  {c.isAssured ? (
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-emerald-900 text-emerald-300">✓ Sim</span>
+                  ) : (
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-slate-700 text-slate-400">Não</span>
+                  )}
+                </td>
                 <td className="px-4 py-3">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[c.status] || "bg-gray-100"}`}>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[c.status] || "bg-slate-700"}`}>
                     {statusLabels[c.status] || c.status}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-right space-x-1">
-                  <button onClick={() => handleDetail(c.id)} className="text-green-600 hover:text-green-800"><Eye size={16} /></button>
-                  <button onClick={() => handleEdit(c.id)} className="text-blue-600 hover:text-blue-800"><Edit size={16} /></button>
-                  <button onClick={() => handleDelete(c.id)} className="text-red-600 hover:text-red-800"><Trash2 size={16} /></button>
+                  <button onClick={() => handleDetail(c.id)} className="text-emerald-400 hover:text-emerald-300"><Eye size={16} /></button>
+                  <button onClick={() => handleEdit(c.id)} className="text-amber-400 hover:text-amber-300"><Edit size={16} /></button>
+                  <button onClick={() => handleDelete(c.id)} className="text-red-400 hover:text-red-300"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
-            {clients.length === 0 && <tr><td colSpan={9} className="px-6 py-8 text-center text-gray-600">Nenhum cliente encontrado</td></tr>}
+            {clients.length === 0 && <tr><td colSpan={10} className="px-6 py-8 text-center text-slate-400">Nenhum cliente encontrado</td></tr>}
           </tbody>
         </table>
       </div>
@@ -184,49 +228,58 @@ export default function ClientesPage() {
         <div className="flex justify-center gap-2 mt-4">
           {Array.from({ length: Math.min(pages, 10) }, (_, i) => i + 1).map(p => (
             <button key={p} onClick={() => setPage(p)}
-              className={`px-3 py-1 rounded ${p === page ? "bg-blue-600 text-white" : "bg-gray-200"}`}>{p}</button>
+              className={`px-3 py-1 rounded ${p === page ? "bg-amber-600 text-slate-900" : "bg-slate-700 text-slate-300 hover:bg-slate-600"}`}>{p}</button>
           ))}
-          {pages > 10 && <span className="px-2 py-1">...</span>}
+          {pages > 10 && <span className="px-2 py-1 text-slate-400">...</span>}
         </div>
       )}
 
       {/* Detail Modal */}
       {showDetail && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6">
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-800 rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 border border-slate-700">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-xl font-bold">{showDetail.name}</h2>
-                <p className="text-sm text-gray-500">Código: {showDetail.code || "-"} | CPF: {showDetail.cpf || "-"}</p>
+                <h2 className="text-xl font-bold text-amber-400">{showDetail.name}</h2>
+                <p className="text-sm text-slate-400">Código: {showDetail.code || "-"} | CPF: {showDetail.cpf || "-"}</p>
               </div>
-              <button onClick={() => setShowDetail(null)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
+              <button onClick={() => setShowDetail(null)} className="text-slate-400 hover:text-slate-300"><X size={20} /></button>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-sm mb-6">
-              <div><span className="text-gray-700">Endereço:</span> {showDetail.address || "-"}, {showDetail.neighborhood || "-"}</div>
-              <div><span className="text-gray-700">Cidade:</span> {showDetail.city || "-"}/{showDetail.state || "-"}</div>
-              <div><span className="text-gray-700">Celular:</span> {showDetail.cellphone || "-"}</div>
-              <div><span className="text-gray-700">Telefone:</span> {showDetail.phone || "-"}</div>
-              <div><span className="text-gray-700">Estado Civil:</span> {showDetail.civilStatus || "-"}</div>
-              <div><span className="text-gray-700">Profissão:</span> {showDetail.profession || "-"}</div>
-              <div><span className="text-gray-700">Cônjuge:</span> {showDetail.spouseName || "-"}</div>
-              <div><span className="text-gray-700">Dia Vencimento:</span> {showDetail.dueDay || "-"}</div>
-              <div><span className="text-gray-700">Local Pagamento:</span> {showDetail.paymentLocation === "LOJA" ? "Loja" : "Residência"}</div>
-              <div><span className="text-gray-700">Cobrador:</span> {showDetail.cobrador?.name || "-"}</div>
-              <div><span className="text-gray-700">Pai:</span> {showDetail.fatherName || "-"}</div>
-              <div><span className="text-gray-700">Mãe:</span> {showDetail.motherName || "-"}</div>
+              <div><span className="text-amber-400">Endereço:</span> <span className="text-slate-300">{showDetail.address || "-"}, {showDetail.neighborhood || "-"}</span></div>
+              <div><span className="text-amber-400">Cidade:</span> <span className="text-slate-300">{showDetail.city || "-"}/{showDetail.state || "-"}</span></div>
+              <div><span className="text-amber-400">Celular:</span> <span className="text-slate-300">{showDetail.cellphone || "-"}</span></div>
+              <div><span className="text-amber-400">Telefone:</span> <span className="text-slate-300">{showDetail.phone || "-"}</span></div>
+              <div><span className="text-amber-400">Estado Civil:</span> <span className="text-slate-300">{showDetail.civilStatus || "-"}</span></div>
+              <div><span className="text-amber-400">Profissão:</span> <span className="text-slate-300">{showDetail.profession || "-"}</span></div>
+              <div><span className="text-amber-400">Cônjuge:</span> <span className="text-slate-300">{showDetail.spouseName || "-"}</span></div>
+              <div><span className="text-amber-400">Dia Vencimento:</span> <span className="text-slate-300">{showDetail.dueDay || "-"}</span></div>
+              <div><span className="text-amber-400">Local Pagamento:</span> <span className="text-slate-300">{showDetail.paymentLocation === "LOJA" ? "Loja" : "Residência"}</span></div>
+              <div>
+                <span className="text-amber-400">Cliente Assegurado:</span>
+                <span className="ml-2 px-2 py-1 rounded-full text-xs font-medium" style={{
+                  backgroundColor: showDetail.isAssured ? '#064e3b' : '#334155',
+                  color: showDetail.isAssured ? '#86efac' : '#cbd5e1'
+                }}>
+                  {showDetail.isAssured ? "✓ Sim" : "Não"}
+                </span>
+              </div>
+              <div><span className="text-amber-400">Cobrador:</span> <span className="text-slate-300">{showDetail.cobrador?.name || "-"}</span></div>
+              <div><span className="text-amber-400">Pai:</span> <span className="text-slate-300">{showDetail.fatherName || "-"}</span></div>
+              <div><span className="text-amber-400">Mãe:</span> <span className="text-slate-300">{showDetail.motherName || "-"}</span></div>
             </div>
 
             {/* Endereço de Cobrança */}
             {showDetail.billingAddressSame === false && showDetail.billingAddress && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <h3 className="font-bold text-blue-800 mb-2 flex items-center gap-2"><MapPin size={16} /> Endereço de Cobrança (diferente do residencial)</h3>
+              <div className="bg-slate-900 border border-amber-700 rounded-lg p-4 mb-6">
+                <h3 className="font-bold text-amber-400 mb-2 flex items-center gap-2"><MapPin size={16} /> Endereço de Cobrança (diferente do residencial)</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div><span className="text-blue-600">Endereço:</span> <span className="text-gray-900">{showDetail.billingAddress}{showDetail.billingNumber ? `, ${showDetail.billingNumber}` : ""}</span></div>
-                  {showDetail.billingComplement && <div><span className="text-blue-600">Complemento:</span> <span className="text-gray-900">{showDetail.billingComplement}</span></div>}
-                  <div><span className="text-blue-600">Bairro:</span> <span className="text-gray-900">{showDetail.billingNeighborhood || "-"}</span></div>
-                  <div><span className="text-blue-600">Cidade:</span> <span className="text-gray-900">{showDetail.billingCity || showDetail.city || "-"}/{showDetail.billingState || showDetail.state || "-"}</span></div>
-                  {showDetail.billingReference && <div className="col-span-2"><span className="text-blue-600">Referência:</span> <span className="text-gray-900">{showDetail.billingReference}</span></div>}
+                  <div><span className="text-amber-400">Endereço:</span> <span className="text-slate-300">{showDetail.billingAddress}{showDetail.billingNumber ? `, ${showDetail.billingNumber}` : ""}</span></div>
+                  {showDetail.billingComplement && <div><span className="text-amber-400">Complemento:</span> <span className="text-slate-300">{showDetail.billingComplement}</span></div>}
+                  <div><span className="text-amber-400">Bairro:</span> <span className="text-slate-300">{showDetail.billingNeighborhood || "-"}</span></div>
+                  <div><span className="text-amber-400">Cidade:</span> <span className="text-slate-300">{showDetail.billingCity || showDetail.city || "-"}/{showDetail.billingState || showDetail.state || "-"}</span></div>
+                  {showDetail.billingReference && <div className="col-span-2"><span className="text-amber-400">Referência:</span> <span className="text-slate-300">{showDetail.billingReference}</span></div>}
                 </div>
               </div>
             )}
@@ -234,12 +287,12 @@ export default function ClientesPage() {
             {/* Dependents */}
             {showDetail.dependents?.length > 0 && (
               <div className="mb-6">
-                <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2"><Users size={16} /> Dependentes ({showDetail.dependents.length})</h3>
-                <div className="bg-gray-50 rounded-lg p-3">
+                <h3 className="font-bold text-amber-400 mb-2 flex items-center gap-2"><Users size={16} /> Dependentes ({showDetail.dependents.length})</h3>
+                <div className="bg-slate-900 rounded-lg p-3 border border-slate-700">
                   {showDetail.dependents.map((d: any) => (
-                    <div key={d.id} className="flex justify-between py-1 border-b border-gray-200 last:border-0">
-                      <span className="text-sm">{d.name}</span>
-                      <span className="text-xs text-gray-500">{d.relationship}</span>
+                    <div key={d.id} className="flex justify-between py-1 border-b border-slate-700 last:border-0">
+                      <span className="text-sm text-slate-300">{d.name}</span>
+                      <span className="text-xs text-slate-400">{d.relationship}</span>
                     </div>
                   ))}
                 </div>
@@ -249,18 +302,18 @@ export default function ClientesPage() {
             {/* Carnês */}
             {showDetail.carnes?.length > 0 && (
               <div>
-                <h3 className="font-bold text-gray-900 mb-2">Carnês</h3>
+                <h3 className="font-bold text-amber-400 mb-2">Carnês</h3>
                 {showDetail.carnes.slice(0, 3).map((c: any) => {
                   const paid = c.payments.filter((p: any) => p.status === "PAID").length;
                   const total = c.payments.length;
                   return (
-                    <div key={c.id} className="bg-gray-50 rounded-lg p-3 mb-2">
+                    <div key={c.id} className="bg-slate-900 rounded-lg p-3 mb-2 border border-slate-700">
                       <div className="flex justify-between">
-                        <span className="font-medium">{c.year}</span>
-                        <span className="text-sm text-green-600">{paid}/{total} pagos</span>
+                        <span className="font-medium text-slate-300">{c.year}</span>
+                        <span className="text-sm text-emerald-400">{paid}/{total} pagos</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                        <div className="bg-green-500 h-2 rounded-full" style={{ width: `${(paid / total) * 100}%` }}></div>
+                      <div className="w-full bg-slate-700 rounded-full h-2 mt-1">
+                        <div className="bg-emerald-600 h-2 rounded-full" style={{ width: `${(paid / total) * 100}%` }}></div>
                       </div>
                     </div>
                   );
@@ -268,34 +321,34 @@ export default function ClientesPage() {
               </div>
             )}
 
-            {showDetail.notes && <p className="text-sm text-gray-500 mt-4"><strong>Obs:</strong> {showDetail.notes}</p>}
+            {showDetail.notes && <p className="text-sm text-slate-400 mt-4"><strong className="text-amber-400">Obs:</strong> {showDetail.notes}</p>}
           </div>
         </div>
       )}
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-800 rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 border border-slate-700">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold">{editId ? "Editar Cliente" : "Novo Cliente"}</h2>
-              <button onClick={() => setShowForm(false)}><X size={20} /></button>
+              <h2 className="text-xl font-bold text-amber-400">{editId ? "Editar Cliente" : "Novo Cliente"}</h2>
+              <button onClick={() => setShowForm(false)} className="text-slate-400 hover:text-slate-300"><X size={20} /></button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700 mb-1">Nome *</label><input name="name" value={form.name} onChange={handleChange} required className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">CPF</label><input name="cpf" value={form.cpf} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">RG</label><input name="rg" value={form.rg} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Celular</label><input name="cellphone" value={form.cellphone} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label><input name="phone" value={form.phone} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700 mb-1">Endereço</label><input name="address" value={form.address} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Bairro</label><input name="neighborhood" value={form.neighborhood} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Cidade</label><input name="city" value={form.city} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Estado</label><input name="state" value={form.state} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">CEP</label><input name="zipCode" value={form.zipCode} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Estado Civil</label><input name="civilStatus" value={form.civilStatus} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Profissão</label><input name="profession" value={form.profession} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                <div className="md:col-span-2"><label className="block text-sm font-medium text-amber-400 mb-1">Nome *</label><input name="name" value={form.name} onChange={handleChange} required className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div><label className="block text-sm font-medium text-amber-400 mb-1">CPF</label><input name="cpf" value={form.cpf} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div><label className="block text-sm font-medium text-amber-400 mb-1">RG</label><input name="rg" value={form.rg} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div><label className="block text-sm font-medium text-amber-400 mb-1">Celular</label><input name="cellphone" value={form.cellphone} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div><label className="block text-sm font-medium text-amber-400 mb-1">Telefone</label><input name="phone" value={form.phone} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div className="md:col-span-2"><label className="block text-sm font-medium text-amber-400 mb-1">Endereço</label><input name="address" value={form.address} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div><label className="block text-sm font-medium text-amber-400 mb-1">Bairro</label><input name="neighborhood" value={form.neighborhood} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div><label className="block text-sm font-medium text-amber-400 mb-1">Cidade</label><input name="city" value={form.city} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div><label className="block text-sm font-medium text-amber-400 mb-1">Estado</label><input name="state" value={form.state} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div><label className="block text-sm font-medium text-amber-400 mb-1">CEP</label><input name="zipCode" value={form.zipCode} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div><label className="block text-sm font-medium text-amber-400 mb-1">Estado Civil</label><input name="civilStatus" value={form.civilStatus} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
+                <div><label className="block text-sm font-medium text-amber-400 mb-1">Profissão</label><input name="profession" value={form.profession} onChange={handleChange} className="w-full px-3 py-2 border border-slate-600 rounded-lg bg-slate-700 text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Cônjuge</label><input name="spouseName" value={form.spouseName} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Pai</label><input name="fatherName" value={form.fatherName} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">Mãe</label><input name="motherName" value={form.motherName} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
@@ -309,6 +362,106 @@ export default function ClientesPage() {
                     <option value="RESIDENCIA">Residência</option>
                     <option value="LOJA">Loja</option>
                   </select>
+                </div>
+
+                {/* Cliente Assegurado */}
+                <div className="md:col-span-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.isAssured || false}
+                      onChange={e => setForm({ ...form, isAssured: e.target.checked })}
+                      className="rounded border-gray-300"
+                    />
+                    <span className="text-sm font-medium text-gray-700">✓ Cliente Assegurado</span>
+                  </label>
+                </div>
+
+                {/* Dependentes */}
+                <div className="md:col-span-2 border-t pt-4 mt-2">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <Users size={18} className="text-blue-600" />
+                      <h3 className="font-bold text-gray-900">Dependentes</h3>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setForm({ ...form, dependents: [...(form.dependents || []), { name: "", relationship: "", birthDate: "" }] })}
+                      className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+                    >
+                      <Plus size={16} /> Adicionar
+                    </button>
+                  </div>
+                  
+                  {form.dependents?.length === 0 && (
+                    <p className="text-sm text-gray-500 italic">Nenhum dependente cadastrado</p>
+                  )}
+                  
+                  {form.dependents?.map((dep: any, index: number) => (
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2 p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Nome</label>
+                        <input
+                          value={dep.name}
+                          onChange={e => {
+                            const newDeps = [...form.dependents];
+                            newDeps[index].name = e.target.value;
+                            setForm({ ...form, dependents: newDeps });
+                          }}
+                          className="w-full px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Nome do dependente"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Parentesco</label>
+                        <select
+                          value={dep.relationship}
+                          onChange={e => {
+                            const newDeps = [...form.dependents];
+                            newDeps[index].relationship = e.target.value;
+                            setForm({ ...form, dependents: newDeps });
+                          }}
+                          className="w-full px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="">Selecione</option>
+                          <option value="Cônjuge">Cônjuge</option>
+                          <option value="Filho(a)">Filho(a)</option>
+                          <option value="Pai">Pai</option>
+                          <option value="Mãe">Mãe</option>
+                          <option value="Irmão(ã)">Irmão(ã)</option>
+                          <option value="Neto(a)">Neto(a)</option>
+                          <option value="Sobrinho(a)">Sobrinho(a)</option>
+                          <option value="Outro">Outro</option>
+                        </select>
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="flex-1">
+                          <label className="block text-xs font-medium text-gray-600 mb-1">Nascimento</label>
+                          <input
+                            type="date"
+                            value={dep.birthDate}
+                            onChange={e => {
+                              const newDeps = [...form.dependents];
+                              newDeps[index].birthDate = e.target.value;
+                              setForm({ ...form, dependents: newDeps });
+                            }}
+                            className="w-full px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newDeps = form.dependents.filter((_: any, i: number) => i !== index);
+                            setForm({ ...form, dependents: newDeps });
+                          }}
+                          className="self-end p-1 text-red-500 hover:text-red-700"
+                          title="Remover"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Endereço de Cobrança */}
@@ -361,6 +514,116 @@ export default function ClientesPage() {
                     </div>
                   </>
                 )}
+                
+                {/* Dependentes */}
+                <div className="md:col-span-2 border-t pt-4 mt-2">
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-2">
+                      <Users size={18} className="text-blue-600" />
+                      <h3 className="font-bold text-gray-900">Dependentes</h3>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowDependents(!showDependents)}
+                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    >
+                      {showDependents ? "Ocultar" : "+ Adicionar"}
+                    </button>
+                  </div>
+
+                  {dependents.length > 0 && (
+                    <div className="bg-gray-50 rounded-lg p-3 mb-3">
+                      {dependents.map((d: any) => (
+                        <div key={d.id} className="flex items-center justify-between py-2 border-b border-gray-200 last:border-0">
+                          <div className="text-sm">
+                            <span className="font-medium">{d.name}</span>
+                            <span className="text-gray-500 ml-2">({d.relationship})</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => deleteDependent(d.id)}
+                            className="text-red-600 hover:text-red-800 text-xs"
+                          >
+                            ✕ Remover
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {showDependents && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        <div className="col-span-2">
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Nome *</label>
+                          <input
+                            type="text"
+                            value={newDependent.name}
+                            onChange={(e) => setNewDependent({ ...newDependent, name: e.target.value })}
+                            placeholder="Nome do dependente"
+                            className="w-full px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:ring-1 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Parentesco</label>
+                          <select
+                            value={newDependent.relationship}
+                            onChange={(e) => setNewDependent({ ...newDependent, relationship: e.target.value })}
+                            className="w-full px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:ring-1 focus:ring-blue-500"
+                          >
+                            <option value="OUTRO">Outro</option>
+                            <option value="CONJUGE">Cônjuge</option>
+                            <option value="FILHO">Filho</option>
+                            <option value="FILHA">Filha</option>
+                            <option value="PAI">Pai</option>
+                            <option value="MAE">Mãe</option>
+                            <option value="IRMAO">Irmão</option>
+                            <option value="IRMA">Irmã</option>
+                            <option value="NETO">Neto</option>
+                            <option value="NETA">Neta</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">CPF</label>
+                          <input
+                            type="text"
+                            value={newDependent.cpf}
+                            onChange={(e) => setNewDependent({ ...newDependent, cpf: e.target.value })}
+                            placeholder="000.000.000-00"
+                            className="w-full px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:ring-1 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Telefone</label>
+                          <input
+                            type="text"
+                            value={newDependent.phone}
+                            onChange={(e) => setNewDependent({ ...newDependent, phone: e.target.value })}
+                            placeholder="(11) 99999-9999"
+                            className="w-full px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:ring-1 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div className="col-span-2">
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Data de Nascimento</label>
+                          <input
+                            type="date"
+                            value={newDependent.birthDate}
+                            onChange={(e) => setNewDependent({ ...newDependent, birthDate: e.target.value })}
+                            className="w-full px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:ring-1 focus:ring-blue-500"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={addDependent}
+                        className="w-full px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 font-medium"
+                      >
+                        + Adicionar Dependente
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700 mb-1">Observações</label><textarea name="notes" value={form.notes} onChange={handleChange} rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500" /></div>
               </div>
 

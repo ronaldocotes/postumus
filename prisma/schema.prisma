@@ -116,6 +116,7 @@ model Client {
   billingReference   String?
   billingLatitude    Float?
   billingLongitude   Float?
+  isAssured       Boolean      @default(false)
   notes           String?
   notes2          String?
   cobradorId      String?

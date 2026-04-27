@@ -5,8 +5,12 @@
 @custom-variant dark (&:where(.__never__));
 
 :root {
-  --background: #ffffff;
-  --foreground: #111827;
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --primary: #d4af37;
+  --primary-dark: #b8941e;
+  --secondary: #1e293b;
+  --accent: #64748b;
   color-scheme: light only;
 }
 
@@ -23,10 +27,10 @@ html,
 }
 
 body {
-  background: #ffffff !important;
-  color: #111827 !important;
+  background: #0f172a !important;
+  color: #f8fafc !important;
   font-family: Arial, Helvetica, sans-serif;
-  -webkit-text-fill-color: #111827 !important;
+  -webkit-text-fill-color: #f8fafc !important;
   color-scheme: light only !important;
 }
 
@@ -41,11 +45,12 @@ body {
 input,
 select,
 textarea {
-  color: #111827 !important;
-  -webkit-text-fill-color: #111827 !important;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
   opacity: 1 !important;
-  background-color: #ffffff !important;
+  background-color: #1e293b !important;
   color-scheme: light !important;
+  border-color: #475569 !important;
 }
 
 option {
