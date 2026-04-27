@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Search, Eye, FileText, CheckCircle, Clock, AlertTriangle } from "lucide-react";
+import { Plus, Search, FileText, CheckCircle, Clock, AlertTriangle, ChevronRight, Calendar, DollarSign } from "lucide-react";
 import SearchSelect from "@/components/ui/SearchSelect";
 
 interface Payment {
@@ -31,6 +31,32 @@ export default function CarnesPage() {
   const [clients, setClients] = useState<any[]>([]);
   const [form, setForm] = useState({ clientId: "", year: String(new Date().getFullYear()), totalValue: "", installments: "12", description: "" });
   const [loading, setLoading] = useState(false);
+
+  // Função para gerar cor baseada no nome
+  const getAvatarColor = (name: string) => {
+    const colors = [
+      "bg-purple-200 text-purple-800",
+      "bg-pink-200 text-pink-800",
+      "bg-blue-200 text-blue-800",
+      "bg-green-200 text-green-800",
+      "bg-yellow-200 text-yellow-800",
+      "bg-indigo-200 text-indigo-800",
+      "bg-rose-200 text-rose-800",
+      "bg-cyan-200 text-cyan-800",
+    ];
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  // Função para extrair iniciais
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .slice(0, 2)
+      .map(n => n[0])
+      .join("")
+      .toUpperCase();
+  };
 
   async function load() {
     const res = await fetch(`/api/carnes?search=${search}`);
@@ -102,31 +128,94 @@ export default function CarnesPage() {
           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid gap-3">
         {carnes.map((c) => {
           const paid = c.payments.filter(p => p.status === "PAID").length;
           const overdue = c.payments.filter(p => p.status === "OVERDUE").length;
+          const progressPercent = (paid / c.installments) * 100;
+          const isQuitado = paid === c.installments;
+          
           return (
-            <div key={c.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-bold text-gray-900">{c.client.name}</h3>
-                  <p className="text-sm text-gray-600">CPF: {c.client.cpf} | Ano: {c.year}</p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Total: {fmt(c.totalValue)} | {c.installments}x de {fmt(c.totalValue / c.installments)}
+            <button
+              key={c.id}
+              onClick={() => setShowDetail(c)}
+              className="text-left bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md hover:border-blue-300 transition-all duration-200 group"
+            >
+              <div className="flex items-start gap-4">
+                {/* Avatar com Iniciais */}
+                <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm ${getAvatarColor(c.client.name)}`}>
+                  {getInitials(c.client.name)}
+                </div>
+
+                {/* Informações Principais */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="font-bold text-gray-900 truncate">{c.client.name}</h3>
+                    {/* Badge de Status */}
+                    {isQuitado ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 flex-shrink-0">
+                        ✓ Quitado
+                      </span>
+                    ) : overdue > 0 ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 flex-shrink-0">
+                        ⚠ {overdue} em Atraso
+                      </span>
+                    ) : null}
+                  </div>
+
+                  {/* Informações Secundárias com Ícones */}
+                  <div className="grid grid-cols-3 gap-3 text-sm text-gray-600 mb-3">
+                    <div className="flex items-center gap-1.5">
+                      <FileText size={14} className="text-gray-400 flex-shrink-0" />
+                      <span className="truncate">{c.client.cpf}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Calendar size={14} className="text-gray-400 flex-shrink-0" />
+                      <span>Ano {c.year}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <DollarSign size={14} className="text-gray-400 flex-shrink-0" />
+                      <span className="font-medium text-gray-900">{fmt(c.totalValue)}</span>
+                    </div>
+                  </div>
+
+                  {/* Barra de Progresso */}
+                  <div className="mb-2">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-semibold text-gray-700">
+                        {paid}/{c.installments} pagos
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {Math.round(progressPercent)}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full transition-all duration-500 ${
+                          isQuitado
+                            ? "bg-gradient-to-r from-emerald-500 to-emerald-600"
+                            : overdue > 0
+                            ? "bg-gradient-to-r from-orange-400 to-red-500"
+                            : "bg-gradient-to-r from-blue-500 to-blue-600"
+                        }`}
+                        style={{ width: `${progressPercent}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Info de Parcelas */}
+                  <p className="text-xs text-gray-500">
+                    {c.installments}x de {fmt(c.totalValue / c.installments)}
                   </p>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-right text-sm">
-                    <p className="text-green-600">{paid}/{c.installments} pagos</p>
-                    {overdue > 0 && <p className="text-red-600">{overdue} em atraso</p>}
-                  </div>
-                  <button onClick={() => setShowDetail(c)} className="text-blue-600 hover:text-blue-800">
-                    <Eye size={20} />
-                  </button>
-                </div>
+
+                {/* Ícone de Navegação */}
+                <ChevronRight 
+                  size={20} 
+                  className="text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0 mt-1"
+                />
               </div>
-            </div>
+            </button>
           );
         })}
         {carnes.length === 0 && <p className="text-center text-gray-600 py-8">Nenhum carnê encontrado</p>}
@@ -165,42 +254,78 @@ export default function CarnesPage() {
       {/* Detail Modal */}
       {showDetail && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h2 className="text-xl font-bold">{showDetail.client.name}</h2>
-                <p className="text-sm text-gray-500">Carnê {showDetail.year} - {fmt(showDetail.totalValue)}</p>
+          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
+            {/* Sticky Header */}
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 z-10">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex-1">
+                  <h2 className="text-xl font-bold text-gray-900">{showDetail.client.name}</h2>
+                  <p className="text-sm text-gray-600 mt-1">Carnê {showDetail.year} • {fmt(showDetail.totalValue)}</p>
+                </div>
+                <button onClick={() => setShowDetail(null)} className="text-gray-400 hover:text-gray-600 p-1">
+                  <span className="text-2xl">✕</span>
+                </button>
               </div>
-              <button onClick={() => setShowDetail(null)} className="text-gray-400 hover:text-gray-600">✕</button>
+              
+              {/* Barra de Progresso */}
+              <div className="mt-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-medium text-gray-700">Progresso do Pagamento</span>
+                  <span className="text-xs font-bold text-gray-900">
+                    {showDetail.payments.filter(p => p.status === "PAID").length}/{showDetail.installments} pagos
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-emerald-500 to-emerald-600 h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${(showDetail.payments.filter(p => p.status === "PAID").length / showDetail.installments) * 100}%` }}
+                  />
+                </div>
+              </div>
             </div>
-            <table className="w-full text-sm text-gray-900">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-800 uppercase">Parcela</th>
-                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-800 uppercase">Vencimento</th>
-                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-800 uppercase">Valor</th>
-                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-800 uppercase">Status</th>
-                  <th className="px-4 py-2 text-right text-xs font-semibold text-gray-800 uppercase">Ação</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {showDetail.payments.map((p) => (
-                  <tr key={p.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{p.installment}/{showDetail.installments}</td>
-                    <td className="px-4 py-3 text-sm text-gray-800">{fmtDate(p.dueDate)}</td>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{fmt(p.amount)}</td>
-                    <td className="px-4 py-3 text-sm flex items-center gap-1 text-gray-800">{statusIcon(p.status)} {statusLabel[p.status]}</td>
-                    <td className="px-4 py-3 text-right">
-                      {p.status !== "PAID" && (
-                        <button onClick={() => handlePay(p.id)} className="text-green-600 hover:text-green-800 text-sm font-medium">
-                          Registrar Pagamento
-                        </button>
-                      )}
-                    </td>
+
+            {/* Scrollable Table Content */}
+            <div className="flex-1 overflow-y-auto px-6 py-4">
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-gray-50 z-5">
+                  <tr className="border-b border-gray-200">
+                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wide">Parcela</th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wide">Vencimento</th>
+                    <th className="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wide">Valor</th>
+                    <th className="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wide">Status</th>
+                    <th className="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wide">Ação</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {showDetail.payments.map((p, idx) => {
+                    const getStatusBadge = (status: string) => {
+                      if (status === "PAID") return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">✓ Pago</span>;
+                      if (status === "OVERDUE") return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">⚠ Atrasado</span>;
+                      return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">⏱ Pendente</span>;
+                    };
+                    
+                    return (
+                      <tr key={p.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                        <td className="px-4 py-4 text-sm font-semibold text-gray-900">{p.installment}/{showDetail.installments}</td>
+                        <td className="px-4 py-4 text-sm text-gray-600">{fmtDate(p.dueDate)}</td>
+                        <td className="px-4 py-4 text-sm font-bold text-gray-900 text-right">{fmt(p.amount)}</td>
+                        <td className="px-4 py-4 text-center">{getStatusBadge(p.status)}</td>
+                        <td className="px-4 py-4 text-right">
+                          {p.status !== "PAID" && (
+                            <button 
+                              onClick={() => handlePay(p.id)} 
+                              className="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors shadow-sm"
+                            >
+                              Registrar
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

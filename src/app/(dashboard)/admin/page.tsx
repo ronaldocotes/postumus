@@ -1,1 +1,905 @@
-\"use client\";\n\nimport { useEffect, useState } from \"react\";\nimport { Plus, Edit, Trash2, X, MapPin, Building2, Users, Settings, Shield, ChevronDown, ChevronRight, Check, Eye, EyeOff } from \"lucide-react\";\nimport { estados, cidadesPorEstado, bairrosPorCidade, adicionarCidade } from \"@/lib/location-data\";\nimport { systemRoles, modules, moduleActions, Permission, Role } from \"@/lib/permissions\";\n\ninterface CidadeConfig {\n  nome: string;\n  estado: string;\n  bairros: string[];\n}\n\ninterface User {\n  id: string;\n  name: string;\n  email: string;\n  role: string;\n  isActive: boolean;\n  createdAt: string;\n}\n\n// Componente Toggle Switch moderno\nfunction ToggleSwitch({ \n  checked, \n  onChange, \n  label, \n  description \n}: { \n  checked: boolean; \n  onChange: () => void; \n  label: string;\n  description?: string;\n}) {\n  return (\n    \u003cdiv className=\"flex items-center justify-between py-3 px-4 hover:bg-slate-50 rounded-lg transition-colors\"\u003e\n      \u003cdiv className=\"flex-1\"\u003e\n        \u003cspan className={`text-sm font-medium ${checked ? 'text-slate-900' : 'text-slate-600'}`}\u003e{label}\u003c/span\u003e\n        {description \u0026\u0026 (\n          \u003cp className=\"text-xs text-slate-400 mt-0.5\"\u003e{description}\u003c/p\u003e\n        )}\n      \u003c/div\u003e\n      \u003cbutton\n        type=\"button\"\n        onClick={onChange}\n        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${\n          checked ? 'bg-blue-600' : 'bg-slate-200'\n        }`}\n      \u003e\n        \u003cspan\n          className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-all duration-200 ease-in-out ${\n            checked ? 'translate-x-6' : 'translate-x-1'\n          }`}\n        /\u003e\n      \u003c/button\u003e\n    \u003c/div\u003e\n  );\n}\n\n// Componente Accordion de Módulo\nfunction ModuleAccordion({\n  module,\n  permissions,\n  editablePermissions,\n  onToggle,\n  isExpanded,\n  onToggleExpand\n}: {\n  module: { id: string; name: string; icon: string };\n  permissions: { id: string; name: string; description: string }[];\n  editablePermissions: Permission[];\n  onToggle: (permission: Permission) => void;\n  isExpanded: boolean;\n  onToggleExpand: () => void;\n}) {\n  const activeCount = permissions.filter(p => \n    editablePermissions.includes(`${module.id}:${p.id}` as Permission)\n  ).length;\n  const totalCount = permissions.length;\n  const allActive = activeCount === totalCount;\n  const someActive = activeCount \u003e 0 \u0026\u0026 activeCount \u003c totalCount;\n\n  const handleToggleAll = () => {\n    if (allActive) {\n      // Desativar todas\n      permissions.forEach(p => {\n        const perm = `${module.id}:${p.id}` as Permission;\n        if (editablePermissions.includes(perm)) {\n          onToggle(perm);\n        }\n      });\n    } else {\n      // Ativar todas\n      permissions.forEach(p => {\n        const perm = `${module.id}:${p.id}` as Permission;\n        if (!editablePermissions.includes(perm)) {\n          onToggle(perm);\n        }\n      });\n    }\n  };\n\n  return (\n    \u003cdiv className={`border rounded-xl overflow-hidden transition-all duration-200 ${\n      isExpanded ? 'border-blue-200 shadow-sm' : 'border-slate-200 hover:border-slate-300'\n    }`}\u003e\n      {/* Header do Accordion */}\n      \u003cbutton\n        type=\"button\"\n        onClick={onToggleExpand}\n        className=\"w-full flex items-center justify-between p-4 bg-white hover:bg-slate-50 transition-colors\"\n      \u003e\n        \u003cdiv className=\"flex items-center gap-3\"\u003e\n          \u003cdiv className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${\n            allActive ? 'bg-blue-100 text-blue-600' : someActive ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-500'\n          }`}\u003e\n            {allActive ? (\n              \u003cCheck size={20} /\u003e\n            ) : (\n              \u003cspan className=\"text-sm font-bold\"\u003e{module.name.charAt(0)}\u003c/span\u003e\n            )}\n          \u003c/div\u003e\n          \n          \u003cdiv className=\"text-left\"\u003e\n            \u003ch4 className=\"font-semibold text-slate-900\"\u003e{module.name}\u003c/h4\u003e\n            \u003cdiv className=\"flex items-center gap-2 mt-0.5\"\u003e\n              {allActive ? (\n                \u003cspan className=\"text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full\"\u003eAcesso Total\u003c/span\u003e\n              ) : someActive ? (\n                \u003cspan className=\"text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full\"\u003e{activeCount}/{totalCount} ativas\u003c/span\u003e\n              ) : (\n                \u003cspan className=\"text-xs text-slate-400\"\u003eSem acesso\u003c/span\u003e\n              )}\n            \u003c/div\u003e\n          \u003c/div\u003e\n        \u003c/div\u003e\n\n        \u003cdiv className=\"flex items-center gap-3\"\u003e\n          {/* Botão Ativar Tudo (visível no hover ou quando expandido) */}\n          {(isExpanded || someActive) \u0026\u0026 (\n            \u003cbutton\n              type=\"button\"\n              onClick={(e) => {\n                e.stopPropagation();\n                handleToggleAll();\n              }}\n              className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${\n                allActive \n                  ? 'text-red-600 hover:bg-red-50' \n                  : 'text-blue-600 hover:bg-blue-50'\n              }`}\n            \u003e\n              {allActive ? 'Desativar Tudo' : 'Ativar Tudo'}\n            \u003c/button\u003e\n          )}\n          \n          \u003cdiv className={`text-slate-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}\u003e\n            \u003cChevronDown size={20} /\u003e\n          \u003c/div\u003e\n        \u003c/div\u003e\n      \u003c/button\u003e\n\n      {/* Conteúdo Expandido */}\n      \u003cdiv className={`overflow-hidden transition-all duration-300 ease-in-out ${\n        isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'\n      }`}\u003e\n        \u003cdiv className=\"border-t border-slate-100 bg-slate-50/50\"\u003e\n          \u003cdiv className=\"p-2 space-y-1\"\u003e\n            {permissions.map((action) =\u003e {\n              const permission = `${module.id}:${action.id}` as Permission;\n              const isChecked = editablePermissions.includes(permission);\n              \n              return (\n                \u003cToggleSwitch\n                  key={action.id}\n                  checked={isChecked}\n                  onChange={() =\u003e onToggle(permission)}\n                  label={action.name}\n                  description={action.description}\n                /\u              );\n            })}\n          \u003c/div\u003e\n        \u003c/div\u003e\n      \u003c/div\u003e\n    \u003c/div\u003e\n  );\n}\n\nexport default function AdminPage() {\n  const [activeTab, setActiveTab] = useState\u003c\"cidades\" | \"bairros\" | \"usuarios\" | \"permissoes\" | \"config\"\u003e(\"usuarios\");\n  const [cidades, setCidades] = useState\u003cCidadeConfig[]\u003e([]);\n  const [users, setUsers] = useState\u003cUser[]\u003e([]);\n  const [showModal, setShowModal] = useState(false);\n  const [modalType, setModalType] = useState\u003c\"cidade\" | \"bairro\" | \"usuario\" | \"permissao\"\u003e(\"usuario\");\n  const [form, setForm] = useState({ estado: \"\", cidade: \"\", bairro: \"\", nome: \"\", email: \"\", senha: \"\", role: \"\", confirmarSenha: \"\" });\n  const [selectedCidade, setSelectedCidade] = useState(\"\");\n  const [bairrosList, setBairrosList] = useState\u003cstring[]\u003e([]);\n  const [selectedRole, setSelectedRole] = useState\u003cRole | null\u003e(null);\n  const [showPassword, setShowPassword] = useState(false);\n  \n  // Estados para edição de permissões\n  const [isEditingPermissions, setIsEditingPermissions] = useState(false);\n  const [editablePermissions, setEditablePermissions] = useState\u003cPermission[]\u003e([]);\n  const [customRoles, setCustomRoles] = useState\u003cRole[]\u003e([]);\n  const [expandedModules, setExpandedModules] = useState\u003cSet\u003cstring\u003e\u003e(new Set());\n\n  useEffect(() =\u003e {\n    const lista: CidadeConfig[] = [];\n    Object.entries(cidadesPorEstado).forEach(([estado, cids]) =\u003e {\n      cids.forEach(cidade =\u003e {\n        lista.push({\n          nome: cidade,\n          estado,\n          bairros: bairrosPorCidade[cidade] || []\n        });\n      });\n    });\n    setCidades(lista);\n    loadUsers();\n  }, []);\n\n  const loadUsers = async () =\u003e {\n    try {\n      const res = await fetch(\"/api/usuarios\");\n      if (res.ok) {\n        const data = await res.json();\n        setUsers(Array.isArray(data) ? data : data.users || data.data || []);\n      } else {\n        setUsers([\n          { id: \"1\", name: \"Administrador\", email: \"admin@posthumous.com\", role: \"super_admin\", isActive: true, createdAt: \"2024-01-01\" },\n          { id: \"2\", name: \"João Silva\", email: \"joao@posthumous.com\", role: \"admin\", isActive: true, createdAt: \"2024-02-15\" },\n          { id: \"3\", name: \"Maria Santos\", email: \"maria@posthumous.com\", role: \"operador\", isActive: true, createdAt: \"2024-03-10\" },\n        ]);\n      }\n    } catch (err) {\n      setUsers([\n        { id: \"1\", name: \"Administrador\", email: \"admin@posthumous.com\", role: \"super_admin\", isActive: true, createdAt: \"2024-01-01\" },\n        { id: \"2\", name: \"João Silva\", email: \"joao@posthumous.com\", role: \"admin\", isActive: true, createdAt: \"2024-02-15\" },\n        { id: \"3\", name: \"Maria Santos\", email: \"maria@posthumous.com\", role: \"operador\", isActive: true, createdAt: \"2024-03-10\" },\n      ]);\n    }\n  };\n\n  const handleAddCidade = () =\u003e {\n    if (form.estado \u0026\u0026 form.cidade) {\n      adicionarCidade(form.estado, form.cidade, []);\n      setCidades([...cidades, { nome: form.cidade, estado: form.estado, bairros: [] }]);\n      setForm({ ...form, cidade: \"\" });\n      setShowModal(false);\n    }\n  };\n\n  const handleAddBairro = () =\u003e {\n    if (selectedCidade \u0026\u0026 form.bairro) {\n      const novosBairros = [...bairrosList, form.bairro];\n      setBairrosList(novosBairros);\n      bairrosPorCidade[selectedCidade] = novosBairros;\n      setForm({ ...form, bairro: \"\" });\n    }\n  };\n\n  const handleRemoveBairro = (index: number) =\u003e {\n    const novos = bairrosList.filter((_, i) =\u003e i !== index);\n    setBairrosList(novos);\n    bairrosPorCidade[selectedCidade] = novos;\n  };\n\n  const handleAddUser = async () =\u003e {\n    if (form.nome \u0026\u0026 form.email \u0026\u0026 form.senha \u0026\u0026 form.role) {\n      if (form.senha !== form.confirmarSenha) {\n        alert(\"As senhas não coincidem!\");\n        return;\n      }\n      const newUser: User = {\n        id: String(Date.now()),\n        name: form.nome,\n        email: form.email,\n        role: form.role,\n        isActive: true,\n        createdAt: new Date().toISOString().split(\"T\")[0]\n      };\n      setUsers([...users, newUser]);\n      setShowModal(false);\n      setForm({ ...form, nome: \"\", email: \"\", senha: \"\", confirmarSenha: \"\", role: \"\" });\n    }\n  };\n\n  const handleEditPermissions = (role: Role) =\u003e {\n    setSelectedRole(role);\n    setEditablePermissions([...role.permissions]);\n    setIsEditingPermissions(true);\n    // Expandir todos os módulos ao iniciar edição\n    setExpandedModules(new Set(modules.map(m =\u003e m.id)));\n  };\n\n  const handleTogglePermission = (permission: Permission) =\u003e {\n    setEditablePermissions(prev =\u003e {\n      if (prev.includes(permission)) {\n        return prev.filter(p =\u003e p !== permission);\n      } else {\n        return [...prev, permission];\n      }\n    });\n  };\n\n  const handleToggleModuleExpand = (moduleId: string) =\u003e {\n    setExpandedModules(prev =\u003e {\n      const newSet = new Set(prev);\n      if (newSet.has(moduleId)) {\n        newSet.delete(moduleId);\n      } else {\n        newSet.add(moduleId);\n      }\n      return newSet;\n    });\n  };\n\n  const handleSavePermissions = () =\u003e {\n    if (selectedRole) {\n      if (selectedRole.isSystem) {\n        const updatedRole: Role = {\n          ...selectedRole,\n          id: `${selectedRole.id}_custom_${Date.now()}`,\n          name: `${selectedRole.name} (Personalizado)`,\n          permissions: editablePermissions,\n          isSystem: false\n        };\n        setCustomRoles([...customRoles, updatedRole]);\n      } else {\n        const updatedRoles = customRoles.map(r =\u003e \n          r.id === selectedRole.id \n            ? { ...r, permissions: editablePermissions }\n            : r\n        );\n        setCustomRoles(updatedRoles);\n      }\n      setIsEditingPermissions(false);\n      setSelectedRole(null);\n      setEditablePermissions([]);\n      setExpandedModules(new Set());\n    }\n  };\n\n  const handleCancelEditPermissions = () =\u003e {\n    setIsEditingPermissions(false);\n    setEditablePermissions([]);\n    setSelectedRole(null);\n    setExpandedModules(new Set());\n  };\n\n  const handleCreateCustomRole = () =\u003e {\n    const newRole: Role = {\n      id: `custom_${Date.now()}`,\n      name: \"Novo Perfil\",\n      description: \"Perfil personalizado\",\n      permissions: [],\n      isSystem: false\n    };\n    setCustomRoles([...customRoles, newRole]);\n    handleEditPermissions(newRole);\n  };\n\n  const allRoles = [...systemRoles, ...customRoles];\n\n  const getRoleName = (roleId: string) =\u003e {\n    return systemRoles.find(r =\u003e r.id === roleId)?.name || roleId;\n  };\n\n  const getRoleColor = (roleId: string) =\u003e {\n    const colors: Record\u003cstring, string\u003e = {\n      super_admin: \"bg-purple-100 text-purple-800\",\n      admin: \"bg-blue-100 text-blue-800\",\n      operador: \"bg-green-100 text-green-800\",\n      cobrador: \"bg-orange-100 text-orange-800\",\n      financeiro: \"bg-yellow-100 text-yellow-800\",\n      visualizador: \"bg-gray-100 text-gray-800\"\n    };\n    return colors[roleId] || \"bg-gray-100 text-gray-800\";\n  };\n\n  return (\n    \u003cdiv className=\"space-y-6\"\u003e\n      {/* Header */}\n      \u003cdiv className=\"flex items-center justify-between\"\u003e\n        \u003cdiv\u003e\n          \u003ch1 className=\"text-2xl font-bold text-slate-900\"\u003ePainel Administrativo\u003c/h1\u003e\n          \u003cp className=\"text-slate-500\"\u003eGerencie usuários, permissões, cidades e configurações\u003c/p\u003e\n        \u003c/div\u003e\n      \u003c/div\u003e\n\n      {/* Tabs */}\n      \u003cdiv className=\"flex gap-1 border-b border-slate-200\"\u003e\n        {[\n          { id: \"usuarios\", label: \"Usuários\", icon: Users },\n          { id: \"permissoes\", label: \"Perfis \u0026 Permissões\", icon: Shield },\n          { id: \"cidades\", label: \"Cidades\", icon: Building2 },\n          { id: \"bairros\", label: \"Bairros\", icon: MapPin },\n          { id: \"config\", label: \"Configurações\", icon: Settings },\n        ].map((tab) =\u003e (\n          \u003cbutton\n            key={tab.id}\n            onClick={() =\u003e setActiveTab(tab.id as any)}\n            className={`px-4 py-2.5 font-medium text-sm border-b-2 transition-all duration-200 flex items-center gap-2 ${\n              activeTab === tab.id\n                ? \"border-blue-600 text-blue-600\"\n                : \"border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50\"\n            }`}\n          \u003e\n            \u003ctab.icon size={16} /\u003e\n            {tab.label}\n          \u003c/button\u003e\n        ))}\n      \u003c/div\u003e\n\n      {/* Conteúdo */}\n      \u003cdiv className=\"bg-white rounded-2xl border border-slate-200 shadow-sm\"\u003e\n        \n        {/* ABA USUÁRIOS */}\n        {activeTab === \"usuarios\" \u0026\u0026 (\n          \u003cdiv className=\"p-6 space-y-6\"\u003e\n            \u003cdiv className=\"flex justify-between items-center\"\u003e\n              \u003cdiv\u003e\n                \u003ch2 className=\"text-lg font-semibold text-slate-900\"\u003eUsuários do Sistema\u003c/h2\u003e\n                \u003cp className=\"text-sm text-slate-500\"\u003eGerencie quem tem acesso ao sistema\u003c/p\u003e\n              \u003c/div\u003e\n              \u003cbutton\n                onClick={() =\u003e { setModalType(\"usuario\"); setShowModal(true); }}\n                className=\"px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 font-medium transition-colors\"\n              \u003e\n                \u003cPlus size={18} /\u003e Novo Usuário\n              \u003c/button\u003e\n            \u003c/div\u003e\n            \n            \u003cdiv className=\"overflow-hidden rounded-xl border border-slate-200\"\u003e\n              \u003ctable className=\"w-full\"\u003e\n                \u003cthead className=\"bg-slate-50\"\u003e\n                  \u003ctr\u003e\n                    \u003cth className=\"px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider\"\u003eNome\u003c/th\u003e\n                    \u003cth className=\"px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider\"\u003eEmail\u003c/th\u003e\n                    \u003cth className=\"px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider\"\u003ePerfil\u003c/th\u003e\n                    \u003cth className=\"px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider\"\u003eStatus\u003c/th\u003e\n                    \u003cth className=\"px-4 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider\"\u003eAções\u003c/th\u003e\n                  \u003c/tr\u003e\n                \u003c/thead\u003e\n                \u003ctbody className=\"divide-y divide-slate-100\"\u003e\n                  {users.map((user) =\u003e (\n                    \u003ctr key={user.id} className=\"hover:bg-slate-50 transition-colors\"\u003e\n                      \u003ctd className=\"px-4 py-3\"\u003e\n                        \u003cdiv className=\"font-medium text-slate-900\"\u003e{user.name}\u003c/div\u003e\n                      \u003c/td\u003e\n                      \u003ctd className=\"px-4 py-3 text-sm text-slate-600\"\u003e{user.email}\u003c/td\u003e\n                      \u003ctd className=\"px-4 py-3\"\u003e\n                        \u003cspan className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}\u003e\n                          {getRoleName(user.role)}\n                        \u003c/span\u003e\n                      \u003c/td\u003e\n                      \u003ctd className=\"px-4 py-3\"\u003e\n                        \u003cspan className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${\n                          user.isActive ? \"bg-green-100 text-green-700\" : \"bg-red-100 text-red-700\"\n                        }`}\u003e\n                          \u003cspan className={`w-1.5 h-1.5 rounded-full mr-1.5 ${user.isActive ? 'bg-green-500' : 'bg-red-500'}`}\u003e\u003c/span\u003e\n                          {user.isActive ? \"Ativo\" : \"Inativo\"}\n                        \u003c/span\u003e\n                      \u003c/td\u003e\n                      \u003ctd className=\"px-4 py-3 text-right\"\u003e\n                        \u003cdiv className=\"flex items-center justify-end gap-1\"\u003e\n                          \u003cbutton className=\"p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors\"\u003e\u003cEdit size={16} /\u003e\u003c/button\u003e\n                          \u003cbutton className=\"p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors\"\u003e\u003cTrash2 size={16} /\u003e\u003c/button\u003e\n                        \u003c/div\u003e\n                      \u003c/td\u003e\n                    \u003c/tr\u003e\n                  ))}\n                \u003c/tbody\u003e\n              \u003c/table\u003e\n            \u003c/div\u003e\n          \u003c/div\u003e\n        )}\n\n        {/* ABA PERMISSÕES - NOVO DESIGN MODERNO */}\n        {activeTab === \"permissoes\" \u0026\u0026 (\n          \u003cdiv className=\"p-6 space-y-6\"\u003e\n            {!isEditingPermissions ? (\n              // Visualização dos Perfis\n              \u003c\u003e\n                \u003cdiv className=\"flex justify-between items-center\"\u003e\n                  \u003cdiv\u003e\n                    \u003ch2 className=\"text-lg font-semibold text-slate-900\"\u003ePerfis de Acesso\u003c/h2\u003e\n                    \u003cp className=\"text-sm text-slate-500\"\u003eEscolha um perfil para editar suas permissões\u003c/p\u003e\n                  \u003c/div\u003e\n                  \u003cbutton\n                    onClick={handleCreateCustomRole}\n                    className=\"px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 font-medium transition-colors shadow-sm\"\n                  \u003e\n                    \u003cPlus size={18} /\u003e Criar Perfil\n                  \u003c/button\u003e\n                \u003c/div\u003e\n\n                \u003cdiv className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4\"\u003e\n                  {allRoles.map((role) =\u003e (\n                    \u003cdiv\n                      key={role.id}\n                      className=\"group p-5 rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-md transition-all duration-200 bg-white cursor-pointer\"\n                      onClick={() =\u003e handleEditPermissions(role)}\n                    \u003e\n                      \u003cdiv className=\"flex items-start justify-between mb-3\"\u003e\n                        \u003cdiv className={`w-10 h-10 rounded-lg flex items-center justify-center ${\n                          role.isSystem ? 'bg-slate-100 text-slate-600' : 'bg-blue-100 text-blue-600'\n                        }`}\u003e\n                          \u003cShield size={20} /\u003e\n                        \u003c/div\u003e\n                        \n                        \u003cdiv className=\"flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity\"\u003e\n                          \u003cbutton\n                            type=\"button\"\n                            onClick={(e) =\u003e {\n                              e.stopPropagation();\n                              handleEditPermissions(role);\n                            }}\n                            className=\"p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors\"\n                          \u003e\n                            \u003cEdit size={16} /\u003e\n                          \u003c/button\u003e\n                          {!role.isSystem \u0026\u0026 (\n                            \u003cbutton\n                              type=\"button\"\n                              onClick={(e) =\u003e {\n                                e.stopPropagation();\n                                setCustomRoles(customRoles.filter(r =\u003e r.id !== role.id));\n                              }}\n                              className=\"p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors\"\n                            \u003e\n                              \u003cTrash2 size={16} /\u003e\n                            \u003c/button\u003e\n                          )}\n                        \u003c/div\u003e\n                      \u003c/div\u003e\n\n                      \u003ch3 className=\"font-semibold text-slate-900 mb-1\"\u003e{role.name}\u003c/h3\u003e\n                      \u003cp className=\"text-sm text-slate-500 mb-4 line-clamp-2\"\u003e{role.description}\u003c/p\u003e\n\n                      \u003cdiv className=\"flex items-center justify-between pt-3 border-t border-slate-100\"\u003e\n                        \u003cspan className=\"text-xs font-medium text-slate-500\"\u003e\n                          {role.permissions.length} permissões\n                        \u003c/span\u003e\n                        \u003cspan className={`text-xs font-medium px-2 py-1 rounded-full ${\n                          role.isSystem \n                            ? 'bg-slate-100 text-slate-600' \n                            : 'bg-blue-50 text-blue-600'\n                        }`}\u003e\n                          {role.isSystem ? 'Sistema' : 'Custom'}\n                        \u003c/span\u003e\n                      \u003c/div\u003e\n                    \u003c/div\u003e\n                  ))}\n                \u003c/div\u003e\n              \u003c/\u003e\n            ) : (\n              // Modo de Edição com Accordions\n              \u003cdiv className=\"space-y-6\"\u003e\n                {/* Header do Modo Edição */}\n                \u003cdiv className=\"flex items-center justify-between pb-4 border-b border-slate-200\"\u003e\n                  \u003cdiv className=\"flex items-center gap-3\"\u003e\n                    \u003cbutton\n                      onClick={handleCancelEditPermissions}\n                      className=\"p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors\"\n                    \u003e\n                      \u003cChevronRight size={20} className=\"rotate-180\" /\u003e\n                    \u003c/button\u003e\n                    \u003cdiv\u003e\n                      \u003ch2 className=\"text-lg font-semibold text-slate-900\"\u003eEditando: {selectedRole?.name}\u003c/h2\u003e\n                      \u003cp className=\"text-sm text-slate-500\"\u003e{editablePermissions.length} permissões ativas\u003c/p\u003e\n                    \u003c/div\u003e\n                  \u003c/div\u003e\n                  \n                  \u003cdiv className=\"flex items-center gap-3\"\u003e\n                    \u003cbutton\n                      onClick={handleCancelEditPermissions}\n                      className=\"px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium transition-colors\"\n                    \u003e\n                      Cancelar\n                    \u003c/button\u003e\n                    \u003cbutton\n                      onClick={handleSavePermissions}\n                      className=\"px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors shadow-sm\"\n                    \u003e\n                      Salvar Alterações\n                    \u003c/button\u003e\n                  \u003c/div\u003e\n                \u003c/div\u003e\n\n                {/* Lista de Módulos com Accordion */}\n                \u003cdiv className=\"space-y-3\"\u003e\n                  {modules.map((module) =\u003e {\n                    const actions = moduleActions[module.id] || [];\n                    if (actions.length === 0) return null;\n                    \n                    return (\n                      \u003cModuleAccordion\n                        key={module.id}\n                        module={module}\n                        permissions={actions}\n                        editablePermissions={editablePermissions}\n                        onToggle={handleTogglePermission}\n                        isExpanded={expandedModules.has(module.id)}\n                        onToggleExpand={() =\u003e handleToggleModuleExpand(module.id)}\n                      /\u                    );\n                  })}\n                \u003c/div\u003e\n              \u003c/div\u003e\n            )}\n          \u003c/div\u003e\n        )}\n\n        {/* ABA CIDADES */}\n        {activeTab === \"cidades\" \u0026\u0026 (\n          \u003cdiv className=\"p-6 space-y-6\"\u003e\n            \u003cdiv className=\"flex justify-between items-center\"\u003e\n              \u003cdiv\u003e\n                \u003ch2 className=\"text-lg font-semibold text-slate-900\"\u003eCidades Cadastradas\u003c/h2\u003e\n                \u003cp className=\"text-sm text-slate-500\"\u003eGerencie as cidades disponíveis no sistema\u003c/p\u003e\n              \u003c/div\u003e\n              \u003cbutton\n                onClick={() =\u003e { setModalType(\"cidade\"); setShowModal(true); }}\n                className=\"px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 font-medium transition-colors\"\n              \u003e\n                \u003cPlus size={18} /\u003e Nova Cidade\n              \u003c/button\u003e\n            \u003c/div\u003e\n            \n            \u003cdiv className=\"overflow-hidden rounded-xl border border-slate-200\"\u003e\n              \u003ctable className=\"w-full\"\u003e\n                \u003cthead className=\"bg-slate-50\"\u003e\n                  \u003ctr\u003e\n                    \u003cth className=\"px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase\"\u003eEstado\u003c/th\u003e\n                    \u003cth className=\"px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase\"\u003eCidade\u003c/th\u003e\n                    \u003cth className=\"px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase\"\u003eBairros\u003c/th\u003e\n                    \u003cth className=\"px-4 py-3 text-right text-xs font-semibold text-slate-600 uppercase\"\u003eAções\u003c/th\u003e\n                  \u003c/tr\u003e\n                \u003c/thead\u003e\n                \u003ctbody className=\"divide-y divide-slate-100\"\u003e\n                  {cidades.map((cidade) =\u003e (\n                    \u003ctr key={`${cidade.estado}-${cidade.nome}`} className=\"hover:bg-slate-50 transition-colors\"\u003e\n                      \u003ctd className=\"px-4 py-3 text-sm text-slate-600\"\u003e{cidade.estado}\u003c/td\u003e\n                      \u003ctd className=\"px-4 py-3 font-medium text-slate-900\"\u003e{cidade.nome}\u003c/td\u003e\n                      \u003ctd className=\"px-4 py-3 text-sm text-slate-600\"\u003e{cidade.bairros.length} bairros\u003c/td\u003e\n                      \u003ctd className=\"px-4 py-3 text-right\"\u003e\n                        \u003cbutton\n                          onClick={() =\u003e {\n                            setSelectedCidade(cidade.nome);\n                            setBairrosList(cidade.bairros);\n                            setActiveTab(\"bairros\");\n                          }}\n                          className=\"text-blue-600 hover:text-blue-800 text-sm font-medium\"\n                        \u003e\n                          Gerenciar Bairros\n                        \u003c/button\u003e\n                      \u003c/td\u003e\n                    \u003c/tr\u003e\n                  ))}\n                \u003c/tbody\u003e\n              \u003c/table\u003e\n            \u003c/div\u003e\n          \u003c/div\u003e\n        )}\n\n        {/* ABA BAIRROS */}\n        {activeTab === \"bairros\" \u0026\u0026 (\n          \u003cdiv className=\"p-6 space-y-6\"\u003e\n            \u003cdiv className=\"flex justify-between items-center\"\u003e\n              \u003cdiv\u003e\n                \u003ch2 className=\"text-lg font-semibold text-slate-900\"\u003eGerenciar Bairros\u003c/h2\u003e\n                {selectedCidade \u0026\u0026 (\n                  \u003cp className=\"text-sm text-slate-500\"\u003eCidade: \u003cspan className=\"font-medium text-slate-900\"\u003e{selectedCidade}\u003c/span\u003e\u003c/p\u003e\n                )}\n              \u003c/div\u003e\n              \u003cselect\n                value={selectedCidade}\n                onChange={(e) =\u003e {\n                  setSelectedCidade(e.target.value);\n                  setBairrosList(bairrosPorCidade[e.target.value] || []);\n                }}\n                className=\"px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"\n              \u003e\n                \u003coption value=\"\"\u003eSelecione uma cidade\u003c/option\u003e\n                {cidades.map(c =\u003e (\n                  \u003coption key={c.nome} value={c.nome}\u003e{c.nome} ({c.estado})\u003c/option\u003e\n                ))}\n              \u003c/select\u003e\n            \u003c/div\u003e\n\n            {selectedCidade ? (\n              \u003cdiv className=\"space-y-4\"\u003e\n                \u003cdiv className=\"flex gap-2\"\u003e\n                  \u003cinput\n                    type=\"text\"\n                    value={form.bairro}\n                    onChange={(e) =\u003e setForm({ ...form, bairro: e.target.value })}\n                    placeholder=\"Nome do novo bairro\"\n                    className=\"flex-1 px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"\n                    onKeyPress={(e) =\u003e e.key === \"Enter\" \u0026\u0026 handleAddBairro()}\n                  /\u003e\n                  \u003cbutton\n                    onClick={handleAddBairro}\n                    disabled={!form.bairro}\n                    className=\"px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed flex items-center gap-2 font-medium transition-colors\"\n                  \u003e\n                    \u003cPlus size={18} /\u003e Adicionar\n                  \u003c/button\u003e\n                \u003c/div\u003e\n\n                \u003cdiv className=\"bg-slate-50 rounded-xl p-4\"\u003e\n                  {bairrosList.length === 0 ? (\n                    \u003cdiv className=\"text-center py-8 text-slate-500\"\u003e\n                      \u003cMapPin size={48} className=\"mx-auto mb-3 text-slate-300\" /\u003e\n                      \u003cp\u003eNenhum bairro cadastrado\u003c/p\u003e\n                    \u003c/div\u003e\n                  ) : (\n                    \u003cdiv className=\"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3\"\u003e\n                      {bairrosList.map((bairro, index) =\u003e (\n                        \u003cdiv\n                          key={index}\n                          className=\"flex items-center justify-between px-4 py-3 bg-white rounded-lg border border-slate-200 hover:border-slate-300 transition-colors\"\n                        \u003e\n                          \u003cspan className=\"text-sm text-slate-700 font-medium truncate\"\u003e{bairro}\u003c/span\u003e\n                          \u003cbutton\n                            onClick={() =\u003e handleRemoveBairro(index)}\n                            className=\"p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors\"\n                          \u003e\n                            \u003cTrash2 size={16} /\u003e\n                          \u003c/button\u003e\n                        \u003c/div\u003e\n                      ))}\n                    \u003c/div\u003e\n                  )}\n                \u003c/div\u003e\n              \u003c/div\u003e\n            ) : (\n              \u003cdiv className=\"text-center py-12 text-slate-500\"\u003e\n                \u003cMapPin size={64} className=\"mx-auto mb-4 text-slate-200\" /\u003e\n                \u003cp className=\"text-lg font-medium\"\u003eSelecione uma cidade\u003c/p\u003e\n                \u003cp className=\"text-sm\"\u003eEscolha uma cidade no dropdown acima para gerenciar seus bairros\u003c/p\u003e\n              \u003c/div\u003e\n            )}\n          \u003c/div\u003e\n        )}\n\n        {/* ABA CONFIGURAÇÕES */}\n        {activeTab === \"config\" \u0026\u0026 (\n          \u003cdiv className=\"p-12 text-center\"\u003e\n            \u003cSettings size={64} className=\"mx-auto mb-4 text-slate-200\" /\u003e\n            \u003ch3 className=\"text-lg font-medium text-slate-900 mb-2\"\u003eConfigurações do Sistema\u003c/h3\u003e\n            \u003cp className=\"text-slate-500\"\u003eEm desenvolvimento\u003c/p\u003e\n          \u003c/div\u003e\n        )}\n      \u003c/div\u003e\n\n      {/* Modal Novo Usuário */}\n      {showModal \u0026\u0026 modalType === \"usuario\" \u0026\u0026 (\n        \u003cdiv className=\"fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm\"\u003e\n          \u003cdiv className=\"bg-white rounded-2xl w-full max-w-md p-6 shadow-xl\"\u003e\n            \u003cdiv className=\"flex justify-between items-center mb-6\"\u003e\n              \u003ch3 className=\"text-xl font-bold text-slate-900\"\u003eNovo Usuário\u003c/h3\u003e\n              \u003cbutton onClick={() =\u003e setShowModal(false)} className=\"p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors\"\u003e\n                \u003cX size={20} /\u003e\n              \u003c/button\u003e\n            \u003c/div\u003e\n            \n            \u003cdiv className=\"space-y-4\"\u003e\n              \u003cdiv\u003e\n                \u003clabel className=\"block text-sm font-medium text-slate-700 mb-1.5\"\u003eNome Completo\u003c/label\u003e\n                \u003cinput\n                  type=\"text\"\n                  value={form.nome}\n                  onChange={(e) =\u003e setForm({ ...form, nome: e.target.value })}\n                  placeholder=\"Ex: João Silva\"\n                  className=\"w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors\"\n                /\u003e\n              \u003c/div\u003e\n              \n              \u003cdiv\u003e\n                \u003clabel className=\"block text-sm font-medium text-slate-700 mb-1.5\"\u003eEmail\u003c/label\u003e\n                \u003cinput\n                  type=\"email\"\n                  value={form.email}\n                  onChange={(e) =\u003e setForm({ ...form, email: e.target.value })}\n                  placeholder=\"joao@posthumous.com\"\n                  className=\"w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors\"\n                /\u003e\n              \u003c/div\u003e\n              \n              \u003cdiv\u003e\n                \u003clabel className=\"block text-sm font-medium text-slate-700 mb-1.5\"\u003ePerfil de Acesso\u003c/label\u003e\n                \u003cselect\n                  value={form.role}\n                  onChange={(e) =\u003e setForm({ ...form, role: e.target.value })}\n                  className=\"w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors\"\n                \u003e\n                  \u003coption value=\"\"\u003eSelecione um perfil\u003c/option\u003e\n                  {systemRoles.map(role =\u003e (\n                    \u003coption key={role.id} value={role.id}\u003e{role.name}\u003c/option\u003e\n                  ))}\n                \u003c/select\u003e\n                {form.role \u0026\u0026 (\n                  \u003cp className=\"text-xs text-slate-500 mt-1.5\"\u003e\n                    {systemRoles.find(r =\u003e r.id === form.role)?.description}\n                  \u003c/p\u003e\n                )}\n              \u003c/div\u003e\n              \n              \u003cdiv\u003e\n                \u003clabel className=\"block text-sm font-medium text-slate-700 mb-1.5\"\u003eSenha\u003c/label\u003e\n                \u003cdiv className=\"relative\"\u003e\n                  \u003cinput\n                    type={showPassword ? \"text\" : \"password\"}\n                    value={form.senha}\n                    onChange={(e) =\u003e setForm({ ...form, senha: e.target.value })}\n                    className=\"w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10 transition-colors\"\n                  /\u003e\n                  \u003cbutton\n                    type=\"button\"\n                    onClick={() =\u003e setShowPassword(!showPassword)}\n                    className=\"absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600\"\n                  \u003e\n                    {showPassword ? \u003cEyeOff size={18} /\u003e : \u003cEye size={18} /\u003e}\n                  \u003c/button\u003e\n                \u003c/div\u003e\n              \u003c/div\u003e\n              \n              \u003cdiv\u003e\n                \u003clabel className=\"block text-sm font-medium text-slate-700 mb-1.5\"\u003eConfirmar Senha\u003c/label\u003e\n                \u003cinput\n                  type=\"password\"\n                  value={form.confirmarSenha}\n                  onChange={(e) =\u003e setForm({ ...form, confirmarSenha: e.target.value })}\n                  className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${\n                    form.senha \u0026\u0026 form.confirmarSenha \u0026\u0026 form.senha !== form.confirmarSenha\n                      ? 'border-red-300 focus:border-red-500'\n                      : 'border-slate-200'\n                  }`}\n                /\u003e\n                {form.senha \u0026\u0026 form.confirmarSenha \u0026\u0026 form.senha !== form.confirmarSenha \u0026\u0026 (\n                  \u003cp className=\"text-xs text-red-500 mt-1\"\u003eAs senhas não coincidem\u003c/p\u003e\n                )}\n              \u003c/div\u003e\n              \n              \u003cdiv className=\"flex gap-3 pt-2\"\u003e\n                \u003cbutton\n                  onClick={() =\u003e setShowModal(false)}\n                  className=\"flex-1 px-4 py-2.5 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors\"\n                \u003e\n                  Cancelar\n                \u003c/button\u003e\n                \u003cbutton\n                  onClick={handleAddUser}\n                  disabled={!form.nome || !form.email || !form.senha || !form.role || form.senha !== form.confirmarSenha}\n                  className=\"flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-medium transition-colors\"\n                \u003e\n                  Criar Usuário\n                \u003c/button\u003e\n              \u003c/div\u003e\n            \u003c/div\u003e\n          \u003c/div\u003e\n        \u003c/div\u003e\n      )}\n\n      {/* Modal Nova Cidade */}\n      {showModal \u0026\u0026 modalType === \"cidade\" \u0026\u0026 (\n        \u003cdiv className=\"fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm\"\u003e\n          \u003cdiv className=\"bg-white rounded-2xl w-full max-w-md p-6 shadow-xl\"\u003e\n            \u003cdiv className=\"flex justify-between items-center mb-6\"\u003e\n              \u003ch3 className=\"text-xl font-bold text-slate-900\"\u003eNova Cidade\u003c/h3\u003e\n              \u003cbutton onClick={() =\u003e setShowModal(false)} className=\"p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors\"\u003e\n                \u003cX size={20} /\u003e\n              \u003c/button\u003e\n            \u003c/div\u003e\n            \n            \u003cdiv className=\"space-y-4\"\u003e\n              \u003cdiv\u003e\n                \u003clabel className=\"block text-sm font-medium text-slate-700 mb-1.5\"\u003eEstado\u003c/label\u003e\n                \u003cselect\n                  value={form.estado}\n                  onChange={(e) =\u003e setForm({ ...form, estado: e.target.value })}\n                  className=\"w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors\"\n                \u003e\n                  \u003coption value=\"\"\u003eSelecione\u003c/option\u003e\n                  {estados.map(e =\u003e (\n                    \u003coption key={e.sigla} value={e.sigla}\u003e{e.nome} ({e.sigla})\u003c/option\u003e\n                  ))}\n                \u003c/select\u003e\n              \u003c/div\u003e\n              \n              \u003cdiv\u003e\n                \u003clabel className=\"block text-sm font-medium text-slate-700 mb-1.5\"\u003eNome da Cidade\u003c/label\u003e\n                \u003cinput\n                  type=\"text\"\n                  value={form.cidade}\n                  onChange={(e) =\u003e setForm({ ...form, cidade: e.target.value })}\n                  placeholder=\"Ex: Macapá\"\n                  className=\"w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors\"\n                /\u003e\n              \u003c/div\u003e\n              \n              \u003cdiv className=\"flex gap-3 pt-2\"\u003e\n                \u003cbutton\n                  onClick={() =\u003e setShowModal(false)}\n                  className=\"flex-1 px-4 py-2.5 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors\"\n                \u003e\n                  Cancelar\n                \u003c/button\u003e\n                \u003cbutton\n                  onClick={handleAddCidade}\n                  disabled={!form.estado || !form.cidade}\n                  className=\"flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-medium transition-colors\"\n                \u003e\n                  Salvar\n                \u003c/button\u003e\n              \u003c/div\u003e\n            \u003c/div\u003e\n          \u003c/div\u003e\n        \u003c/div\u003e\n      )}\n    \u003c/div\u003e\n  );\n}\n
+"use client";
+
+import { useEffect, useState } from "react";
+import { Plus, Edit, Trash2, X, MapPin, Building2, Users, Settings, Shield, ChevronDown, ChevronRight, Check, Eye, EyeOff } from "lucide-react";
+import { estados, cidadesPorEstado, bairrosPorCidade, adicionarCidade } from "@/lib/location-data";
+import { systemRoles, modules, moduleActions, Permission, Role } from "@/lib/permissions";
+
+interface CidadeConfig {
+  nome: string;
+  estado: string;
+  bairros: string[];
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+// Componente Toggle Switch moderno
+function ToggleSwitch({ 
+  checked, 
+  onChange, 
+  label, 
+  description 
+}: { 
+  checked: boolean; 
+  onChange: () => void; 
+  label: string;
+  description?: string;
+}) {
+  return (
+    <div className="flex items-center justify-between py-3 px-4 hover:bg-slate-50 rounded-lg transition-colors">
+      <div className="flex-1">
+        <span className={`text-sm font-medium ${checked ? 'text-slate-900' : 'text-slate-600'}`}>{label}</span>
+        {description && (
+          <p className="text-xs text-slate-400 mt-0.5">{description}</p>
+        )}
+      </div>
+      <button
+        type="button"
+        onClick={onChange}
+        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+          checked ? 'bg-blue-600' : 'bg-slate-200'
+        }`}
+      >
+        <span
+          className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-all duration-200 ease-in-out ${
+            checked ? 'translate-x-6' : 'translate-x-1'
+          }`}
+        />
+      </button>
+    </div>
+  );
+}
+
+// Componente Accordion de Módulo
+function ModuleAccordion({
+  module,
+  permissions,
+  editablePermissions,
+  onToggle,
+  isExpanded,
+  onToggleExpand
+}: {
+  module: { id: string; name: string; icon: string };
+  permissions: { id: string; name: string; description: string }[];
+  editablePermissions: Permission[];
+  onToggle: (permission: Permission) => void;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
+}) {
+  const activeCount = permissions.filter(p => 
+    editablePermissions.includes(`${module.id}:${p.id}` as Permission)
+  ).length;
+  const totalCount = permissions.length;
+  const allActive = activeCount === totalCount;
+  const someActive = activeCount > 0 && activeCount < totalCount;
+
+  const handleToggleAll = () => {
+    if (allActive) {
+      permissions.forEach(p => {
+        const perm = `${module.id}:${p.id}` as Permission;
+        if (editablePermissions.includes(perm)) {
+          onToggle(perm);
+        }
+      });
+    } else {
+      permissions.forEach(p => {
+        const perm = `${module.id}:${p.id}` as Permission;
+        if (!editablePermissions.includes(perm)) {
+          onToggle(perm);
+        }
+      });
+    }
+  };
+
+  return (
+    <div className={`border rounded-xl overflow-hidden transition-all duration-200 ${
+      isExpanded ? 'border-blue-200 shadow-sm' : 'border-slate-200 hover:border-slate-300'
+    }`}>
+      {/* Header do Accordion - div em vez de button para permitir botões aninhados */}
+      <div className="w-full flex items-center justify-between p-4 bg-white hover:bg-slate-50 transition-colors">
+        <button
+          type="button"
+          onClick={onToggleExpand}
+          className="flex-1 flex items-center gap-3 text-left"
+        >
+          <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+            allActive ? 'bg-blue-100 text-blue-600' : someActive ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-500'
+          }`}>
+            {allActive ? (
+              <Check size={20} />
+            ) : (
+              <span className="text-sm font-bold">{module.name.charAt(0)}</span>
+            )}
+          </div>
+          
+          <div>
+            <h4 className="font-semibold text-slate-900">{module.name}</h4>
+            <div className="flex items-center gap-2 mt-0.5">
+              {allActive ? (
+                <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Acesso Total</span>
+              ) : someActive ? (
+                <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">{activeCount}/{totalCount} ativas</span>
+              ) : (
+                <span className="text-xs text-slate-400">Sem acesso</span>
+              )}
+            </div>
+          </div>
+        </button>
+
+        <div className="flex items-center gap-3">
+          {/* Botão Ativar Tudo (visível no hover ou quando expandido) */}
+          {(isExpanded || someActive) && (
+            <button
+              type="button"
+              onClick={handleToggleAll}
+              className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${
+                allActive 
+                  ? 'text-red-600 hover:bg-red-50' 
+                  : 'text-blue-600 hover:bg-blue-50'
+              }`}
+            >
+              {allActive ? 'Desativar Tudo' : 'Ativar Tudo'}
+            </button>
+          )}
+          
+          <button
+            type="button"
+            onClick={onToggleExpand}
+            className={`text-slate-400 hover:text-slate-600 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+          >
+            <ChevronDown size={20} />
+          </button>
+        </div>
+      </div>
+
+      {/* Conteúdo Expandido */}
+      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+        isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+      }`}>
+        <div className="border-t border-slate-100 bg-slate-50/50">
+          <div className="p-2 space-y-1">
+            {permissions.map((action) => {
+              const permission = `${module.id}:${action.id}` as Permission;
+              const isChecked = editablePermissions.includes(permission);
+              
+              return (
+                <ToggleSwitch
+                  key={action.id}
+                  checked={isChecked}
+                  onChange={() => onToggle(permission)}
+                  label={action.name}
+                  description={action.description}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function AdminPage() {
+  const [activeTab, setActiveTab] = useState<"localidades" | "usuarios" | "permissoes" | "config">("usuarios");
+  const [cidades, setCidades] = useState<CidadeConfig[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState<"cidade" | "bairro" | "usuario" | "permissao">("usuario");
+  const [form, setForm] = useState({ estado: "", cidade: "", bairro: "", nome: "", email: "", senha: "", role: "", confirmarSenha: "" });
+  const [selectedCidade, setSelectedCidade] = useState("");
+  const [bairrosList, setBairrosList] = useState<string[]>([]);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  
+  // Estados para edição de permissões
+  const [isEditingPermissions, setIsEditingPermissions] = useState(false);
+  const [editablePermissions, setEditablePermissions] = useState<Permission[]>([]);
+  const [customRoles, setCustomRoles] = useState<Role[]>([]);
+  const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const lista: CidadeConfig[] = [];
+    Object.entries(cidadesPorEstado).forEach(([estado, cids]) => {
+      cids.forEach(cidade => {
+        lista.push({
+          nome: cidade,
+          estado,
+          bairros: bairrosPorCidade[cidade] || []
+        });
+      });
+    });
+    setCidades(lista);
+    loadUsers();
+  }, []);
+
+  const loadUsers = async () => {
+    try {
+      const res = await fetch("/api/usuarios");
+      if (res.ok) {
+        const data = await res.json();
+        setUsers(Array.isArray(data) ? data : data.users || data.data || []);
+      } else {
+        setUsers([
+          { id: "1", name: "Administrador", email: "admin@posthumous.com", role: "super_admin", isActive: true, createdAt: "2024-01-01" },
+          { id: "2", name: "João Silva", email: "joao@posthumous.com", role: "admin", isActive: true, createdAt: "2024-02-15" },
+          { id: "3", name: "Maria Santos", email: "maria@posthumous.com", role: "operador", isActive: true, createdAt: "2024-03-10" },
+        ]);
+      }
+    } catch (err) {
+      setUsers([
+        { id: "1", name: "Administrador", email: "admin@posthumous.com", role: "super_admin", isActive: true, createdAt: "2024-01-01" },
+        { id: "2", name: "João Silva", email: "joao@posthumous.com", role: "admin", isActive: true, createdAt: "2024-02-15" },
+        { id: "3", name: "Maria Santos", email: "maria@posthumous.com", role: "operador", isActive: true, createdAt: "2024-03-10" },
+      ]);
+    }
+  };
+
+  const handleAddCidade = () => {
+    if (form.estado && form.cidade) {
+      adicionarCidade(form.estado, form.cidade, []);
+      setCidades([...cidades, { nome: form.cidade, estado: form.estado, bairros: [] }]);
+      setForm({ ...form, cidade: "" });
+      setShowModal(false);
+    }
+  };
+
+  const handleAddBairro = () => {
+    if (selectedCidade && form.bairro) {
+      const novosBairros = [...bairrosList, form.bairro];
+      setBairrosList(novosBairros);
+      bairrosPorCidade[selectedCidade] = novosBairros;
+      setForm({ ...form, bairro: "" });
+    }
+  };
+
+  const handleRemoveBairro = (index: number) => {
+    const novos = bairrosList.filter((_, i) => i !== index);
+    setBairrosList(novos);
+    bairrosPorCidade[selectedCidade] = novos;
+  };
+
+  const handleAddUser = async () => {
+    if (form.nome && form.email && form.senha && form.role) {
+      if (form.senha !== form.confirmarSenha) {
+        alert("As senhas não coincidem!");
+        return;
+      }
+      const newUser: User = {
+        id: String(Date.now()),
+        name: form.nome,
+        email: form.email,
+        role: form.role,
+        isActive: true,
+        createdAt: new Date().toISOString().split("T")[0]
+      };
+      setUsers([...users, newUser]);
+      setShowModal(false);
+      setForm({ ...form, nome: "", email: "", senha: "", confirmarSenha: "", role: "" });
+    }
+  };
+
+  const handleEditPermissions = (role: Role) => {
+    setSelectedRole(role);
+    setEditablePermissions([...role.permissions]);
+    setIsEditingPermissions(true);
+    // Expandir todos os módulos ao iniciar edição
+    setExpandedModules(new Set(modules.map(m => m.id)));
+  };
+
+  const handleTogglePermission = (permission: Permission) => {
+    setEditablePermissions(prev => {
+      if (prev.includes(permission)) {
+        return prev.filter(p => p !== permission);
+      } else {
+        return [...prev, permission];
+      }
+    });
+  };
+
+  const handleToggleModuleExpand = (moduleId: string) => {
+    setExpandedModules(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(moduleId)) {
+        newSet.delete(moduleId);
+      } else {
+        newSet.add(moduleId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSavePermissions = () => {
+    if (selectedRole) {
+      if (selectedRole.isSystem) {
+        const updatedRole: Role = {
+          ...selectedRole,
+          id: `${selectedRole.id}_custom_${Date.now()}`,
+          name: `${selectedRole.name} (Personalizado)`,
+          permissions: editablePermissions,
+          isSystem: false
+        };
+        setCustomRoles([...customRoles, updatedRole]);
+      } else {
+        const updatedRoles = customRoles.map(r => 
+          r.id === selectedRole.id 
+            ? { ...r, permissions: editablePermissions }
+            : r
+        );
+        setCustomRoles(updatedRoles);
+      }
+      setIsEditingPermissions(false);
+      setSelectedRole(null);
+      setEditablePermissions([]);
+      setExpandedModules(new Set());
+    }
+  };
+
+  const handleCancelEditPermissions = () => {
+    setIsEditingPermissions(false);
+    setEditablePermissions([]);
+    setSelectedRole(null);
+    setExpandedModules(new Set());
+  };
+
+  const handleCreateCustomRole = () => {
+    const newRole: Role = {
+      id: `custom_${Date.now()}`,
+      name: "Novo Perfil",
+      description: "Perfil personalizado",
+      permissions: [],
+      isSystem: false
+    };
+    setCustomRoles([...customRoles, newRole]);
+    handleEditPermissions(newRole);
+  };
+
+  const allRoles = [...systemRoles, ...customRoles];
+
+  const getRoleName = (roleId: string) => {
+    return systemRoles.find(r => r.id === roleId)?.name || roleId;
+  };
+
+  const getRoleColor = (roleId: string) => {
+    const colors: Record<string, string> = {
+      super_admin: "bg-purple-100 text-purple-800",
+      admin: "bg-blue-100 text-blue-800",
+      operador: "bg-green-100 text-green-800",
+      cobrador: "bg-orange-100 text-orange-800",
+      financeiro: "bg-yellow-100 text-yellow-800",
+      visualizador: "bg-gray-100 text-gray-800"
+    };
+    return colors[roleId] || "bg-gray-100 text-gray-800";
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Painel Administrativo</h1>
+          <p className="text-slate-500">Gerencie usuários, permissões, cidades e configurações</p>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-1 border-b border-slate-200">
+        {[
+          { id: "usuarios", label: "Usuários", icon: Users },
+          { id: "permissoes", label: "Perfis & Permissões", icon: Shield },
+          { id: "localidades", label: "Localidades", icon: MapPin },
+          { id: "config", label: "Configurações", icon: Settings },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`px-4 py-2.5 font-medium text-sm border-b-2 transition-all duration-200 flex items-center gap-2 ${
+              activeTab === tab.id
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+            }`}
+          >
+            <tab.icon size={16} />
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Conteúdo */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+        
+        {/* ABA USUÁRIOS */}
+        {activeTab === "usuarios" && (
+          <div className="p-6 space-y-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900">Usuários do Sistema</h2>
+                <p className="text-sm text-slate-500">Gerencie quem tem acesso ao sistema</p>
+              </div>
+              <button
+                onClick={() => { setModalType("usuario"); setShowModal(true); }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 font-medium transition-colors"
+              >
+                <Plus size={18} /> Novo Usuário
+              </button>
+            </div>
+            
+            <div className="overflow-hidden rounded-xl border border-slate-200">
+              <table className="w-full">
+                <thead className="bg-slate-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Nome</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Email</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Perfil</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Ações</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {users.map((user) => (
+                    <tr key={user.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="font-medium text-slate-900">{user.name}</div>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-slate-600">{user.email}</td>
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
+                          {getRoleName(user.role)}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                          user.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                        }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${user.isActive ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                          {user.isActive ? "Ativo" : "Inativo"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Edit size={16} /></button>
+                          <button className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* ABA PERMISSÕES - NOVO DESIGN MODERNO */}
+        {activeTab === "permissoes" && (
+          <div className="p-6 space-y-6">
+            {!isEditingPermissions ? (
+              // Visualização dos Perfis
+              <>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg font-semibold text-slate-900">Perfis de Acesso</h2>
+                    <p className="text-sm text-slate-500">Escolha um perfil para editar suas permissões</p>
+                  </div>
+                  <button
+                    onClick={handleCreateCustomRole}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 font-medium transition-colors shadow-sm"
+                  >
+                    <Plus size={18} /> Criar Perfil
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {allRoles.map((role) => (
+                    <div
+                      key={role.id}
+                      className="group p-5 rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-md transition-all duration-200 bg-white cursor-pointer"
+                      onClick={() => handleEditPermissions(role)}
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                          role.isSystem ? 'bg-slate-100 text-slate-600' : 'bg-blue-100 text-blue-600'
+                        }`}>
+                          <Shield size={20} />
+                        </div>
+                        
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditPermissions(role);
+                            }}
+                            className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          >
+                            <Edit size={16} />
+                          </button>
+                          {!role.isSystem && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setCustomRoles(customRoles.filter(r => r.id !== role.id));
+                              }}
+                              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      <h3 className="font-semibold text-slate-900 mb-1">{role.name}</h3>
+                      <p className="text-sm text-slate-500 mb-4 line-clamp-2">{role.description}</p>
+
+                      <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                        <span className="text-xs font-medium text-slate-500">
+                          {role.permissions.length} permissões
+                        </span>
+                        <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                          role.isSystem 
+                            ? 'bg-slate-100 text-slate-600' 
+                            : 'bg-blue-50 text-blue-600'
+                        }`}>
+                          {role.isSystem ? 'Sistema' : 'Custom'}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              // Modo de Edição com Accordions
+              <div className="space-y-6">
+                {/* Header do Modo Edição */}
+                <div className="flex items-center justify-between pb-4 border-b border-slate-200">
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={handleCancelEditPermissions}
+                      className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                    >
+                      <ChevronRight size={20} className="rotate-180" />
+                    </button>
+                    <div>
+                      <h2 className="text-lg font-semibold text-slate-900">Editando: {selectedRole?.name}</h2>
+                      <p className="text-sm text-slate-500">{editablePermissions.length} permissões ativas</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={handleCancelEditPermissions}
+                      className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium transition-colors"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      onClick={handleSavePermissions}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors shadow-sm"
+                    >
+                      Salvar Alterações
+                    </button>
+                  </div>
+                </div>
+
+                {/* Lista de Módulos com Accordion */}
+                <div className="space-y-3">
+                  {modules.map((module) => {
+                    const actions = moduleActions[module.id] || [];
+                    if (actions.length === 0) return null;
+                    
+                    return (
+                      <ModuleAccordion
+                        key={module.id}
+                        module={module}
+                        permissions={actions}
+                        editablePermissions={editablePermissions}
+                        onToggle={handleTogglePermission}
+                        isExpanded={expandedModules.has(module.id)}
+                        onToggleExpand={() => handleToggleModuleExpand(module.id)}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ABA LOCALIDADES */}
+        {activeTab === "localidades" && (
+          <div className="p-6 space-y-6">
+            {/* Seção de Cidades */}
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900">Cidades Cadastradas</h2>
+                <p className="text-sm text-slate-500">Gerencie as cidades e seus bairros</p>
+              </div>
+              <button
+                onClick={() => { setModalType("cidade"); setShowModal(true); }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 font-medium transition-colors"
+              >
+                <Plus size={18} /> Nova Cidade
+              </button>
+            </div>
+            
+            <div className="overflow-hidden rounded-xl border border-slate-200">
+              <table className="w-full">
+                <thead className="bg-slate-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Estado</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Cidade</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Bairros</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-slate-600 uppercase">Ações</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {cidades.map((cidade) => (
+                    <tr key={`${cidade.estado}-${cidade.nome}`} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-4 py-3 text-sm text-slate-600">{cidade.estado}</td>
+                      <td className="px-4 py-3 font-medium text-slate-900">{cidade.nome}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600">{cidade.bairros.length} bairros</td>
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          onClick={() => {
+                            setSelectedCidade(cidade.nome);
+                            setBairrosList(cidade.bairros);
+                          }}
+                          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                        >
+                          Gerenciar Bairros
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Seção de Bairros - aparece quando uma cidade está selecionada */}
+            {selectedCidade && (
+              <div className="mt-8 pt-6 border-t border-slate-200">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900">Bairros de {selectedCidade}</h3>
+                    <p className="text-sm text-slate-500">Gerencie os bairros desta cidade</p>
+                  </div>
+                  <button
+                    onClick={() => setSelectedCidade("")}
+                    className="text-slate-500 hover:text-slate-700 text-sm font-medium"
+                  >
+                    Fechar
+                  </button>
+                </div>
+
+                <div className="flex gap-2 mb-4">
+                  <input
+                    type="text"
+                    value={form.bairro}
+                    onChange={(e) => setForm({ ...form, bairro: e.target.value })}
+                    placeholder="Nome do novo bairro"
+                    className="flex-1 px-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    onKeyPress={(e) => e.key === "Enter" && handleAddBairro()}
+                  />
+                  <button
+                    onClick={handleAddBairro}
+                    disabled={!form.bairro}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed flex items-center gap-2 font-medium transition-colors"
+                  >
+                    <Plus size={18} /> Adicionar
+                  </button>
+                </div>
+
+                <div className="bg-slate-50 rounded-xl p-4">
+                  {bairrosList.length === 0 ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <MapPin size={48} className="mx-auto mb-3 text-slate-300" />
+                      <p>Nenhum bairro cadastrado para esta cidade</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                      {bairrosList.map((bairro, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between px-4 py-3 bg-white rounded-lg border border-slate-200 hover:border-slate-300 transition-colors"
+                        >
+                          <span className="text-sm text-slate-700 font-medium truncate">{bairro}</span>
+                          <button
+                            onClick={() => handleRemoveBairro(index)}
+                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ABA CONFIGURAÇÕES */}
+        {activeTab === "config" && (
+          <div className="p-12 text-center">
+            <Settings size={64} className="mx-auto mb-4 text-slate-200" />
+            <h3 className="text-lg font-medium text-slate-900 mb-2">Configurações do Sistema</h3>
+            <p className="text-slate-500">Em desenvolvimento</p>
+          </div>
+        )}
+      </div>
+
+      {/* Modal Novo Usuário */}
+      {showModal && modalType === "usuario" && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-slate-900">Novo Usuário</h3>
+              <button onClick={() => setShowModal(false)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Nome Completo</label>
+                <input
+                  type="text"
+                  value={form.nome}
+                  onChange={(e) => setForm({ ...form, nome: e.target.value })}
+                  placeholder="Ex: João Silva"
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="joao@posthumous.com"
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Perfil de Acesso</label>
+                <select
+                  value={form.role}
+                  onChange={(e) => setForm({ ...form, role: e.target.value })}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                >
+                  <option value="">Selecione um perfil</option>
+                  {systemRoles.map(role => (
+                    <option key={role.id} value={role.id}>{role.name}</option>
+                  ))}
+                </select>
+                {form.role && (
+                  <p className="text-xs text-slate-500 mt-1.5">
+                    {systemRoles.find(r => r.id === form.role)?.description}
+                  </p>
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Senha</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={form.senha}
+                    onChange={(e) => setForm({ ...form, senha: e.target.value })}
+                    className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10 transition-colors"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Confirmar Senha</label>
+                <input
+                  type="password"
+                  value={form.confirmarSenha}
+                  onChange={(e) => setForm({ ...form, confirmarSenha: e.target.value })}
+                  className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    form.senha && form.confirmarSenha && form.senha !== form.confirmarSenha
+                      ? 'border-red-300 focus:border-red-500'
+                      : 'border-slate-200'
+                  }`}
+                />
+                {form.senha && form.confirmarSenha && form.senha !== form.confirmarSenha && (
+                  <p className="text-xs text-red-500 mt-1">As senhas não coincidem</p>
+                )}
+              </div>
+              
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2.5 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleAddUser}
+                  disabled={!form.nome || !form.email || !form.senha || !form.role || form.senha !== form.confirmarSenha}
+                  className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-medium transition-colors"
+                >
+                  Criar Usuário
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Nova Cidade */}
+      {showModal && modalType === "cidade" && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-slate-900">Nova Cidade</h3>
+              <button onClick={() => setShowModal(false)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Estado</label>
+                <select
+                  value={form.estado}
+                  onChange={(e) => setForm({ ...form, estado: e.target.value })}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                >
+                  <option value="">Selecione</option>
+                  {estados.map(e => (
+                    <option key={e.sigla} value={e.sigla}>{e.nome} ({e.sigla})</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Nome da Cidade</label>
+                <input
+                  type="text"
+                  value={form.cidade}
+                  onChange={(e) => setForm({ ...form, cidade: e.target.value })}
+                  placeholder="Ex: Macapá"
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+              </div>
+              
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2.5 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleAddCidade}
+                  disabled={!form.estado || !form.cidade}
+                  className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-medium transition-colors"
+                >
+                  Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

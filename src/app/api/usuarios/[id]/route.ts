@@ -20,8 +20,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     name: data.name,
     email: data.email,
     role: data.role,
-    active: data.active,
   };
+
+  if (data.hasOwnProperty('active')) {
+    updateData.active = data.active;
+  }
 
   if (data.password) {
     updateData.password = await bcrypt.hash(data.password, 10);

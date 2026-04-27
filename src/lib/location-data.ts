@@ -8,7 +8,7 @@ export interface Estado {
 }
 
 export interface Cidade {
-  nome: string;
+  nome?: string;
   codigoIBGE?: string;
   bairros: string[];
 }

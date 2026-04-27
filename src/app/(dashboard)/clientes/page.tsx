@@ -64,7 +64,7 @@ export default function ClientesPage() {
       setCidadesDisponiveis(cidades);
       // Se a cidade atual não estiver na lista, limpar
       if (form.city && !cidades.includes(form.city)) {
-        setForm(prev => ({ ...prev, city: "", neighborhood: "" }));
+        setForm((prev: any) => ({ ...prev, city: "", neighborhood: "" }));
         setBairrosDisponiveis([]);
       }
     } else {
@@ -79,7 +79,7 @@ export default function ClientesPage() {
       setBairrosDisponiveis(bairros);
       // Se o bairro atual não estiver na lista, limpar
       if (form.neighborhood && !bairros.includes(form.neighborhood)) {
-        setForm(prev => ({ ...prev, neighborhood: "" }));
+        setForm((prev: any) => ({ ...prev, neighborhood: "" }));
       }
     } else {
       setBairrosDisponiveis([]);
@@ -91,7 +91,7 @@ export default function ClientesPage() {
     if (geoCidade && !form.city && !editId) {
       // Verificar se a cidade está na lista de cidades do estado
       const estadoSigla = geoEstado === "Amapá" ? "AP" : geoEstado === "Pará" ? "PA" : "AP";
-      setForm(prev => ({ ...prev, city: geoCidade, state: estadoSigla }));
+      setForm((prev: any) => ({ ...prev, city: geoCidade, state: estadoSigla }));
     }
   }, [geoCidade, geoEstado, editId]);
 
