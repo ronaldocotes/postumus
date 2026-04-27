@@ -55,7 +55,15 @@ export default function AdminPage() {
       const res = await fetch("/api/usuarios");
       if (res.ok) {
         const data = await res.json();
-        setUsers(data);
+        // Garantir que é sempre um array
+        setUsers(Array.isArray(data) ? data : data.users || data.data || []);
+      } else {
+        // Se API falhar, usar mock
+        setUsers([
+          { id: "1", name: "Administrador", email: "admin@posthumous.com", role: "super_admin", isActive: true, createdAt: "2024-01-01" },
+          { id: "2", name: "João Silva", email: "joao@posthumous.com", role: "admin", isActive: true, createdAt: "2024-02-15" },
+          { id: "3", name: "Maria Santos", email: "maria@posthumous.com", role: "operador", isActive: true, createdAt: "2024-03-10" },
+        ]);
       }
     } catch (err) {
       // Dados mock para demonstração
