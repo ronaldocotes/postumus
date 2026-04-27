@@ -67,7 +67,7 @@ export default function Sidebar() {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-6 border-b border-gray-200">
-            <img src="/logo.png" alt="Posthumous" className="w-12 h-12 mx-auto mb-2" />
+            <img src="/dove-icon.svg" alt="Posthumous" className="w-12 h-12 mx-auto mb-2" />
             <h1 className="text-xl font-bold text-center">Posthumous</h1>
             <p className="text-sm text-gray-500 mt-1">Gestão de Serviços Póstumos</p>
           </div>

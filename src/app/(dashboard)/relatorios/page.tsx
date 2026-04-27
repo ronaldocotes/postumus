@@ -104,7 +104,7 @@ export default function RelatoriosPage() {
           <div className="mb-6 print:mb-4">
             <div className="flex items-center justify-between border-b pb-4 print:pb-2">
               <div>
-                <img src="/logo.png" alt="Posthumous" className="w-10 h-10 mb-1" />
+                <img src="/dove-icon.svg" alt="Posthumous" className="w-10 h-10 mb-1" />
                 <h2 className="text-xl font-bold text-gray-900 print:text-lg">Posthumous</h2>
                 <p className="text-sm text-gray-500">Gestão de Serviços Póstumos</p>
               </div>
