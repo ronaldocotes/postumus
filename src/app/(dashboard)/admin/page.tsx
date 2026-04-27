@@ -31,6 +31,11 @@ export default function AdminPage() {
   const [bairrosList, setBairrosList] = useState<string[]>([]);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  
+  // Estados para edição de permissões
+  const [isEditingPermissions, setIsEditingPermissions] = useState(false);
+  const [editablePermissions, setEditablePermissions] = useState<Permission[]>([]);
+  const [customRoles, setCustomRoles] = useState<Role[]>([]);
 
   useEffect(() => {
     // Carregar cidades da base
@@ -98,6 +103,69 @@ export default function AdminPage() {
     setBairrosList(novos);
     bairrosPorCidade[selectedCidade] = novos;
   };
+
+  // Funções para gerenciar permissões
+  const handleEditPermissions = (role: Role) => {
+    setSelectedRole(role);
+    setEditablePermissions([...role.permissions]);
+    setIsEditingPermissions(true);
+  };
+
+  const handleTogglePermission = (permission: Permission) => {
+    setEditablePermissions(prev => {
+      if (prev.includes(permission)) {
+        return prev.filter(p => p !== permission);
+      } else {
+        return [...prev, permission];
+      }
+    });
+  };
+
+  const handleSavePermissions = () => {
+    if (selectedRole) {
+      // Se for um perfil do sistema, criar uma cópia customizada
+      if (selectedRole.isSystem) {
+        const updatedRole: Role = {
+          ...selectedRole,
+          id: `${selectedRole.id}_custom_${Date.now()}`,
+          name: `${selectedRole.name} (Personalizado)`,
+          permissions: editablePermissions,
+          isSystem: false
+        };
+        setCustomRoles([...customRoles, updatedRole]);
+      } else {
+        // Atualizar perfil customizado existente
+        const updatedRoles = customRoles.map(r => 
+          r.id === selectedRole.id 
+            ? { ...r, permissions: editablePermissions }
+            : r
+        );
+        setCustomRoles(updatedRoles);
+      }
+      setIsEditingPermissions(false);
+      setSelectedRole(null);
+      setEditablePermissions([]);
+    }
+  };
+
+  const handleCancelEditPermissions = () => {
+    setIsEditingPermissions(false);
+    setEditablePermissions([]);
+  };
+
+  const handleCreateCustomRole = () => {
+    const newRole: Role = {
+      id: `custom_${Date.now()}`,
+      name: "Novo Perfil",
+      description: "Perfil personalizado",
+      permissions: [],
+      isSystem: false
+    };
+    setCustomRoles([...customRoles, newRole]);
+    handleEditPermissions(newRole);
+  };
+
+  const allRoles = [...systemRoles, ...customRoles];
 
   const handleAddUser = async () => {
     if (form.nome && form.email && form.senha && form.role) {
@@ -291,27 +359,59 @@ export default function AdminPage() {
                 <h2 className="text-lg font-semibold text-gray-900">Perfis de Acesso</h2>
                 <p className="text-sm text-gray-600">Gerencie grupos de permissões predefinidos</p>
               </div>
+              <button
+                onClick={handleCreateCustomRole}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+              >
+                <Plus size={18} /> Novo Perfil
+              </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {systemRoles.map((role) => (
+              {allRoles.map((role) => (
                 <div
                   key={role.id}
                   className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                    selectedRole?.id === role.id
+                    selectedRole?.id === role.id && !isEditingPermissions
                       ? "border-blue-500 bg-blue-50"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
-                  onClick={() => setSelectedRole(selectedRole?.id === role.id ? null : role)}
+                  onClick={() => !isEditingPermissions && setSelectedRole(selectedRole?.id === role.id ? null : role)}
                 >
                   <div className="flex items-start justify-between">
                     <div>
                       <h3 className="font-semibold text-gray-900">{role.name}</h3>
                       <p className="text-sm text-gray-600 mt-1">{role.description}</p>
                     </div>
-                    {role.isSystem && (
-                      <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">Sistema</span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {role.isSystem ? (
+                        <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">Sistema</span>
+                      ) : (
+                        <span className="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded">Custom</span>
+                      )}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditPermissions(role);
+                        }}
+                        className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                        title="Editar permissões"
+                      >
+                        <Edit size={16} />
+                      </button>
+                      {!role.isSystem && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCustomRoles(customRoles.filter(r => r.id !== role.id));
+                          }}
+                          className="p-1 text-red-600 hover:bg-red-50 rounded"
+                          title="Excluir perfil"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                    </div>
                   </div>
                   <div className="mt-3 flex items-center gap-2">
                     <span className="text-xs text-gray-500">{role.permissions.length} permissões</span>
@@ -320,11 +420,85 @@ export default function AdminPage() {
               ))}
             </div>
 
-            {selectedRole && (
+            {isEditingPermissions && selectedRole && (
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg border-2 border-blue-200">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-semibold text-gray-900">
+                    Editando: {selectedRole.name}
+                  </h3>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleCancelEditPermissions}
+                      className="px-3 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-100"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      onClick={handleSavePermissions}
+                      className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    >
+                      Salvar ({editablePermissions.length} permissões)
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {modules.map((mod) => {
+                    const actions = moduleActions[mod.id] || [];
+                    
+                    return (
+                      <div key={mod.id} className="bg-white p-3 rounded border">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="font-medium text-gray-900">{mod.name}</span>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                          {actions.map((action) => {
+                            const permission = `${mod.id}:${action.id}` as Permission;
+                            const isChecked = editablePermissions.includes(permission);
+                            
+                            return (
+                              <label
+                                key={action.id}
+                                className={`flex items-center gap-2 p-2 rounded cursor-pointer transition-colors ${
+                                  isChecked 
+                                    ? "bg-green-50 border border-green-200" 
+                                    : "bg-gray-50 border border-gray-200"
+                                }`}
+                                title={action.description}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={isChecked}
+                                  onChange={() => handleTogglePermission(permission)}
+                                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                                />
+                                <span className={`text-sm ${isChecked ? "text-green-800 font-medium" : "text-gray-600"}`}>
+                                  {action.name}
+                                </span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {selectedRole && !isEditingPermissions && (
               <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-4">
-                  Permissões do perfil: {selectedRole.name}
-                </h3>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-semibold text-gray-900">
+                    Permissões do perfil: {selectedRole.name}
+                  </h3>
+                  <button
+                    onClick={() => handleEditPermissions(selectedRole)}
+                    className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-1"
+                  >
+                    <Edit size={14} /> Editar
+                  </button>
+                </div>
                 
                 <div className="space-y-4">
                   {modules.map((mod) => {
