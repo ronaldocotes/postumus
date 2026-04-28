@@ -2,38 +2,46 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const search = searchParams.get("search") || "";
-  const page = parseInt(searchParams.get("page") || "1");
-  const year = searchParams.get("year");
-  const limit = 20;
+  try {
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get("search") || "";
+    const page = parseInt(searchParams.get("page") || "1");
+    const year = searchParams.get("year");
+    const limit = 20;
 
-  const where: any = {};
-  if (search) {
-    where.client = { name: { contains: search, mode: "insensitive" } };
-  }
-  if (year) {
-    where.year = parseInt(year);
-  }
+    const where: any = {};
+    if (search) {
+      where.client = { name: { contains: search, mode: "insensitive" } };
+    }
+    if (year) {
+      where.year = parseInt(year);
+    }
 
-  const [carnes, total] = await Promise.all([
-    prisma.carne.findMany({
-      where,
-      include: {
-        client: { select: { name: true, cpf: true } },
-        installments: {
-          orderBy: { numero: "asc" },
-          include: { Payment: true },
+    const [carnes, total] = await Promise.all([
+      prisma.carne.findMany({
+        where,
+        include: {
+          client: { select: { name: true, cpf: true } },
+          installments: {
+            orderBy: { numero: "asc" },
+            include: { Payment: true },
+          },
         },
-      },
-      orderBy: { createdAt: "desc" },
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
-    prisma.carne.count({ where }),
-  ]);
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      prisma.carne.count({ where }),
+    ]);
 
-  return NextResponse.json({ carnes, total, pages: Math.ceil(total / limit) });
+    return NextResponse.json({ carnes, total, pages: Math.ceil(total / limit) });
+  } catch (error: any) {
+    console.error("Erro na API de carnês:", error);
+    return NextResponse.json(
+      { error: "Erro ao buscar carnês", message: error.message },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
