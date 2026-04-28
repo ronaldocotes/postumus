@@ -5,26 +5,33 @@ import { formatCurrency } from "@/lib/utils";
 import { Users, Truck, Package, FileText, DollarSign, AlertTriangle, TrendingUp, CheckCircle } from "lucide-react";
 
 async function getStats() {
-  const [clients, suppliers, products, overdueInstallments, pendingInstallments, totalPayable, paidInstallments, completedServices] =
+  const [clients, suppliers, products, overdueInstallments, pendingInstallments, totalPayable, paidThisMonth, completedServices] =
     await Promise.all([
       prisma.client.count({ where: { active: true } }),
       prisma.supplier.count({ where: { active: true } }),
       prisma.product.count({ where: { active: true } }),
-      // Parcelas atrasadas (Installment com status LATE)
+      // Parcelas atrasadas
       prisma.installment.count({ where: { status: "LATE" } }),
-      // Total a receber (soma de parcelas pendentes)
+      // Total a receber
       prisma.installment.aggregate({
         where: { status: { in: ["PENDING", "LATE"] } },
         _sum: { valor: true },
       }),
-      // Total a pagar (despesas pendentes)
+      // Total a pagar
       prisma.financialTransaction.aggregate({
         where: { type: "EXPENSE", status: "PENDING" },
         _sum: { amount: true },
       }),
-      // Parcelas pagas este mês
-      prisma.installment.count({ where: { status: "PAID", createdAt: { gte: new Date(new Date().setDate(1)), lte: new Date() } } }),
-      // Serviços vendidos (ServiceSale com status PAID)
+      // Pagos este mes
+      prisma.payment.count({
+        where: {
+          paidAt: {
+            gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+            lte: new Date(),
+          },
+        },
+      }),
+      // Servicos vendidos
       prisma.serviceSale.count({ where: { status: "PAID" } }),
     ]);
 
@@ -35,7 +42,7 @@ async function getStats() {
     overdueInstallments,
     totalReceivable: pendingInstallments._sum.valor || 0,
     totalPayable: totalPayable._sum.amount || 0,
-    paidInstallments,
+    paidInstallments: paidThisMonth,
     completedServices,
   };
 }
@@ -69,11 +76,11 @@ export default async function DashboardPage() {
       description: "Produtos em estoque"
     },
     { 
-      label: "Carnês em Atraso", 
+      label: "Parcelas em Atraso", 
       value: stats.overdueInstallments, 
       icon: AlertTriangle, 
       color: "bg-red-500",
-      warning: stats.overdueInstallments > 100,
+      warning: stats.overdueInstallments > 10,
       description: "Parcelas atrasadas"
     },
     { 
@@ -165,14 +172,14 @@ export default async function DashboardPage() {
       </div>
 
       {/* Alert Banner */}
-      {stats.overdueInstallments > 100 && (
+      {stats.overdueInstallments > 10 && (
         <div className="mt-8 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-xl p-6">
           <div className="flex items-start gap-4">
             <AlertTriangle className="text-red-600 flex-shrink-0" size={24} />
             <div>
               <h3 className="font-bold text-red-900 mb-1">Aviso: Alto volume de atrasos</h3>
               <p className="text-sm text-red-800">
-                Existem {stats.overdueInstallments} carnês com atraso. Considere intensificar as ações de cobrança.
+                Existem {stats.overdueInstallments} parcelas com atraso. Considere intensificar as ações de cobrança.
               </p>
             </div>
           </div>

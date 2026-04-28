@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Edit, Trash2, X, MapPin, Building2, Users, Settings, Shield, ChevronDown, ChevronRight, Check, Eye, EyeOff } from "lucide-react";
+import { Plus, Edit, Trash2, X, MapPin, Building2, Users, Settings, Shield, ChevronDown, ChevronRight, Check, Eye, EyeOff, Navigation } from "lucide-react";
 import { estados, cidadesPorEstado, bairrosPorCidade, adicionarCidade } from "@/lib/location-data";
 import { systemRoles, modules, moduleActions, Permission, Role } from "@/lib/permissions";
 
@@ -394,11 +394,18 @@ export default function AdminPage() {
           { id: "usuarios", label: "Usuários", icon: Users },
           { id: "permissoes", label: "Perfis & Permissões", icon: Shield },
           { id: "localidades", label: "Localidades", icon: MapPin },
+          { id: "rotas", label: "Rotas de Cobrança", icon: Navigation },
           { id: "config", label: "Configurações", icon: Settings },
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => {
+              if (tab.id === "rotas") {
+                window.location.href = "/admin/routes";
+              } else {
+                setActiveTab(tab.id as any);
+              }
+            }}
             className={`px-4 py-2.5 font-medium text-sm border-b-2 transition-all duration-200 flex items-center gap-2 ${
               activeTab === tab.id
                 ? "border-blue-600 text-blue-600"
