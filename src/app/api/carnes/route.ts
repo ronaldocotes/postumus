@@ -45,33 +45,51 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const data = await request.json();
-  const { clientId, year, totalValue, installments = 12, description } = data;
+  try {
+    const data = await request.json();
+    const { clientId, year, totalValue, installments = 12, description } = data;
 
-  const installmentValue = totalValue / installments;
+    const installmentValue = totalValue / installments;
 
-  // Cria o carne com as parcelas
-  const carne = await prisma.carne.create({
-    data: {
-      clientId,
-      year,
-      totalValue,
-      description,
-      installments: {
-        create: Array.from({ length: installments }, (_, i) => ({
-          numero: i + 1,
-          valor: Math.round(installmentValue * 100) / 100,
-          dueDate: new Date(year, i, 10),
-          status: "PENDING",
-        })),
+    // 1. Cria o carnê
+    const carne = await prisma.carne.create({
+      data: {
+        clientId,
+        year,
+        totalValue,
+        description,
       },
-    },
-    include: {
-      installments: {
-        include: { Payment: true },
-      },
-    },
-  });
+    });
 
-  return NextResponse.json(carne, { status: 201 });
+    // 2. Cria as parcelas
+    await prisma.installment.createMany({
+      data: Array.from({ length: installments }, (_, i) => ({
+        carneId: carne.id,
+        numero: i + 1,
+        valor: Math.round(installmentValue * 100) / 100,
+        dueDate: new Date(year, i, 10),
+        status: "PENDING",
+      })),
+    });
+
+    // 3. Retorna carnê com parcelas
+    const carneComParcelas = await prisma.carne.findUnique({
+      where: { id: carne.id },
+      include: {
+        client: { select: { name: true, cpf: true } },
+        installments: {
+          orderBy: { numero: "asc" },
+          include: { payment: true },
+        },
+      },
+    });
+
+    return NextResponse.json(carneComParcelas, { status: 201 });
+  } catch (error: any) {
+    console.error("Erro ao criar carnê:", error);
+    return NextResponse.json(
+      { error: "Erro ao criar carnê", message: error.message },
+      { status: 500 }
+    );
+  }
 }

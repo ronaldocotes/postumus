@@ -10,7 +10,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
       installments: {
         orderBy: { numero: "asc" },
         include: {
-          Payment: true,
+          payment: true,
         },
       },
     },
