@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Search, Edit, Trash2, X } from "lucide-react";
 import SearchSelect from "@/components/ui/SearchSelect";
+import { useToast } from "@/components/ui/Toast";
 
 interface Product {
   id: string;
@@ -18,27 +19,42 @@ interface Supplier { id: string; name: string; cnpj?: string; }
 const emptyForm = { name: "", description: "", sku: "", price: "", cost: "", stock: "0", minStock: "0", supplierId: "" };
 
 export default function MercadoriasPage() {
+  const { success, error: toastError, loading: toastLoading, update, dismiss } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
-  const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
 
   async function load() {
-    const res = await fetch(`/api/mercadorias?search=${search}`);
-    const data = await res.json();
-    setProducts(data.products || []);
+    try {
+      const res = await fetch(`/api/mercadorias?search=${search}`);
+      const data = await res.json();
+      setProducts(data.products || []);
+    } catch (err) {
+      toastError("Erro ao carregar mercadorias");
+    }
   }
 
   async function loadSuppliers() {
-    const res = await fetch("/api/fornecedores?search=");
-    const data = await res.json();
-    setSuppliers(data.suppliers || []);
+    try {
+      const res = await fetch("/api/fornecedores?search=");
+      const data = await res.json();
+      setSuppliers(data.suppliers || []);
+    } catch (err) {
+      toastError("Erro ao carregar fornecedores");
+    } finally {
+      setPageLoading(false);
+    }
   }
 
-  useEffect(() => { load(); loadSuppliers(); }, [search]);
+  useEffect(() => { 
+    load(); 
+    loadSuppliers();
+  }, [search]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -46,7 +62,8 @@ export default function MercadoriasPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
+    setFormLoading(true);
+    const toastId = toastLoading(editId ? "Atualizando..." : "Criando...");
     const url = editId ? `/api/mercadorias/${editId}` : "/api/mercadorias";
     const method = editId ? "PUT" : "POST";
     const payload = {
@@ -55,23 +72,46 @@ export default function MercadoriasPage() {
       stock: parseInt(form.stock), minStock: parseInt(form.minStock),
       supplierId: form.supplierId || null,
     };
-    const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    if (res.ok) { setShowForm(false); setEditId(null); setForm(emptyForm); load(); }
-    else { const err = await res.json(); alert(err.error || "Erro ao salvar"); }
-    setLoading(false);
+    try {
+      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      if (res.ok) {
+        update(toastId, editId ? "Mercadoria atualizada! ✅" : "Mercadoria criada! ✅", "success");
+        setShowForm(false); 
+        setEditId(null); 
+        setForm(emptyForm); 
+        load();
+      } else { 
+        const err = await res.json(); 
+        update(toastId, err.error || "Erro ao salvar", "error");
+      }
+    } catch (err) {
+      update(toastId, "Erro de conexão", "error");
+    }
+    setFormLoading(false);
   }
 
   async function handleEdit(id: string) {
-    const res = await fetch(`/api/mercadorias/${id}`);
-    const p = await res.json();
-    setForm({ name: p.name||"", description: p.description||"", sku: p.sku||"", price: String(p.price), cost: p.cost ? String(p.cost) : "", stock: String(p.stock), minStock: String(p.minStock), supplierId: p.supplierId||"" });
-    setEditId(id); setShowForm(true);
+    try {
+      const res = await fetch(`/api/mercadorias/${id}`);
+      const p = await res.json();
+      setForm({ name: p.name||"", description: p.description||"", sku: p.sku||"", price: String(p.price), cost: p.cost ? String(p.cost) : "", stock: String(p.stock), minStock: String(p.minStock), supplierId: p.supplierId||"" });
+      setEditId(id); 
+      setShowForm(true);
+    } catch (err) {
+      toastError("Erro ao carregar mercadoria");
+    }
   }
 
   async function handleDelete(id: string) {
     if (!confirm("Deseja desativar esta mercadoria?")) return;
-    await fetch(`/api/mercadorias/${id}`, { method: "DELETE" });
-    load();
+    const toastId = toastLoading("Removendo...");
+    try {
+      await fetch(`/api/mercadorias/${id}`, { method: "DELETE" });
+      update(toastId, "Mercadoria removida! ✅", "success");
+      load();
+    } catch (err) {
+      update(toastId, "Erro ao remover", "error");
+    }
   }
 
   const fmt = (v: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
@@ -151,7 +191,7 @@ export default function MercadoriasPage() {
               </div>
               <div className="flex justify-end gap-3 pt-4">
                 <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 font-medium">Cancelar</button>
-                <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">{loading ? "Salvando..." : "Salvar"}</button>
+                <button type="submit" disabled={formLoading} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">{formLoading ? "Salvando..." : "Salvar"}</button>
               </div>
             </form>
           </div>

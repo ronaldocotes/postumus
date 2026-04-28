@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Wrench, ShoppingCart, X, Search } from "lucide-react";
 import SearchSelect from "@/components/ui/SearchSelect";
+import { useToast } from "@/components/ui/Toast";
 
 const fmt = (v: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 const fmtDate = (d: string) => new Intl.DateTimeFormat("pt-BR").format(new Date(d));
@@ -17,10 +18,12 @@ const paymentMethods = [
 ];
 
 export default function ServicosPage() {
+  const { success, error: toastError, loading: toastLoading, update } = useToast();
   const [services, setServices] = useState<any[]>([]);
   const [sales, setSales] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [formLoading, setFormLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showSaleForm, setShowSaleForm] = useState(false);
   const [editing, setEditing] = useState<any>(null);
@@ -59,40 +62,78 @@ export default function ServicosPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setFormLoading(true);
+    const toastId = toastLoading(editing ? "Atualizando..." : "Criando...");
     const url = editing ? `/api/servicos/${editing.id}` : "/api/servicos";
     const method = editing ? "PUT" : "POST";
-    await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
-    setShowForm(false);
-    setEditing(null);
-    setForm({ name: "", description: "", price: "", cost: "", category: "" });
-    loadData();
+    try {
+      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+      if (res.ok) {
+        update(toastId, editing ? "Serviço atualizado! ✅" : "Serviço criado! ✅", "success");
+        setShowForm(false);
+        setEditing(null);
+        setForm({ name: "", description: "", price: "", cost: "", category: "" });
+        loadData();
+      } else {
+        const err = await res.json();
+        update(toastId, err.error || "Erro ao salvar", "error");
+      }
+    } catch (err) {
+      update(toastId, "Erro de conexão", "error");
+    }
+    setFormLoading(false);
   }
 
   async function handleSaleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    await fetch("/api/servicos/vendas", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(saleForm),
-    });
-    setShowSaleForm(false);
-    setSaleForm({
-      serviceId: "", clientId: "", clientName: "", quantity: "1", unitPrice: "",
-      discount: "", paymentMethod: "CASH", status: "PAID", notes: "", date: new Date().toISOString().slice(0, 10),
-    });
-    loadData();
+    setFormLoading(true);
+    const toastId = toastLoading("Registrando venda...");
+    try {
+      const res = await fetch("/api/servicos/vendas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(saleForm),
+      });
+      if (res.ok) {
+        update(toastId, "Venda registrada! ✅", "success");
+        setShowSaleForm(false);
+        setSaleForm({
+          serviceId: "", clientId: "", clientName: "", quantity: "1", unitPrice: "",
+          discount: "", paymentMethod: "CASH", status: "PAID", notes: "", date: new Date().toISOString().slice(0, 10),
+        });
+        loadData();
+      } else {
+        const err = await res.json();
+        update(toastId, err.error || "Erro ao registrar", "error");
+      }
+    } catch (err) {
+      update(toastId, "Erro de conexão", "error");
+    }
+    setFormLoading(false);
   }
 
   async function handleDelete(id: string) {
     if (!confirm("Deseja excluir este serviço?")) return;
-    await fetch(`/api/servicos/${id}`, { method: "DELETE" });
-    loadData();
+    const toastId = toastLoading("Removendo...");
+    try {
+      await fetch(`/api/servicos/${id}`, { method: "DELETE" });
+      update(toastId, "Serviço removido! ✅", "success");
+      loadData();
+    } catch (err) {
+      update(toastId, "Erro ao remover", "error");
+    }
   }
 
   async function handleDeleteSale(id: string) {
     if (!confirm("Deseja excluir esta venda?")) return;
-    await fetch(`/api/servicos/vendas/${id}`, { method: "DELETE" });
-    loadData();
+    const toastId = toastLoading("Removendo...");
+    try {
+      await fetch(`/api/servicos/vendas/${id}`, { method: "DELETE" });
+      update(toastId, "Venda removida! ✅", "success");
+      loadData();
+    } catch (err) {
+      update(toastId, "Erro ao remover", "error");
+    }
   }
 
   function openEdit(s: any) {
@@ -286,7 +327,7 @@ export default function ServicosPage() {
               </div>
               <div className="flex justify-end gap-2 pt-2">
                 <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 font-medium">Cancelar</button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{editing ? "Salvar" : "Cadastrar"}</button>
+                <button type="submit" disabled={formLoading} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">{formLoading ? "Salvando..." : (editing ? "Salvar" : "Cadastrar")}</button>
               </div>
             </form>
           </div>
@@ -374,7 +415,7 @@ export default function ServicosPage() {
               </div>
               <div className="flex justify-end gap-2 pt-2">
                 <button type="button" onClick={() => setShowSaleForm(false)} className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 font-medium">Cancelar</button>
-                <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Registrar Venda</button>
+                <button type="submit" disabled={formLoading} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50">{formLoading ? "Registrando..." : "Registrar Venda"}</button>
               </div>
             </form>
           </div>
