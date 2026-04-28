@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
           client: { select: { name: true, cpf: true } },
           installments: {
             orderBy: { numero: "asc" },
-            include: { Payment: true },
+            include: { payment: true },
           },
         },
         orderBy: { createdAt: "desc" },

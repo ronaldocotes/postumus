@@ -5,23 +5,23 @@ import { formatCurrency } from "@/lib/utils";
 import { Users, Truck, Package, FileText, DollarSign, AlertTriangle, TrendingUp, CheckCircle } from "lucide-react";
 
 async function getStats() {
-  const [clients, suppliers, products, pendingPayments, totalPayable, paidThisMonth, completedServices] =
+  const [clients, suppliers, products, pendingInstallments, totalPayable, paidInstallments, completedServices] =
     await Promise.all([
       prisma.client.count({ where: { active: true } }),
       prisma.supplier.count({ where: { active: true } }),
       prisma.product.count({ where: { active: true } }),
-      // Pagamentos pendentes (aproximação de parcelas atrasadas)
-      prisma.payment.count({ where: { status: "PENDING" } }),
+      // Parcelas pendentes
+      prisma.installment.count({ where: { status: "PENDING" } }),
       // Total a pagar (despesas pendentes)
       prisma.financialTransaction.aggregate({
         where: { type: "EXPENSE", status: "PENDING" },
         _sum: { amount: true },
       }),
-      // Pagos este mês
-      prisma.payment.count({
+      // Parcelas pagas este mês
+      prisma.installment.count({
         where: {
           status: "PAID",
-          createdAt: {
+          updatedAt: {
             gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
             lte: new Date(),
           },
@@ -35,10 +35,10 @@ async function getStats() {
     clients,
     suppliers,
     products,
-    overdueInstallments: pendingPayments,
-    totalReceivable: pendingPayments * 500, // Aproximação: valor médio por pagamento
+    overdueInstallments: pendingInstallments,
+    totalReceivable: pendingInstallments * 500, // Aproximação: valor médio por parcela
     totalPayable: totalPayable._sum.amount || 0,
-    paidInstallments: paidThisMonth,
+    paidInstallments,
     completedServices,
   };
 }
