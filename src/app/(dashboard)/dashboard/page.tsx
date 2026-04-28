@@ -24,8 +24,8 @@ async function getStats() {
       }),
       // Parcelas pagas este mês
       prisma.installment.count({ where: { status: "PAID", createdAt: { gte: new Date(new Date().setDate(1)), lte: new Date() } } }),
-      // Serviços completados
-      prisma.service.count({ where: { status: "COMPLETED" } }),
+      // Serviços vendidos (ServiceSale com status PAID)
+      prisma.serviceSale.count({ where: { status: "PAID" } }),
     ]);
 
   return {

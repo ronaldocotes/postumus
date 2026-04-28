@@ -9,7 +9,12 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
       dependents: { where: { active: true }, orderBy: { name: "asc" } },
       cobrador: { select: { id: true, name: true } },
       carnes: {
-        include: { payments: { orderBy: { installment: "asc" } } },
+        include: {
+          installments: {
+            orderBy: { numero: "asc" },
+            include: { payment: true },
+          },
+        },
         orderBy: { year: "desc" },
       },
     },

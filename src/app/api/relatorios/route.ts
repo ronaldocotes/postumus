@@ -29,9 +29,9 @@ export async function GET(request: NextRequest) {
           orderBy: { year: "desc" },
           take: 1,
           include: {
-            payments: {
-              where: { status: { in: ["PENDING", "OVERDUE"] } },
-              select: { amount: true },
+            installments: {
+              where: { status: { in: ["PENDING", "LATE"] } },
+              select: { valor: true },
             },
           },
         },
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 
     const data = clients.map(c => {
       const lastCarne = c.carnes[0];
-      const pendingAmount = lastCarne?.payments.reduce((s: number, p: any) => s + p.amount, 0) || 0;
+      const pendingAmount = lastCarne?.installments.reduce((s: number, i: any) => s + i.valor, 0) || 0;
       return {
         id: c.id,
         code: c.code,
@@ -131,52 +131,67 @@ export async function GET(request: NextRequest) {
 
   if (type === "inadimplentes") {
     const today = new Date();
-    const overduePayments = await prisma.payment.findMany({
+    // Busca parcelas atrasadas (LATE) ou pendentes com dueDate no passado
+    const overdueInstallments = await prisma.installment.findMany({
       where: {
-        status: { in: ["PENDING", "OVERDUE"] },
+        status: { in: ["PENDING", "LATE"] },
         dueDate: { lt: today },
       },
       include: {
         carne: {
-          include: { client: { select: { name: true, cpf: true, cellphone: true, phone: true, address: true, city: true } } },
+          include: { 
+            client: { 
+              select: { 
+                id: true,
+                name: true, 
+                cpf: true, 
+                cellphone: true, 
+                phone: true, 
+                address: true, 
+                city: true 
+              } 
+            } 
+          },
         },
       },
       orderBy: { dueDate: "asc" },
     });
 
-    // Mark as overdue
-    const overdueIds = overduePayments.filter(p => p.status === "PENDING").map(p => p.id);
-    if (overdueIds.length > 0) {
-      await prisma.payment.updateMany({
-        where: { id: { in: overdueIds } },
-        data: { status: "OVERDUE" },
+    // Atualiza status para LATE se ainda estiver PENDING
+    const pendingIds = overdueInstallments
+      .filter(i => i.status === "PENDING")
+      .map(i => i.id);
+    if (pendingIds.length > 0) {
+      await prisma.installment.updateMany({
+        where: { id: { in: pendingIds } },
+        data: { status: "LATE" },
       });
     }
 
-    // Group by client
+    // Agrupa por cliente
     const grouped: Record<string, any> = {};
-    for (const p of overduePayments) {
-      const clientId = p.carne.clientId;
+    for (const inst of overdueInstallments) {
+      const clientId = inst.carne.client.id;
       if (!grouped[clientId]) {
         grouped[clientId] = {
-          client: p.carne.client,
+          client: inst.carne.client,
           payments: [],
           totalOverdue: 0,
         };
       }
       grouped[clientId].payments.push({
-        installment: p.installment,
-        dueDate: p.dueDate,
-        amount: p.amount,
-        year: p.carne.year,
+        installment: inst.numero,
+        dueDate: inst.dueDate,
+        amount: inst.valor,
+        year: inst.carne.year,
       });
-      grouped[clientId].totalOverdue += p.amount;
+      grouped[clientId].totalOverdue += inst.valor;
     }
 
     return NextResponse.json({
       title: "Relatório de Inadimplentes",
       data: Object.values(grouped),
-      totalGeral: overduePayments.reduce((s, p) => s + p.amount, 0),
+      totalGeral: overdueInstallments.reduce((s, i) => s + i.valor, 0),
     });
   }
 
@@ -214,15 +229,19 @@ export async function GET(request: NextRequest) {
     const endDate = new Date(year, month, 0, 23, 59, 59);
 
     const payments = await prisma.payment.findMany({
-      where: { status: "PAID", paidAt: { gte: startDate, lte: endDate } },
+      where: { paidAt: { gte: startDate, lte: endDate } },
       include: {
-        carne: { include: { client: { select: { name: true, cpf: true } } } },
+        installment: {
+          include: {
+            carne: { include: { client: { select: { name: true, cpf: true } } } },
+          },
+        },
         receivedBy: { select: { name: true } },
       },
       orderBy: { paidAt: "asc" },
     });
 
-    const total = payments.reduce((s, p) => s + (p.paidAmount || p.amount), 0);
+    const total = payments.reduce((s, p) => s + p.paidAmount, 0);
 
     return NextResponse.json({
       title: `Relatório de Pagamentos Recebidos - ${String(month).padStart(2, "0")}/${year}`,

@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user?.id) {
+    if (!(session?.user as any)?.id) {
       return NextResponse.json(
         { error: "Nao autenticado" },
         { status: 401 }
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     const visitLog = await prisma.visitLog.create({
       data: {
         clientId,
-        collectorId: session.user.id,
+        collectorId: (session?.user as any)?.id,
         type,
         notes,
         nextVisitDate: nextVisitDate ? new Date(nextVisitDate) : null,
