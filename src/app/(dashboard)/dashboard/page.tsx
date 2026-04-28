@@ -5,16 +5,19 @@ import { formatCurrency } from "@/lib/utils";
 import { Users, Truck, Package, FileText, DollarSign, AlertTriangle } from "lucide-react";
 
 async function getStats() {
-  const [clients, suppliers, products, overduePayments, totalReceivable, totalPayable] =
+  const [clients, suppliers, products, overdueInstallments, pendingInstallments, totalPayable] =
     await Promise.all([
       prisma.client.count({ where: { active: true } }),
       prisma.supplier.count({ where: { active: true } }),
       prisma.product.count({ where: { active: true } }),
-      prisma.payment.count({ where: { status: "OVERDUE" } }),
-      prisma.payment.aggregate({
-        where: { status: "PENDING" },
-        _sum: { amount: true },
+      // Parcelas atrasadas (Installment com status LATE)
+      prisma.installment.count({ where: { status: "LATE" } }),
+      // Total a receber (soma de parcelas pendentes)
+      prisma.installment.aggregate({
+        where: { status: { in: ["PENDING", "LATE"] } },
+        _sum: { valor: true },
       }),
+      // Total a pagar (despesas pendentes)
       prisma.financialTransaction.aggregate({
         where: { type: "EXPENSE", status: "PENDING" },
         _sum: { amount: true },
@@ -25,8 +28,8 @@ async function getStats() {
     clients,
     suppliers,
     products,
-    overduePayments,
-    totalReceivable: totalReceivable._sum.amount || 0,
+    overdueInstallments,
+    totalReceivable: pendingInstallments._sum.valor || 0,
     totalPayable: totalPayable._sum.amount || 0,
   };
 }
@@ -38,7 +41,7 @@ export default async function DashboardPage() {
     { label: "Clientes Ativos", value: stats.clients, icon: Users, color: "bg-blue-500" },
     { label: "Fornecedores", value: stats.suppliers, icon: Truck, color: "bg-green-500" },
     { label: "Mercadorias", value: stats.products, icon: Package, color: "bg-purple-500" },
-    { label: "Carnês em Atraso", value: stats.overduePayments, icon: AlertTriangle, color: "bg-red-500" },
+    { label: "Carnês em Atraso", value: stats.overdueInstallments, icon: AlertTriangle, color: "bg-red-500" },
     { label: "A Receber", value: formatCurrency(stats.totalReceivable), icon: DollarSign, color: "bg-emerald-500" },
     { label: "A Pagar", value: formatCurrency(stats.totalPayable), icon: FileText, color: "bg-orange-500" },
   ];

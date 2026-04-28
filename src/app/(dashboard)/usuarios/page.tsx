@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Search, Edit, Trash2, X, Shield, ShieldCheck, UserCog, ChevronRight } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 interface User {
   id: string;
@@ -31,12 +32,13 @@ const getInitials = (name: string) => name.split(" ").slice(0, 2).map(n => n[0])
 const emptyForm = { name: "", email: "", password: "", role: "SECRETARIA", active: true };
 
 export default function UsuariosPage() {
+  const { success, error, loading, update, dismiss } = useToast();
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
-  const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
 
   async function load() {
     const res = await fetch(`/api/usuarios?search=${search}`);
@@ -54,35 +56,42 @@ export default function UsuariosPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
+    setFormLoading(true);
 
     if (!editId && !form.password) {
-      alert("Senha é obrigatória para novos usuários");
-      setLoading(false);
+      error("Senha é obrigatória para novos usuários");
+      setFormLoading(false);
       return;
     }
+
+    const toastId = loading(editId ? "Atualizando usuário..." : "Criando usuário...");
 
     const url = editId ? `/api/usuarios/${editId}` : "/api/usuarios";
     const method = editId ? "PUT" : "POST";
     const payload: any = { name: form.name, email: form.email, role: form.role, active: form.active };
     if (form.password) payload.password = form.password;
 
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    if (res.ok) {
-      setShowForm(false);
-      setEditId(null);
-      setForm(emptyForm);
-      load();
-    } else {
-      const err = await res.json();
-      alert(err.error || "Erro ao salvar");
+      if (res.ok) {
+        setShowForm(false);
+        setEditId(null);
+        setForm(emptyForm);
+        load();
+        update(toastId, editId ? "Usuário atualizado com sucesso! ✅" : "Usuário criado com sucesso! ✅", "success");
+      } else {
+        const err = await res.json();
+        update(toastId, err.error || "Erro ao salvar usuário", "error");
+      }
+    } catch (err) {
+      update(toastId, "Erro de conexão", "error");
     }
-    setLoading(false);
+    setFormLoading(false);
   }
 
   async function handleEdit(id: string) {
@@ -95,8 +104,19 @@ export default function UsuariosPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Deseja desativar este usuário?")) return;
-    await fetch(`/api/usuarios/${id}`, { method: "DELETE" });
-    load();
+    
+    const toastId = loading("Removendo usuário...");
+    try {
+      const res = await fetch(`/api/usuarios/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        load();
+        update(toastId, "Usuário removido com sucesso! ✅", "success");
+      } else {
+        update(toastId, "Erro ao remover usuário", "error");
+      }
+    } catch (err) {
+      update(toastId, "Erro de conexão", "error");
+    }
   }
 
   const fmtDate = (d: string) => new Intl.DateTimeFormat("pt-BR").format(new Date(d));
@@ -242,9 +262,9 @@ export default function UsuariosPage() {
               <div className="flex justify-end gap-3 pt-6 border-t border-gray-200 mt-6">
                 <button type="button" onClick={() => setShowForm(false)}
                   className="px-4 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 font-medium transition-colors">Cancelar</button>
-                <button type="submit" disabled={loading}
+                <button type="submit" disabled={formLoading}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors">
-                  {loading ? "Salvando..." : "Salvar"}
+                  {formLoading ? "Salvando..." : "Salvar"}
                 </button>
               </div>
             </form>

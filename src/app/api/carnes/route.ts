@@ -21,7 +21,10 @@ export async function GET(request: NextRequest) {
       where,
       include: {
         client: { select: { name: true, cpf: true } },
-        payments: { orderBy: { installment: "asc" } },
+        installments: {
+          orderBy: { numero: "asc" },
+          include: { payment: true },
+        },
       },
       orderBy: { createdAt: "desc" },
       skip: (page - 1) * limit,
@@ -39,23 +42,27 @@ export async function POST(request: NextRequest) {
 
   const installmentValue = totalValue / installments;
 
+  // Cria o carne com as parcelas
   const carne = await prisma.carne.create({
     data: {
       clientId,
       year,
       totalValue,
-      installments,
       description,
-      payments: {
+      installments: {
         create: Array.from({ length: installments }, (_, i) => ({
-          installment: i + 1,
+          numero: i + 1,
+          valor: Math.round(installmentValue * 100) / 100,
           dueDate: new Date(year, i, 10),
-          amount: Math.round(installmentValue * 100) / 100,
           status: "PENDING",
         })),
       },
     },
-    include: { payments: true },
+    include: {
+      installments: {
+        include: { payment: true },
+      },
+    },
   });
 
   return NextResponse.json(carne, { status: 201 });

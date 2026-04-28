@@ -7,16 +7,31 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
     where: { id },
     include: {
       client: true,
-      payments: { orderBy: { installment: "asc" } },
+      installments: {
+        orderBy: { numero: "asc" },
+        include: {
+          payment: true,
+        },
+      },
     },
   });
-  if (!carne) return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
+  if (!carne) return NextResponse.json({ error: "Nao encontrado" }, { status: 404 });
   return NextResponse.json(carne);
 }
 
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  await prisma.payment.deleteMany({ where: { carneId: id } });
+  // Deleta os pagamentos relacionados às parcelas primeiro
+  await prisma.payment.deleteMany({
+    where: {
+      installment: {
+        carneId: id,
+      },
+    },
+  });
+  // Deleta as parcelas
+  await prisma.installment.deleteMany({ where: { carneId: id } });
+  // Deleta o carne
   await prisma.carne.delete({ where: { id } });
   return NextResponse.json({ success: true });
 }

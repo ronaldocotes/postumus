@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Search, Edit, Trash2, X, Eye, Users, MapPin } from "lucide-react";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { useToast } from "@/components/ui/Toast";
 import { estados, cidadesPorEstado, bairrosPorCidade, estadosCivis, getCidades, getBairros } from "@/lib/location-data";
 
 interface Client {
@@ -35,6 +36,7 @@ const emptyForm: any = {
 };
 
 export default function ClientesPage() {
+  const { success, error, loading: toastLoading, update, dismiss } = useToast();
   const [clients, setClients] = useState<Client[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
@@ -43,7 +45,7 @@ export default function ClientesPage() {
   const [showDependents, setShowDependents] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
-  const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
@@ -121,15 +123,31 @@ export default function ClientesPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
+    setFormLoading(true);
+    const toastId = toastLoading(editId ? "Atualizando cliente..." : "Criando cliente...");
+    
     const url = editId ? `/api/clientes/${editId}` : "/api/clientes";
     const method = editId ? "PUT" : "POST";
     const payload = { ...form, dueDay: parseInt(form.dueDay) || 10 };
     if (!payload.cpf) delete payload.cpf;
-    const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    if (res.ok) { setShowForm(false); setEditId(null); setForm(emptyForm); loadClients(); }
-    else { const err = await res.json(); alert(err.error || "Erro ao salvar"); }
-    setLoading(false);
+    
+    try {
+      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      if (res.ok) { 
+        setShowForm(false); 
+        setEditId(null); 
+        setForm(emptyForm); 
+        loadClients();
+        update(toastId, editId ? "Cliente atualizado com sucesso! ✅" : "Cliente criado com sucesso! ✅", "success");
+      }
+      else { 
+        const err = await res.json(); 
+        update(toastId, err.error || "Erro ao salvar cliente", "error");
+      }
+    } catch (err) {
+      update(toastId, "Erro de conexão", "error");
+    }
+    setFormLoading(false);
   }
 
   async function handleEdit(id: string) {
@@ -155,8 +173,18 @@ export default function ClientesPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Deseja cancelar este cliente?")) return;
-    await fetch(`/api/clientes/${id}`, { method: "DELETE" });
-    loadClients();
+    const toastId = toastLoading("Removendo cliente...");
+    try {
+      const res = await fetch(`/api/clientes/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        loadClients();
+        update(toastId, "Cliente removido com sucesso! ✅", "success");
+      } else {
+        update(toastId, "Erro ao remover cliente", "error");
+      }
+    } catch (err) {
+      update(toastId, "Erro de conexão", "error");
+    }
   }
 
   async function addDependent() {
@@ -657,7 +685,7 @@ export default function ClientesPage() {
 
               <div className="flex justify-end gap-3 pt-4">
                 <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 font-medium">Cancelar</button>
-                <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">{loading ? "Salvando..." : "Salvar"}</button>
+                <button type="submit" disabled={formLoading} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">{formLoading ? "Salvando..." : "Salvar"}</button>
               </div>
             </form>
           </div>

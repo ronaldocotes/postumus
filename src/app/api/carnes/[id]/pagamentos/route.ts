@@ -8,7 +8,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const payment = await prisma.payment.update({
     where: { id: paymentId },
     data: {
-      status: "PAID",
       paidAmount: data.paidAmount,
       paidAt: new Date(),
       paymentMethod: data.paymentMethod || "CASH",

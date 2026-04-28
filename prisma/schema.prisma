@@ -66,11 +66,21 @@ model User {
   password  String
   role      Role     @default(SECRETARIA)
   active    Boolean  @default(true)
+  
+  // NOVO: PIN e Zona para cobradores
+  pin       String?  // PIN de 4 dígitos (hasheado) para confirmar pagamentos
+  zone      String?  // Zona de atuação fixa (ex: "Zona Sul")
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   payments         Payment[]
   assignedClients  Client[]  @relation("CobradorCliente")
+  
+  // Sistema de cobrança
+  collectionRoutes CollectionRoute[]
+  visitLogs        VisitLog[]
+  paymentReceipts  PaymentReceipt[]
 }
 
 model Client {
@@ -121,6 +131,12 @@ model Client {
   notes2          String?
   cobradorId      String?
   active          Boolean      @default(true)
+  
+  // NOVO: Campos para sistema de cobrança
+  zone            String?      // Microrregião (ex: "Centro-Sul", "Fazendinha")
+  routeOrder      Int?         // Ordem manual definida pelo cobrador
+  routeMode       RouteMode    @default(AUTO) // AUTO ou MANUAL
+  
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
@@ -129,6 +145,16 @@ model Client {
   carnes       Carne[]
   transactions FinancialTransaction[]
   serviceSales ServiceSale[]
+  
+  // Sistema de cobrança
+  collectionRouteStops CollectionRouteStop[]
+  visitLogs            VisitLog[]
+}
+
+// NOVO: Enum para modo de rota
+enum RouteMode {
+  AUTO
+  MANUAL
 }
 
 model Dependent {
@@ -223,24 +249,47 @@ model Carne {
   clientId     String
   year         Int
   totalValue   Float
-  installments Int      @default(12)
   description  String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  client   Client    @relation(fields: [clientId], references: [id])
-  payments Payment[]
+  client       Client         @relation(fields: [clientId], references: [id])
+  installments Installment[]  // NOVO: Parcelas separadas
+}
+
+// NOVO: Tabela de Parcelas (substitui JSON)
+model Installment {
+  id          String   @id @default(cuid())
+  carneId     String
+  numero      Int      // Número da parcela (1, 2, 3...)
+  valor       Float    // Valor original
+  dueDate     DateTime // Data de vencimento
+  status      InstallmentStatus @default(PENDING)
+  
+  // Pagamento (opcional, 1:1)
+  payment     Payment?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  carne       Carne    @relation(fields: [carneId], references: [id], onDelete: Cascade)
+  
+  @@unique([carneId, numero]) // Garante parcela única por carnê
+}
+
+enum InstallmentStatus {
+  PENDING   // Pendente
+  PAID      // Pago
+  LATE      // Atrasado
+  PARTIAL   // Pago parcialmente
+  CANCELLED // Cancelado
 }
 
 model Payment {
   id              String          @id @default(cuid())
-  carneId         String
-  installment     Int
-  dueDate         DateTime
-  amount          Float
-  paidAmount      Float?
-  paidAt          DateTime?
-  status          PaymentStatus   @default(PENDING)
+  installmentId   String          @unique // NOVO: Vinculado à parcela
+  paidAmount      Float
+  paidAt          DateTime        @default(now())
   paymentMethod   PaymentMethod?
   paymentLocation PaymentLocation?
   pixCode         String?
@@ -251,8 +300,11 @@ model Payment {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 
-  carne      Carne  @relation(fields: [carneId], references: [id])
-  receivedBy User?  @relation(fields: [receivedById], references: [id])
+  installment Installment @relation(fields: [installmentId], references: [id])
+  receivedBy  User?       @relation(fields: [receivedById], references: [id])
+  
+  // Sistema de cobrança
+  receipts PaymentReceipt[]
 }
 
 model FinancialTransaction {
@@ -274,4 +326,88 @@ model FinancialTransaction {
 
   client   Client?   @relation(fields: [clientId], references: [id])
   supplier Supplier? @relation(fields: [supplierId], references: [id])
+}
+
+// ============================================
+// SISTEMA DE COBRANÇA (App do Cobrador)
+// ============================================
+
+// Rota de cobrança do dia
+model CollectionRoute {
+  id          String   @id @default(cuid())
+  date        DateTime @default(now())
+  collectorId String
+  status      RouteStatus @default(ACTIVE)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  collector User                 @relation(fields: [collectorId], references: [id])
+  stops     CollectionRouteStop[]
+}
+
+enum RouteStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+// Paradas da rota (clientes a visitar)
+model CollectionRouteStop {
+  id          String    @id @default(cuid())
+  routeId     String
+  clientId    String
+  order       Int       // Ordem na rota
+  visited     Boolean   @default(false)
+  visitedAt   DateTime?
+  latitude    Float?
+  longitude   Float?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  route  CollectionRoute @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  client Client          @relation(fields: [clientId], references: [id])
+
+  @@unique([routeId, clientId])
+}
+
+// Log de visitas (check-in GPS)
+model VisitLog {
+  id            String    @id @default(cuid())
+  clientId      String
+  client        Client    @relation(fields: [clientId], references: [id])
+  collectorId   String
+  collector     User      @relation(fields: [collectorId], references: [id])
+  
+  type          VisitType // CHECKIN, PAYMENT, NAO_ATENDEU, REMARCADO
+  notes         String?   // Ex: "Casa fechada", "Pediu pra voltar amanhã"
+  nextVisitDate DateTime? // Se type == REMARCADO
+  
+  lat           Float?    // Localização do GPS
+  lng           Float?
+  accuracy      Float?    // Precisão em metros
+  
+  createdAt     DateTime  @default(now())
+}
+
+enum VisitType {
+  CHECKIN      // Check-in na casa do cliente
+  PAYMENT      // Pagamento recebido
+  NAO_ATENDEU  // Não atendeu
+  REMARCADO    // Remarcado para outro dia
+}
+
+// Comprovantes de pagamento (fotos)
+model PaymentReceipt {
+  id          String   @id @default(cuid())
+  paymentId   String
+  url         String   // URL da imagem no Vercel Blob
+  filename    String
+  mimeType    String
+  size        Int      // Tamanho em bytes
+  uploadedAt  DateTime @default(now())
+  uploadedBy  String
+
+  payment    Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  uploader   User    @relation(fields: [uploadedBy], references: [id])
 }

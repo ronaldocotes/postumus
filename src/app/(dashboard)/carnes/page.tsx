@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Search, FileText, CheckCircle, Clock, AlertTriangle, ChevronRight, Calendar, DollarSign } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 import SearchSelect from "@/components/ui/SearchSelect";
 
 interface Payment {
@@ -24,13 +25,14 @@ interface Carne {
 }
 
 export default function CarnesPage() {
+  const { success, error, loading: toastLoading, update } = useToast();
   const [carnes, setCarnes] = useState<Carne[]>([]);
   const [search, setSearch] = useState("");
   const [showNew, setShowNew] = useState(false);
   const [showDetail, setShowDetail] = useState<Carne | null>(null);
   const [clients, setClients] = useState<any[]>([]);
   const [form, setForm] = useState({ clientId: "", year: String(new Date().getFullYear()), totalValue: "", installments: "12", description: "" });
-  const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
 
   // Função para gerar cor baseada no nome
   const getAvatarColor = (name: string) => {
@@ -77,14 +79,28 @@ export default function CarnesPage() {
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    const res = await fetch("/api/carnes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, year: parseInt(form.year), totalValue: parseFloat(form.totalValue), installments: parseInt(form.installments) }),
-    });
-    if (res.ok) { setShowNew(false); setForm({ clientId: "", year: String(new Date().getFullYear()), totalValue: "", installments: "12", description: "" }); load(); }
-    setLoading(false);
+    setFormLoading(true);
+    const toastId = toastLoading("Criando carnê...");
+    
+    try {
+      const res = await fetch("/api/carnes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, year: parseInt(form.year), totalValue: parseFloat(form.totalValue), installments: parseInt(form.installments) }),
+      });
+      if (res.ok) { 
+        setShowNew(false); 
+        setForm({ clientId: "", year: String(new Date().getFullYear()), totalValue: "", installments: "12", description: "" }); 
+        load();
+        update(toastId, "Carnê criado com sucesso! ✅", "success");
+      } else {
+        const err = await res.json();
+        update(toastId, err.error || "Erro ao criar carnê", "error");
+      }
+    } catch (err) {
+      update(toastId, "Erro de conexão", "error");
+    }
+    setFormLoading(false);
   }
 
   async function handlePay(paymentId: string) {
@@ -92,16 +108,27 @@ export default function CarnesPage() {
     if (!method) return;
     const payment = showDetail?.payments.find(p => p.id === paymentId);
     if (!payment) return;
-    await fetch(`/api/carnes/${paymentId}/pagamentos`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ paidAmount: payment.amount, paymentMethod: method }),
-    });
-    // Refresh detail
-    const res = await fetch(`/api/carnes/${showDetail!.id}`);
-    const updated = await res.json();
-    setShowDetail(updated);
-    load();
+    
+    const toastId = toastLoading("Registrando pagamento...");
+    try {
+      const res = await fetch(`/api/carnes/${paymentId}/pagamentos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paidAmount: payment.amount, paymentMethod: method }),
+      });
+      
+      if (res.ok) {
+        const carneRes = await fetch(`/api/carnes/${showDetail!.id}`);
+        const updated = await carneRes.json();
+        setShowDetail(updated);
+        load();
+        update(toastId, "Pagamento registrado com sucesso! ✅", "success");
+      } else {
+        update(toastId, "Erro ao registrar pagamento", "error");
+      }
+    } catch (err) {
+      update(toastId, "Erro de conexão", "error");
+    }
   }
 
   const statusIcon = (s: string) => {
@@ -244,7 +271,7 @@ export default function CarnesPage() {
               <div><label className="block text-sm font-medium text-gray-700 mb-1">Valor Total *</label><input type="number" step="0.01" value={form.totalValue} onChange={(e) => setForm({ ...form, totalValue: e.target.value })} required className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none" /></div>
               <div className="flex justify-end gap-3">
                 <button type="button" onClick={() => setShowNew(false)} className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 font-medium">Cancelar</button>
-                <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">{loading ? "Gerando..." : "Gerar Carnê"}</button>
+                <button type="submit" disabled={formLoading} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">{formLoading ? "Gerando..." : "Gerar Carnê"}</button>
               </div>
             </form>
           </div>
