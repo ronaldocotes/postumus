@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
         client: { select: { name: true, cpf: true } },
         installments: {
           orderBy: { numero: "asc" },
-          include: { payment: true },
+          include: { Payment: true },
         },
       },
       orderBy: { createdAt: "desc" },
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     },
     include: {
       installments: {
-        include: { payment: true },
+        include: { Payment: true },
       },
     },
   });
