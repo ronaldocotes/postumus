@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { format, isToday, isPast } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { NotificationManager } from "@/components/notifications/NotificationManager";
 
 interface RouteStop {
   id: string;
@@ -438,6 +439,8 @@ export default function CobrancaPage() {
           </div>
         </>
       )}
+
+      <NotificationManager />
     </div>
   );
 }

@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Funeraria Cobrança</string>
+    <string name="title_activity_main">Funeraria Cobrança</string>
+    <string name="package_name">com.funeraria.cobranca</string>
+    <string name="custom_url_scheme">com.funeraria.cobranca</string>
+</resources>

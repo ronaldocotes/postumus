@@ -383,8 +383,8 @@ export default function ClientesPage() {
               <div>
                 <h3 className="font-bold text-[#4a6fa5] mb-2">Carnês</h3>
                 {showDetail.carnes.slice(0, 3).map((c: any) => {
-                  const paid = c.payments.filter((p: any) => p.status === "PAID").length;
-                  const total = c.payments.length;
+                  const paid = c.installments.filter((i: any) => i.payment && i.status === "PAID").length;
+                  const total = c.installments.length;
                   return (
                     <div key={c.id} className="bg-gray-50 rounded-lg p-3 mb-2 border border-gray-200">
                       <div className="flex justify-between">

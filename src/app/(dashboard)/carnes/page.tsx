@@ -5,23 +5,26 @@ import { Plus, Search, FileText, CheckCircle, Clock, AlertTriangle, ChevronRight
 import { useToast } from "@/components/ui/Toast";
 import SearchSelect from "@/components/ui/SearchSelect";
 
-interface Payment {
+interface Installment {
   id: string;
-  installment: number;
+  numero: number;
+  valor: number;
   dueDate: string;
-  amount: number;
   status: string;
-  paidAt?: string;
-  paymentMethod?: string;
+  payment?: {
+    id: string;
+    paidAmount: number;
+    paidAt: string;
+    paymentMethod?: string;
+  };
 }
 
 interface Carne {
   id: string;
   year: number;
   totalValue: number;
-  installments: number;
   client: { name: string; cpf: string };
-  payments: Payment[];
+  installments: Installment[];
 }
 
 export default function CarnesPage() {
@@ -103,18 +106,18 @@ export default function CarnesPage() {
     setFormLoading(false);
   }
 
-  async function handlePay(paymentId: string) {
+  async function handlePay(installmentId: string) {
     const method = prompt("Método: CASH, PIX, CARD", "CASH");
     if (!method) return;
-    const payment = showDetail?.payments.find(p => p.id === paymentId);
-    if (!payment) return;
+    const installment = showDetail?.installments.find(i => i.id === installmentId);
+    if (!installment) return;
     
     const toastId = toastLoading("Registrando pagamento...");
     try {
-      const res = await fetch(`/api/carnes/${paymentId}/pagamentos`, {
+      const res = await fetch(`/api/carnes/${showDetail!.id}/installments/${installmentId}/pay`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paidAmount: payment.amount, paymentMethod: method }),
+        body: JSON.stringify({ paidAmount: installment.valor, paymentMethod: method }),
       });
       
       if (res.ok) {
@@ -157,10 +160,11 @@ export default function CarnesPage() {
 
       <div className="grid gap-3">
         {carnes.map((c) => {
-          const paid = c.payments.filter(p => p.status === "PAID").length;
-          const overdue = c.payments.filter(p => p.status === "OVERDUE").length;
-          const progressPercent = (paid / c.installments) * 100;
-          const isQuitado = paid === c.installments;
+          const paid = c.installments.filter(i => i.payment && i.status === "PAID").length;
+          const late = c.installments.filter(i => i.status === "LATE").length;
+          const total = c.installments.length;
+          const progressPercent = total > 0 ? (paid / total) * 100 : 0;
+          const isQuitado = paid === total && total > 0;
           
           return (
             <button
@@ -183,9 +187,9 @@ export default function CarnesPage() {
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 flex-shrink-0">
                         ✓ Quitado
                       </span>
-                    ) : overdue > 0 ? (
+                    ) : late > 0 ? (
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 flex-shrink-0">
-                        ⚠ {overdue} em Atraso
+                        ⚠ {late} em Atraso
                       </span>
                     ) : null}
                   </div>
@@ -210,7 +214,7 @@ export default function CarnesPage() {
                   <div className="mb-2">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-xs font-semibold text-gray-700">
-                        {paid}/{c.installments} pagos
+                        {paid}/{total} pagos
                       </span>
                       <span className="text-xs text-gray-500">
                         {Math.round(progressPercent)}%
@@ -221,7 +225,7 @@ export default function CarnesPage() {
                         className={`h-2 rounded-full transition-all duration-500 ${
                           isQuitado
                             ? "bg-gradient-to-r from-emerald-500 to-emerald-600"
-                            : overdue > 0
+                            : late > 0
                             ? "bg-gradient-to-r from-orange-400 to-red-500"
                             : "bg-gradient-to-r from-blue-500 to-blue-600"
                         }`}
@@ -232,7 +236,7 @@ export default function CarnesPage() {
 
                   {/* Info de Parcelas */}
                   <p className="text-xs text-gray-500">
-                    {c.installments}x de {fmt(c.totalValue / c.installments)}
+                    {total}x de {fmt(c.totalValue / total)}
                   </p>
                 </div>
 
@@ -299,13 +303,13 @@ export default function CarnesPage() {
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-medium text-gray-700">Progresso do Pagamento</span>
                   <span className="text-xs font-bold text-gray-900">
-                    {showDetail.payments.filter(p => p.status === "PAID").length}/{showDetail.installments} pagos
+                    {showDetail.installments.filter(i => i.payment && i.status === "PAID").length}/{showDetail.installments.length} pagos
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 
                     className="bg-gradient-to-r from-emerald-500 to-emerald-600 h-2 rounded-full transition-all duration-500"
-                    style={{ width: `${(showDetail.payments.filter(p => p.status === "PAID").length / showDetail.installments) * 100}%` }}
+                    style={{ width: `${(showDetail.installments.filter(i => i.payment && i.status === "PAID").length / showDetail.installments.length) * 100}%` }}
                   />
                 </div>
               </div>
@@ -324,23 +328,23 @@ export default function CarnesPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {showDetail.payments.map((p, idx) => {
+                  {showDetail.installments.map((inst, idx) => {
                     const getStatusBadge = (status: string) => {
                       if (status === "PAID") return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">✓ Pago</span>;
-                      if (status === "OVERDUE") return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">⚠ Atrasado</span>;
+                      if (status === "LATE") return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">⚠ Atrasado</span>;
                       return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">⏱ Pendente</span>;
                     };
                     
                     return (
-                      <tr key={p.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                        <td className="px-4 py-4 text-sm font-semibold text-gray-900">{p.installment}/{showDetail.installments}</td>
-                        <td className="px-4 py-4 text-sm text-gray-600">{fmtDate(p.dueDate)}</td>
-                        <td className="px-4 py-4 text-sm font-bold text-gray-900 text-right">{fmt(p.amount)}</td>
-                        <td className="px-4 py-4 text-center">{getStatusBadge(p.status)}</td>
+                      <tr key={inst.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                        <td className="px-4 py-4 text-sm font-semibold text-gray-900">{inst.numero}/{showDetail.installments.length}</td>
+                        <td className="px-4 py-4 text-sm text-gray-600">{fmtDate(inst.dueDate)}</td>
+                        <td className="px-4 py-4 text-sm font-bold text-gray-900 text-right">{fmt(inst.valor)}</td>
+                        <td className="px-4 py-4 text-center">{getStatusBadge(inst.payment ? "PAID" : inst.status)}</td>
                         <td className="px-4 py-4 text-right">
-                          {p.status !== "PAID" && (
+                          {!inst.payment && (
                             <button 
-                              onClick={() => handlePay(p.id)} 
+                              onClick={() => inst.payment && handlePay(inst.payment.id)} 
                               className="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors shadow-sm"
                             >
                               Registrar

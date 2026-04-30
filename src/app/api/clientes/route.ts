@@ -9,30 +9,14 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = Math.min(parseInt(searchParams.get("limit") || "20"), 1000);
 
-    const where: any = { active: true };
-    if (search) {
-      where.OR = [
-        { name: { contains: search, mode: "insensitive" } },
-        { cpf: { contains: search } },
-        { code: { contains: search } },
-        { cellphone: { contains: search } },
-      ];
-    }
-    if (status) where.status = status;
+    // Busca simples sem filtros complexos
+    const clients = await prisma.client.findMany({
+      orderBy: { name: "asc" },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
 
-    const [clients, total] = await Promise.all([
-      prisma.client.findMany({
-        where,
-        include: {
-          cobrador: { select: { name: true } },
-          _count: { select: { dependents: true } },
-        },
-        orderBy: { name: "asc" },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      prisma.client.count({ where }),
-    ]);
+    const total = await prisma.client.count();
 
     return NextResponse.json({ clients, total, pages: Math.ceil(total / limit) });
   } catch (error: any) {
@@ -45,15 +29,23 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const data = await request.json();
+  try {
+    const data = await request.json();
 
-  if (data.cpf) {
-    const existing = await prisma.client.findUnique({ where: { cpf: data.cpf } });
-    if (existing) {
-      return NextResponse.json({ error: "CPF já cadastrado" }, { status: 400 });
+    if (data.cpf) {
+      const existing = await prisma.client.findUnique({ where: { cpf: data.cpf } });
+      if (existing) {
+        return NextResponse.json({ error: "CPF já cadastrado" }, { status: 400 });
+      }
     }
-  }
 
-  const client = await prisma.client.create({ data });
-  return NextResponse.json(client, { status: 201 });
+    const client = await prisma.client.create({ data });
+    return NextResponse.json(client, { status: 201 });
+  } catch (error: any) {
+    console.error("Erro ao criar cliente:", error);
+    return NextResponse.json(
+      { error: "Erro ao criar cliente", message: error.message },
+      { status: 500 }
+    );
+  }
 }

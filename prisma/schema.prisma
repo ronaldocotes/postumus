@@ -7,6 +7,292 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id               String            @id @default(cuid())
+  name             String
+  email            String            @unique
+  password         String
+  role             Role              @default(SECRETARIA)
+  active           Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  pin              String?
+  zone             String?
+  assignedClients  Client[]          @relation("CobradorCliente")
+  collectionRoutes CollectionRoute[]
+  payments         Payment[]
+  paymentReceipts  PaymentReceipt[]
+  pushSubscriptions PushSubscription[]
+  visitLogs        VisitLog[]
+}
+
+model Client {
+  id                   String                 @id @default(cuid())
+  code                 String?                @unique
+  name                 String
+  cpf                  String?                @unique
+  rg                   String?
+  birthDate            DateTime?
+  phone                String?
+  cellphone            String?
+  email                String?
+  address              String?
+  number               String?
+  complement           String?
+  neighborhood         String?
+  city                 String?
+  state                String?
+  zipCode              String?
+  civilStatus          String?
+  profession           String?
+  workplace            String?
+  fatherName           String?
+  motherName           String?
+  spouseName           String?
+  dueDay               Int?                   @default(10)
+  paymentLocation      PaymentLocation?       @default(RESIDENCIA)
+  contractDate         DateTime?
+  cancelDate           DateTime?
+  cancelReason         String?
+  status               ClientStatus           @default(ACTIVE)
+  monthlyValue         Float?
+  notes                String?
+  notes2               String?
+  cobradorId           String?
+  active               Boolean                @default(true)
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  latitude             Float?
+  longitude            Float?
+  billingAddress       String?
+  billingAddressSame   Boolean                @default(true)
+  billingCity          String?
+  billingComplement    String?
+  billingLatitude      Float?
+  billingLongitude     Float?
+  billingNeighborhood  String?
+  billingNumber        String?
+  billingReference     String?
+  billingState         String?
+  billingZipCode       String?
+  isAssured            Boolean                @default(false)
+  zone                 String?
+  routeOrder           Int?
+  routeMode            RouteMode              @default(AUTO)
+  carnes               Carne[]
+  cobrador             User?                  @relation("CobradorCliente", fields: [cobradorId], references: [id])
+  collectionRouteStops CollectionRouteStop[]
+  dependents           Dependent[]
+  transactions         FinancialTransaction[]
+  serviceSales         ServiceSale[]
+  visitLogs            VisitLog[]
+}
+
+model Dependent {
+  id           String     @id @default(cuid())
+  clientId     String
+  name         String
+  birthDate    DateTime?
+  relationship Parentesco @default(OUTRO)
+  cpf          String?
+  phone        String?
+  notes        String?
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  client       Client     @relation(fields: [clientId], references: [id])
+}
+
+model Supplier {
+  id           String                 @id @default(cuid())
+  name         String
+  cnpj         String?                @unique
+  phone        String?
+  email        String?
+  address      String?
+  city         String?
+  state        String?
+  contactName  String?
+  notes        String?
+  active       Boolean                @default(true)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  transactions FinancialTransaction[]
+  products     Product[]
+}
+
+model Product {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  sku         String?   @unique
+  price       Float
+  cost        Float?
+  stock       Int       @default(0)
+  minStock    Int       @default(0)
+  supplierId  String?
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  supplier    Supplier? @relation(fields: [supplierId], references: [id])
+}
+
+model Service {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  cost        Float?
+  category    String?
+  active      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  sales       ServiceSale[]
+}
+
+model ServiceSale {
+  id            String         @id @default(cuid())
+  serviceId     String
+  clientId      String?
+  clientName    String?
+  quantity      Int            @default(1)
+  unitPrice     Float
+  totalPrice    Float
+  discount      Float?
+  date          DateTime       @default(now())
+  paymentMethod PaymentMethod?
+  status        PaymentStatus  @default(PENDING)
+  paidAt        DateTime?
+  notes         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  client        Client?        @relation(fields: [clientId], references: [id])
+  service       Service        @relation(fields: [serviceId], references: [id])
+}
+
+model Carne {
+  id           String        @id @default(cuid())
+  clientId     String
+  year         Int
+  totalValue   Float
+  description  String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  client       Client        @relation(fields: [clientId], references: [id])
+  installments Installment[]
+}
+
+model Installment {
+  id        String            @id @default(cuid())
+  carneId   String
+  numero    Int
+  valor     Float
+  dueDate   DateTime
+  status    InstallmentStatus @default(PENDING)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  carne     Carne             @relation(fields: [carneId], references: [id], onDelete: Cascade)
+  payment   Payment?
+
+  @@unique([carneId, numero])
+}
+
+model Payment {
+  id              String           @id @default(cuid())
+  paidAmount      Float
+  paidAt          DateTime         @default(now())
+  paymentMethod   PaymentMethod?
+  paymentLocation PaymentLocation?
+  pixCode         String?
+  receivedById    String?
+  latitude        Float?
+  longitude       Float?
+  notes           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  installmentId   String           @unique
+  installment     Installment      @relation(fields: [installmentId], references: [id])
+  receivedBy      User?            @relation(fields: [receivedById], references: [id])
+  receipts        PaymentReceipt[]
+}
+
+model FinancialTransaction {
+  id            String          @id @default(cuid())
+  type          TransactionType
+  description   String
+  amount        Float
+  date          DateTime
+  dueDate       DateTime?
+  paidAt        DateTime?
+  status        PaymentStatus   @default(PENDING)
+  paymentMethod PaymentMethod?
+  category      String?
+  clientId      String?
+  supplierId    String?
+  notes         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  client        Client?         @relation(fields: [clientId], references: [id])
+  supplier      Supplier?       @relation(fields: [supplierId], references: [id])
+}
+
+model CollectionRoute {
+  id          String                @id @default(cuid())
+  date        DateTime              @default(now())
+  collectorId String
+  status      RouteStatus           @default(ACTIVE)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  collector   User                  @relation(fields: [collectorId], references: [id])
+  stops       CollectionRouteStop[]
+}
+
+model CollectionRouteStop {
+  id        String          @id @default(cuid())
+  routeId   String
+  clientId  String
+  order     Int
+  visited   Boolean         @default(false)
+  visitedAt DateTime?
+  latitude  Float?
+  longitude Float?
+  notes     String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  client    Client          @relation(fields: [clientId], references: [id])
+  route     CollectionRoute @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  @@unique([routeId, clientId])
+}
+
+model VisitLog {
+  id            String    @id @default(cuid())
+  clientId      String
+  collectorId   String
+  accuracy      Float?
+  notes         String?
+  createdAt     DateTime  @default(now())
+  lat           Float?
+  lng           Float?
+  nextVisitDate DateTime?
+  type          VisitType
+  client        Client    @relation(fields: [clientId], references: [id])
+  collector     User      @relation(fields: [collectorId], references: [id])
+}
+
+model PaymentReceipt {
+  id         String   @id @default(cuid())
+  paymentId  String
+  url        String
+  filename   String
+  mimeType   String
+  size       Int
+  uploadedAt DateTime @default(now())
+  uploadedBy String
+  payment    Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  uploader   User     @relation(fields: [uploadedBy], references: [id])
+}
+
 enum Role {
   ADMIN
   GERENTE
@@ -59,290 +345,17 @@ enum Parentesco {
   OUTRO
 }
 
-model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(SECRETARIA)
-  active    Boolean  @default(true)
-  
-  // NOVO: PIN e Zona para cobradores
-  pin       String?  // PIN de 4 dígitos (hasheado) para confirmar pagamentos
-  zone      String?  // Zona de atuação fixa (ex: "Zona Sul")
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  payments         Payment[]
-  assignedClients  Client[]  @relation("CobradorCliente")
-  
-  // Sistema de cobrança
-  collectionRoutes CollectionRoute[]
-  visitLogs        VisitLog[]
-  paymentReceipts  PaymentReceipt[]
-}
-
-model Client {
-  id              String       @id @default(cuid())
-  code            String?      @unique
-  name            String
-  cpf             String?      @unique
-  rg              String?
-  birthDate       DateTime?
-  phone           String?
-  cellphone       String?
-  email           String?
-  address         String?
-  number          String?
-  complement      String?
-  neighborhood    String?
-  city            String?
-  state           String?
-  zipCode         String?
-  civilStatus     String?
-  profession      String?
-  workplace       String?
-  fatherName      String?
-  motherName      String?
-  spouseName      String?
-  dueDay          Int?         @default(10)
-  paymentLocation PaymentLocation? @default(RESIDENCIA)
-  contractDate    DateTime?
-  cancelDate      DateTime?
-  cancelReason    String?
-  status          ClientStatus @default(ACTIVE)
-  monthlyValue    Float?
-  latitude        Float?
-  longitude       Float?
-  billingAddressSame Boolean  @default(true)
-  billingAddress     String?
-  billingNumber      String?
-  billingComplement  String?
-  billingNeighborhood String?
-  billingCity        String?
-  billingState       String?
-  billingZipCode     String?
-  billingReference   String?
-  billingLatitude    Float?
-  billingLongitude   Float?
-  isAssured       Boolean      @default(false)
-  notes           String?
-  notes2          String?
-  cobradorId      String?
-  active          Boolean      @default(true)
-  
-  // NOVO: Campos para sistema de cobrança
-  zone            String?      // Microrregião (ex: "Centro-Sul", "Fazendinha")
-  routeOrder      Int?         // Ordem manual definida pelo cobrador
-  routeMode       RouteMode    @default(AUTO) // AUTO ou MANUAL
-  
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-
-  cobrador     User?        @relation("CobradorCliente", fields: [cobradorId], references: [id])
-  dependents   Dependent[]
-  carnes       Carne[]
-  transactions FinancialTransaction[]
-  serviceSales ServiceSale[]
-  
-  // Sistema de cobrança
-  collectionRouteStops CollectionRouteStop[]
-  visitLogs            VisitLog[]
-}
-
-// NOVO: Enum para modo de rota
 enum RouteMode {
   AUTO
   MANUAL
 }
 
-model Dependent {
-  id           String     @id @default(cuid())
-  clientId     String
-  name         String
-  birthDate    DateTime?
-  relationship Parentesco @default(OUTRO)
-  cpf          String?
-  phone        String?
-  notes        String?
-  active       Boolean    @default(true)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-
-  client Client @relation(fields: [clientId], references: [id])
-}
-
-model Supplier {
-  id          String   @id @default(cuid())
-  name        String
-  cnpj        String?  @unique
-  phone       String?
-  email       String?
-  address     String?
-  city        String?
-  state       String?
-  contactName String?
-  notes       String?
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  products     Product[]
-  transactions FinancialTransaction[]
-}
-
-model Product {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  sku         String?  @unique
-  price       Float
-  cost        Float?
-  stock       Int      @default(0)
-  minStock    Int      @default(0)
-  supplierId  String?
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  supplier Supplier? @relation(fields: [supplierId], references: [id])
-}
-
-model Service {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  price       Float
-  cost        Float?
-  category    String?
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  sales ServiceSale[]
-}
-
-model ServiceSale {
-  id            String         @id @default(cuid())
-  serviceId     String
-  clientId      String?
-  clientName    String?
-  quantity      Int            @default(1)
-  unitPrice     Float
-  totalPrice    Float
-  discount      Float?
-  date          DateTime       @default(now())
-  paymentMethod PaymentMethod?
-  status        PaymentStatus  @default(PENDING)
-  paidAt        DateTime?
-  notes         String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-
-  service Service @relation(fields: [serviceId], references: [id])
-  client  Client? @relation(fields: [clientId], references: [id])
-}
-
-model Carne {
-  id           String   @id @default(cuid())
-  clientId     String
-  year         Int
-  totalValue   Float
-  description  String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  client       Client         @relation(fields: [clientId], references: [id])
-  installments Installment[]  // NOVO: Parcelas separadas
-}
-
-// NOVO: Tabela de Parcelas (substitui JSON)
-model Installment {
-  id          String   @id @default(cuid())
-  carneId     String
-  numero      Int      // Número da parcela (1, 2, 3...)
-  valor       Float    // Valor original
-  dueDate     DateTime // Data de vencimento
-  status      InstallmentStatus @default(PENDING)
-  
-  // Pagamento (opcional, 1:1)
-  payment     Payment?
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  carne       Carne    @relation(fields: [carneId], references: [id], onDelete: Cascade)
-  
-  @@unique([carneId, numero]) // Garante parcela única por carnê
-}
-
 enum InstallmentStatus {
-  PENDING   // Pendente
-  PAID      // Pago
-  LATE      // Atrasado
-  PARTIAL   // Pago parcialmente
-  CANCELLED // Cancelado
-}
-
-model Payment {
-  id              String          @id @default(cuid())
-  installmentId   String          @unique // NOVO: Vinculado à parcela
-  paidAmount      Float
-  paidAt          DateTime        @default(now())
-  paymentMethod   PaymentMethod?
-  paymentLocation PaymentLocation?
-  pixCode         String?
-  receivedById    String?
-  latitude        Float?
-  longitude       Float?
-  notes           String?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-
-  installment Installment @relation(fields: [installmentId], references: [id])
-  receivedBy  User?       @relation(fields: [receivedById], references: [id])
-  
-  // Sistema de cobrança
-  receipts PaymentReceipt[]
-}
-
-model FinancialTransaction {
-  id            String          @id @default(cuid())
-  type          TransactionType
-  description   String
-  amount        Float
-  date          DateTime
-  dueDate       DateTime?
-  paidAt        DateTime?
-  status        PaymentStatus   @default(PENDING)
-  paymentMethod PaymentMethod?
-  category      String?
-  clientId      String?
-  supplierId    String?
-  notes         String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-
-  client   Client?   @relation(fields: [clientId], references: [id])
-  supplier Supplier? @relation(fields: [supplierId], references: [id])
-}
-
-// ============================================
-// SISTEMA DE COBRANÇA (App do Cobrador)
-// ============================================
-
-// Rota de cobrança do dia
-model CollectionRoute {
-  id          String   @id @default(cuid())
-  date        DateTime @default(now())
-  collectorId String
-  status      RouteStatus @default(ACTIVE)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  collector User                 @relation(fields: [collectorId], references: [id])
-  stops     CollectionRouteStop[]
+  PENDING
+  PAID
+  LATE
+  PARTIAL
+  CANCELLED
 }
 
 enum RouteStatus {
@@ -351,63 +364,22 @@ enum RouteStatus {
   CANCELLED
 }
 
-// Paradas da rota (clientes a visitar)
-model CollectionRouteStop {
-  id          String    @id @default(cuid())
-  routeId     String
-  clientId    String
-  order       Int       // Ordem na rota
-  visited     Boolean   @default(false)
-  visitedAt   DateTime?
-  latitude    Float?
-  longitude   Float?
-  notes       String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  route  CollectionRoute @relation(fields: [routeId], references: [id], onDelete: Cascade)
-  client Client          @relation(fields: [clientId], references: [id])
-
-  @@unique([routeId, clientId])
-}
-
-// Log de visitas (check-in GPS)
-model VisitLog {
-  id            String    @id @default(cuid())
-  clientId      String
-  client        Client    @relation(fields: [clientId], references: [id])
-  collectorId   String
-  collector     User      @relation(fields: [collectorId], references: [id])
-  
-  type          VisitType // CHECKIN, PAYMENT, NAO_ATENDEU, REMARCADO
-  notes         String?   // Ex: "Casa fechada", "Pediu pra voltar amanhã"
-  nextVisitDate DateTime? // Se type == REMARCADO
-  
-  lat           Float?    // Localização do GPS
-  lng           Float?
-  accuracy      Float?    // Precisão em metros
-  
-  createdAt     DateTime  @default(now())
-}
-
 enum VisitType {
-  CHECKIN      // Check-in na casa do cliente
-  PAYMENT      // Pagamento recebido
-  NAO_ATENDEU  // Não atendeu
-  REMARCADO    // Remarcado para outro dia
+  CHECKIN
+  PAYMENT
+  NAO_ATENDEU
+  REMARCADO
 }
 
-// Comprovantes de pagamento (fotos)
-model PaymentReceipt {
-  id          String   @id @default(cuid())
-  paymentId   String
-  url         String   // URL da imagem no Vercel Blob
-  filename    String
-  mimeType    String
-  size        Int      // Tamanho em bytes
-  uploadedAt  DateTime @default(now())
-  uploadedBy  String
+// Push Notifications
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  payment    Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
-  uploader   User    @relation(fields: [uploadedBy], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
