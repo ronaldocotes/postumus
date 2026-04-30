@@ -1,0 +1,277 @@
+/**
+ * Exemplo de integração da API de carnês no frontend
+ * Use este código como referência para integrar geração de PDFs
+ */
+
+// ──────────────────────────────────────────────────────────────────────
+// 1️⃣  COMPONENTE REACT PARA GERAR CARNÊ
+// ──────────────────────────────────────────────────────────────────────
+
+import { useState } from 'react';
+
+export function GerarCarneButton({ carne, cliente }: { carne: any; cliente: any }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleGerarCarne = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Prepara os dados
+      const payload = {
+        cliente: cliente.name,
+        cpf: cliente.cpf,
+        nParcelas: carne.installments?.length || 12,
+        total: carne.totalValue || 'R$ 0,00',
+        valorParcela: carne.installmentValue || 'R$ 0,00',
+        carneId: carne.id,
+        paleta: 'azul', // ou obter das preferências
+      };
+
+      // Chama a API
+      const response = await fetch('/api/carnes/gerar-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro: ${response.statusText}`);
+      }
+
+      // Obtém o PDF como blob
+      const blob = await response.blob();
+
+      // Cria URL para download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `carne_${carne.id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      alert('✅ Carnê gerado com sucesso!');
+    } catch (err: any) {
+      setError(err.message);
+      alert(`❌ Erro: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleGerarCarne}
+      disabled={loading}
+      className="btn btn-primary"
+    >
+      {loading ? '⏳ Gerando PDF...' : '📄 Gerar Carnê PDF'}
+    </button>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// 2️⃣  FETCH SIMPLES (VANILLA JS)
+// ──────────────────────────────────────────────────────────────────────
+
+async function downloadCarne(carneData) {
+  try {
+    const response = await fetch('/api/carnes/gerar-pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(carneData),
+    });
+
+    if (!response.ok) throw new Error('Erro na geração');
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `carne_${carneData.carneId}.pdf`;
+    link.click();
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Erro ao gerar carnê:', error);
+  }
+}
+
+// Uso:
+// downloadCarne({
+//   cliente: 'João Silva',
+//   cpf: '123.456.789-00',
+//   nParcelas: 12,
+//   total: 'R$ 3.050,00',
+//   valorParcela: 'R$ 254,00'
+// });
+
+// ──────────────────────────────────────────────────────────────────────
+// 3️⃣  FUNÇÃO COM TOAST/NOTIFICAÇÃO
+// ──────────────────────────────────────────────────────────────────────
+
+async function gerarCarneComFeedback(carneData, onSuccess?, onError?) {
+  const toastId = Math.random();
+
+  try {
+    // Mostra toast de carregamento
+    toast.loading('Gerando carnê...', { id: toastId });
+
+    const response = await fetch('/api/carnes/gerar-pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(carneData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Falha ao gerar PDF');
+    }
+
+    // Download
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `carne_${carneData.carneId}.pdf`;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    // Sucesso
+    toast.success('✅ Carnê gerado com sucesso!', { id: toastId });
+    onSuccess?.();
+  } catch (error: any) {
+    toast.error(`❌ ${error.message}`, { id: toastId });
+    onError?.(error);
+  }
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// 4️⃣  INTEGRAÇÃO COM PRISMA (SERVER SIDE)
+// ──────────────────────────────────────────────────────────────────────
+
+import { prisma } from '@/lib/prisma';
+
+export async function gerarCarneFromDB(carneId: string) {
+  // Busca dados no banco
+  const carne = await prisma.carne.findUnique({
+    where: { id: carneId },
+    include: { cliente: true },
+  });
+
+  if (!carne) throw new Error('Carnê não encontrado');
+
+  // Monta payload
+  const payload = {
+    cliente: carne.cliente.name,
+    cpf: carne.cliente.cpf,
+    nParcelas: carne.nParcelas,
+    total: formatCurrency(carne.totalValue),
+    valorParcela: formatCurrency(carne.totalValue / carne.nParcelas),
+    carneId: carne.id,
+    paleta: 'azul',
+  };
+
+  // Faz requisição interna
+  const response = await fetch('http://localhost:3000/api/carnes/gerar-pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  return response.blob();
+}
+
+function formatCurrency(value: number): string {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(value);
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// 5️⃣  CONFIGURAÇÕES AVANÇADAS
+// ──────────────────────────────────────────────────────────────────────
+
+const PALETAS = ['azul', 'verde', 'cinza', 'vinho', 'preto'];
+
+interface CarneConfig {
+  cliente: string;
+  cpf?: string;
+  nParcelas?: number;
+  total?: string;
+  valorParcela?: string;
+  empresa?: string;
+  cnpj?: string;
+  carneId?: string;
+  paleta?: 'azul' | 'verde' | 'cinza' | 'vinho' | 'preto';
+  diaVencimento?: number;
+  mesInicio?: number;
+  anoInicio?: number;
+}
+
+// Exemplo com config completa
+const configCompleta: CarneConfig = {
+  cliente: 'Ana Costa Silva',
+  cpf: '123.456.789-00',
+  nParcelas: 12,
+  total: 'R$ 3.050,00',
+  valorParcela: 'R$ 254,00',
+  empresa: 'Posthumous',
+  cnpj: '12.345.678/0001-99',
+  carneId: '2026-001',
+  paleta: 'azul',
+  diaVencimento: 15,
+  mesInicio: 5,
+  anoInicio: 2026,
+};
+
+// ──────────────────────────────────────────────────────────────────────
+// 6️⃣  EXPORTAR COMO MÓDULO
+// ──────────────────────────────────────────────────────────────────────
+
+export const CarneAPI = {
+  /**
+   * Gera e faz download do carnê
+   */
+  download: async (config: CarneConfig) => {
+    const response = await fetch('/api/carnes/gerar-pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro ${response.status}: ${response.statusText}`);
+    }
+
+    return response.blob();
+  },
+
+  /**
+   * Gera e retorna como base64
+   */
+  toBase64: async (config: CarneConfig): Promise<string> => {
+    const blob = await CarneAPI.download(config);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  },
+
+  /**
+   * Gera e abre em nova aba
+   */
+  preview: async (config: CarneConfig) => {
+    const blob = await CarneAPI.download(config);
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+  },
+};
+
+// Uso:
+// await CarneAPI.download({ cliente: 'João', nParcelas: 12 });
+// await CarneAPI.preview({ cliente: 'Maria', nParcelas: 6 });

@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+export const dynamic = "force-dynamic";
+
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -41,12 +43,12 @@ interface RouteStop {
   installments: Installment[];
 }
 
-export default function PagamentoPage() {
+function PagamentoPageContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const stopId = searchParams.get("stopId");
-  const clientId = searchParams.get("clientId");
+  const stopId = searchParams?.get("stopId");
+  const clientId = searchParams?.get("clientId");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [stop, setStop] = useState<RouteStop | null>(null);
@@ -561,5 +563,13 @@ export default function PagamentoPage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function PagamentoPage() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <PagamentoPageContent />
+    </Suspense>
   );
 }

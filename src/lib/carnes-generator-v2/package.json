@@ -1,0 +1,20 @@
+{
+  "name": "carne-posthumous",
+  "version": "2.0.0",
+  "description": "Gerador de Carnê de Pagamento — API + Frontend integrado",
+  "main": "server.js",
+  "scripts": {
+    "start":    "node server.js",
+    "dev":      "nodemon server.js",
+    "generate": "node src/index.js"
+  },
+  "keywords": ["pdf", "carne", "pagamento", "posthumous"],
+  "author": "Posthumous",
+  "license": "MIT",
+  "dependencies": {
+    "pdfkit": "^0.15.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}

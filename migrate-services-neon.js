@@ -1,12 +1,10 @@
+require('dotenv').config();
 const { Pool } = require("pg");
 const fs = require("fs");
 const path = require("path");
+const { pgPoolConfig } = require("./src/lib/db-config");
 
-const pool = new Pool({
-  connectionString: "postgresql://neondb_owner:npg_nw4axRiGgH0K@ep-winter-mountain-acangl3p.sa-east-1.aws.neon.tech/neondb?sslmode=require",
-  ssl: { rejectUnauthorized: false },
-  connectionTimeoutMillis: 30000,
-});
+const pool = new Pool(pgPoolConfig);
 
 async function run() {
   console.log("Applying services migration to Neon...");

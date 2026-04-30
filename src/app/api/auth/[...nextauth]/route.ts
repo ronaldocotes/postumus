@@ -1,6 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma-fixed";
 import bcrypt from "bcryptjs";
 
 export const authOptions: AuthOptions = {
@@ -55,8 +55,11 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
   },
-  secret: "postumus-prod-secret-2026-secure",
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
+
+export const dynamic = 'force-dynamic';
+
 export { handler as GET, handler as POST };

@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Plus, Search, FileText, CheckCircle, Clock, AlertTriangle, ChevronRight, Calendar, DollarSign } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";
 import SearchSelect from "@/components/ui/SearchSelect";
+import PaymentModal from "@/components/carnes/PaymentModal";
 
 interface Installment {
   id: string;
@@ -36,6 +37,10 @@ export default function CarnesPage() {
   const [clients, setClients] = useState<any[]>([]);
   const [form, setForm] = useState({ clientId: "", year: String(new Date().getFullYear()), totalValue: "", installments: "12", description: "" });
   const [formLoading, setFormLoading] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedInstallment, setSelectedInstallment] = useState<Installment | null>(null);
+  const [pixData, setPixData] = useState<any>(null);
+  const hasLoaded = useRef(false);
 
   // Função para gerar cor baseada no nome
   const getAvatarColor = (name: string) => {
@@ -63,25 +68,82 @@ export default function CarnesPage() {
       .toUpperCase();
   };
 
-  async function load() {
-    const res = await fetch(`/api/carnes?search=${search}`);
-    const data = await res.json();
-    setCarnes(data.carnes || []);
-  }
+  const load = useCallback(async (searchTerm = "") => {
+    try {
+      const res = await fetch(`/api/carnes?search=${encodeURIComponent(searchTerm)}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      setCarnes(data.carnes || []);
+    } catch (err) {
+      console.error("Erro ao carregar carnês:", err);
+    }
+  }, []);
 
-  async function loadClients() {
-    const res = await fetch("/api/clientes?limit=999");
-    const data = await res.json();
-    setClients(data.clients || []);
-  }
+  const loadClients = useCallback(async () => {
+    try {
+      const res = await fetch("/api/clientes?limit=999");
+      if (!res.ok) return;
+      const data = await res.json();
+      setClients(data.clients || []);
+    } catch (err) {
+      console.error("Erro ao carregar clientes:", err);
+    }
+  }, []);
 
-  useEffect(() => { load(); }, [search]);
+  const loadPixData = useCallback(async () => {
+    try {
+      const res = await fetch("/api/empresa");
+      if (res.ok) {
+        const data = await res.json();
+        const company = data.companies?.[0];
+        if (company) {
+          setPixData({
+            keyType: company.pixKeyType,
+            key: company.pixKey,
+            name: company.pixName,
+            city: company.pixCity,
+          });
+        }
+      }
+    } catch (err) {
+      console.error("Erro ao carregar dados PIX:", err);
+    }
+  }, []);
+
+  // Carrega dados apenas uma vez na montagem
+  useEffect(() => { 
+    if (!hasLoaded.current) {
+      hasLoaded.current = true;
+      load("");
+      loadPixData();
+    }
+  }, [load, loadPixData]);
+
+  // Carrega carnês quando o search muda (com debounce)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      load(search);
+    }, 300); // Debounce de 300ms
+    
+    return () => clearTimeout(timer);
+  }, [search, load]);
 
   const fmt = (v: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
   const fmtDate = (d: string) => new Intl.DateTimeFormat("pt-BR").format(new Date(d));
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
+    
+    // Validação
+    if (!form.clientId) {
+      error("Selecione um cliente");
+      return;
+    }
+    if (!form.totalValue || parseFloat(form.totalValue) <= 0) {
+      error("Valor total deve ser maior que 0");
+      return;
+    }
+    
     setFormLoading(true);
     const toastId = toastLoading("Criando carnê...");
     
@@ -89,43 +151,61 @@ export default function CarnesPage() {
       const res = await fetch("/api/carnes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, year: parseInt(form.year), totalValue: parseFloat(form.totalValue), installments: parseInt(form.installments) }),
+        body: JSON.stringify({ 
+          clientId: form.clientId,
+          year: parseInt(form.year), 
+          totalValue: parseFloat(form.totalValue), 
+          installments: parseInt(form.installments),
+          description: form.description
+        }),
       });
+      
+      const data = await res.json();
+      
       if (res.ok) { 
         setShowNew(false); 
         setForm({ clientId: "", year: String(new Date().getFullYear()), totalValue: "", installments: "12", description: "" }); 
-        load();
+        load(search);
         update(toastId, "Carnê criado com sucesso! ✅", "success");
       } else {
-        const err = await res.json();
-        update(toastId, err.error || "Erro ao criar carnê", "error");
+        update(toastId, data.error || "Erro ao criar carnê", "error");
+        console.error("Erro da API:", data);
       }
-    } catch (err) {
+    } catch (err: any) {
       update(toastId, "Erro de conexão", "error");
+      console.error("Erro:", err);
+    } finally {
+      setFormLoading(false);
     }
-    setFormLoading(false);
   }
 
   async function handlePay(installmentId: string) {
-    const method = prompt("Método: CASH, PIX, CARD", "CASH");
-    if (!method) return;
-    const installment = showDetail?.installments.find(i => i.id === installmentId);
+    const installment = showDetail?.installments.find((i: any) => i.id === installmentId);
     if (!installment) return;
+    
+    setSelectedInstallment(installment);
+    setShowPaymentModal(true);
+  }
+
+  async function handlePaymentMethodSelected(method: string) {
+    if (!selectedInstallment || !showDetail) return;
     
     const toastId = toastLoading("Registrando pagamento...");
     try {
-      const res = await fetch(`/api/carnes/${showDetail!.id}/installments/${installmentId}/pay`, {
+      const res = await fetch(`/api/carnes/${selectedInstallment.id}/pagamentos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paidAmount: installment.valor, paymentMethod: method }),
+        body: JSON.stringify({ paidAmount: selectedInstallment.valor, paymentMethod: method }),
       });
       
       if (res.ok) {
         const carneRes = await fetch(`/api/carnes/${showDetail!.id}`);
         const updated = await carneRes.json();
         setShowDetail(updated);
-        load();
+        load(search);
         update(toastId, "Pagamento registrado com sucesso! ✅", "success");
+        setShowPaymentModal(false);
+        setSelectedInstallment(null);
       } else {
         update(toastId, "Erro ao registrar pagamento", "error");
       }
@@ -157,6 +237,19 @@ export default function CarnesPage() {
         <input type="text" placeholder="Buscar por nome do cliente..." value={search} onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
       </div>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => {
+          setShowPaymentModal(false);
+          setSelectedInstallment(null);
+        }}
+        onPayment={handlePaymentMethodSelected}
+        installmentValue={selectedInstallment?.valor || 0}
+        clientName={showDetail?.client.name || ""}
+        pixData={pixData}
+      />
 
       <div className="grid gap-3">
         {carnes.map((c) => {
@@ -285,9 +378,9 @@ export default function CarnesPage() {
       {/* Detail Modal */}
       {showDetail && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
-            {/* Sticky Header */}
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 z-10">
+          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            {/* Fixed Header */}
+            <div className="bg-white border-b border-gray-200 p-6 flex-shrink-0">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex-1">
                   <h2 className="text-xl font-bold text-gray-900">{showDetail.client.name}</h2>
@@ -344,7 +437,7 @@ export default function CarnesPage() {
                         <td className="px-4 py-4 text-right">
                           {!inst.payment && (
                             <button 
-                              onClick={() => inst.payment && handlePay(inst.payment.id)} 
+                              onClick={() => handlePay(inst.id)} 
                               className="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors shadow-sm"
                             >
                               Registrar

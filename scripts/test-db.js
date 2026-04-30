@@ -1,8 +1,7 @@
 // Script para testar a API de clientes localmente
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 
-const { PrismaClient } = require('@prisma/client');
-
+const { PrismaClient } = require('../src/generated/prisma');
 const prisma = new PrismaClient();
 
 async function test() {

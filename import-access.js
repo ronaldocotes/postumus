@@ -3,20 +3,49 @@ const { Pool } = require("pg");
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
 
-const DB_URL = process.argv[2] || "postgresql://postgres:1q@localhost:5432/funeraria";
-console.log(`Importando para: ${DB_URL.split("@")[1]}`);
+require('dotenv').config();
+const { pgPoolConfig } = require('./src/lib/db-config');
 
-const pool = new Pool({ connectionString: DB_URL, ssl: { rejectUnauthorized: false } });
 const buffer = fs.readFileSync("C:\\Users\\sdcot\\Downloads\\FC - CenterPAX-DESKTOP-F14286F.accdb");
 const reader = new MDBReader(buffer);
 
+async function importWithBatches(client, items, fn, batchSize = 100, name = 'itens') {
+  let count = 0;
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    try {
+      await client.query('SAVEPOINT sp' + i);
+      for (const item of batch) {
+        await fn(item);
+        count++;
+      }
+      await client.query('RELEASE SAVEPOINT sp' + i);
+      console.log(`  ${name}: ${count}/${items.length} (${Math.round((i+batch.length)/items.length*100)}%)`);
+    } catch (err) {
+      await client.query('ROLLBACK TO SAVEPOINT sp' + i);
+      console.warn(`⚠️ Batch ${Math.floor(i/batchSize)+1} falhou, retry...`, err.message);
+      // Retry o batch
+      for (const item of batch) {
+        try {
+          await fn(item);
+          count++;
+        } catch (retryErr) {
+          console.warn(`  ❌ Skip ${name}:`, retryErr.message);
+        }
+      }
+    }
+  }
+  return count;
+}
+
 async function run() {
+  const pool = new Pool({ ...pgPoolConfig });
   const client = await pool.connect();
-
+  
   try {
-    await client.query("BEGIN");
-
-    // 1. Criar admin
+    await client.query('BEGIN');
+    
+    // 1. Criar admin (transação única)
     const adminHash = await bcrypt.hash("admin123", 10);
     await client.query(`
       INSERT INTO "User" (id, name, email, password, role, active, "createdAt", "updatedAt")
@@ -25,13 +54,13 @@ async function run() {
     `, [adminHash]);
     console.log("✓ Admin criado");
 
-    // 2. Importar funcionários como usuários (cobradores)
+    // 2. Importar funcionários (batch)
     const funcionarios = reader.getTable("Funcionários").getData();
     const funcMap = {};
-    for (const f of funcionarios) {
+    await importWithBatches(client, funcionarios, async (f) => {
       const id = `func-${f.IdFunc}`;
       const nome = (f.Nome || "").trim();
-      if (!nome) continue;
+      if (!nome) return;
       const email = `func${f.IdFunc}@funeraria.com`;
       const hash = await bcrypt.hash("123456", 10);
       await client.query(`
@@ -40,10 +69,9 @@ async function run() {
         ON CONFLICT (email) DO NOTHING
       `, [id, nome, email, hash]);
       funcMap[f.IdFunc] = id;
-    }
+    }, 50, 'Funcionários');
+    
     console.log(`✓ ${Object.keys(funcMap).length} funcionários importados`);
-
-    // 3. Importar clientes
     const clientes = reader.getTable("Clientes").getData();
     const clientMap = {};
     let importedClients = 0;

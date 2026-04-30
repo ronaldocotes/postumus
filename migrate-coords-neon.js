@@ -1,8 +1,9 @@
+require('dotenv').config();
 const { Pool } = require("pg");
-const p = new Pool({
-  connectionString: "postgresql://neondb_owner:npg_nw4axRiGgH0K@ep-winter-mountain-acangl3p.sa-east-1.aws.neon.tech/neondb?sslmode=require",
-  ssl: { rejectUnauthorized: false },
-});
+const { pgPoolConfig } = require("./src/lib/db-config");
+
+const p = new Pool(pgPoolConfig);
+
 async function run() {
   await p.query('ALTER TABLE "Client" ADD COLUMN IF NOT EXISTS latitude DOUBLE PRECISION, ADD COLUMN IF NOT EXISTS longitude DOUBLE PRECISION');
   console.log("Columns added!");

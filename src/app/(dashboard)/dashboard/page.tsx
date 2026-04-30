@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
 import { Users, Truck, Package, FileText, DollarSign, AlertTriangle, TrendingUp, CheckCircle } from "lucide-react";
+import DashboardCharts from "@/components/dashboard/DashboardCharts";
 
 async function getStats() {
   const [clients, suppliers, products, pendingInstallments, totalPayable, paidInstallments, completedServices] =
@@ -181,6 +182,9 @@ export default async function DashboardPage() {
           </div>
         </div>
       )}
+
+      {/* Gráficos */}
+      <DashboardCharts stats={stats} />
     </div>
   );
 }

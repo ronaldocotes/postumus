@@ -7,29 +7,27 @@ import {
   Users,
   Truck,
   Package,
-  FileText,
-  BarChart3,
   DollarSign,
   LayoutDashboard,
   LogOut,
   Menu,
   X,
   Wrench,
-  MapPin,
   Settings,
   ChevronDown,
   Store,
   Bike,
   Wallet,
-  Building,
   MapPinned,
   Receipt,
   PieChart,
   UserCog,
   Map,
   Cog,
+  Navigation,
+  ShoppingCart,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signOut } from "next-auth/react";
 
 interface SubMenuItem {
@@ -54,6 +52,7 @@ const menuItems: MenuItem[] = [
     children: [
       { href: "/carnes", label: "Carnês", icon: Receipt },
       { href: "/mapa", label: "Mapa / Rotas", icon: MapPinned },
+      { href: "/cobranca/rotas", label: "Rotas de Cobrança", icon: Navigation },
     ],
   },
   {
@@ -62,6 +61,7 @@ const menuItems: MenuItem[] = [
     children: [
       { href: "/mercadorias", label: "Mercadorias", icon: Package },
       { href: "/servicos", label: "Serviços", icon: Wrench },
+      { href: "/vendas", label: "Vendas", icon: ShoppingCart },
       { href: "/fornecedores", label: "Fornecedores", icon: Truck },
     ],
   },
@@ -77,9 +77,10 @@ const menuItems: MenuItem[] = [
     label: "Administração",
     icon: Settings,
     children: [
+      { href: "/empresa", label: "Empresa", icon: Store },
       { href: "/admin", label: "Usuários & Permissões", icon: UserCog },
-      { href: "/admin?tab=cidades", label: "Localidades", icon: Map },
-      { href: "/admin?tab=config", label: "Configurações", icon: Cog },
+      { href: "/localidades", label: "Localidades", icon: Map },
+      { href: "/configuracoes", label: "Configurações", icon: Cog },
     ],
   },
 ];
@@ -88,6 +89,25 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set());
+  const [companyLogo, setCompanyLogo] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadCompanyLogo = async () => {
+      try {
+        const res = await fetch("/api/empresa");
+        if (res.ok) {
+          const data = await res.json();
+          const activeCompany = data.companies?.[0];
+          if (activeCompany?.logo) {
+            setCompanyLogo(activeCompany.logo);
+          }
+        }
+      } catch (err) {
+        console.error("Erro ao carregar logo da empresa:", err);
+      }
+    };
+    loadCompanyLogo();
+  }, []);
 
   const toggleMenu = (label: string) => {
     setExpandedMenus((prev) => {
@@ -138,7 +158,11 @@ export default function Sidebar() {
       >
         {/* Logo */}
         <div className="p-6 border-b border-slate-200 bg-gradient-to-b from-[#d4e4f7] to-white shrink-0">
-          <img src="/logo-oficial.png" alt="Posthumous" className="w-16 h-16 mx-auto mb-2" />
+          {companyLogo ? (
+            <img src={companyLogo} alt="Logo da Empresa" className="w-16 h-16 mx-auto mb-2 object-contain" />
+          ) : (
+            <img src="/logo-oficial.png" alt="Posthumous" className="w-16 h-16 mx-auto mb-2" />
+          )}
           <h1 className="text-xl font-bold text-center text-[#4a6fa5]">Posthumous</h1>
           <p className="text-xs text-slate-500 mt-1 text-center">Gestão de Serviços Póstumos</p>
         </div>

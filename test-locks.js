@@ -1,10 +1,9 @@
 const { Pool } = require("pg");
 const fs = require("fs");
-const pool = new Pool({
-  connectionString: "postgresql://neondb_owner:npg_nw4axRiGgH0K@ep-winter-mountain-acangl3p.sa-east-1.aws.neon.tech/neondb?sslmode=require",
-  ssl: { rejectUnauthorized: false },
-  connectionTimeoutMillis: 30000,
-});
+require('dotenv').config();
+const { Pool } = require("pg");
+const { pgPoolConfig } = require("./src/lib/db-config");
+const pool = new Pool(pgPoolConfig);
 
 const log = (msg) => { console.log(msg); fs.appendFileSync("C:\\Users\\sdcot\\funeraria-system\\test-locks-out.txt", msg + "\n"); };
 

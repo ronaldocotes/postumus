@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Posthumous – Carnês</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ── Reset & Base ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue:      #2563eb;
+  --blue-light:#eff6ff;
+  --blue-mid:  #1e3a5f;
+  --green:     #16a34a;
+  --green-bg:  #f0fdf4;
+  --amber:     #d97706;
+  --amber-bg:  #fef3c7;
+  --red:       #dc2626;
+  --gray-50:   #f9fafb;
+  --gray-100:  #f3f4f6;
+  --gray-200:  #e5e7eb;
+  --gray-300:  #d1d5db;
+  --gray-400:  #9ca3af;
+  --gray-500:  #6b7280;
+  --gray-600:  #4b5563;
+  --gray-700:  #374151;
+  --gray-900:  #111827;
+  --sidebar-w: 220px;
+  --font: 'Inter', sans-serif;
+}
+body { font-family: var(--font); background: var(--gray-50); color: var(--gray-900); display: flex; height: 100vh; overflow: hidden; }
+
+/* ── Sidebar ──────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w); background: #fff; border-right: 1px solid var(--gray-200);
+  display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto;
+}
+.sidebar-logo {
+  padding: 20px 16px 16px; border-bottom: 1px solid var(--gray-100);
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-img {
+  width: 40px; height: 40px; border-radius: 8px; overflow: hidden;
+  background: linear-gradient(135deg,#1e3a5f,#2563eb);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.logo-text strong { display: block; font-size: 13px; font-weight: 700; color: var(--gray-900); }
+.logo-text span { font-size: 10px; color: var(--gray-500); }
+
+nav { flex: 1; padding: 12px 8px; }
+.nav-item {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+  border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--gray-600);
+  cursor: pointer; transition: all .15s; margin-bottom: 2px; user-select: none;
+}
+.nav-item:hover { background: var(--gray-50); color: var(--gray-900); }
+.nav-item.active { background: var(--blue-light); color: var(--blue); font-weight: 600; }
+.nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+.nav-section { font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .06em; padding: 12px 10px 4px; }
+.nav-sub { padding-left: 30px; }
+.nav-sub .nav-item { font-size: 12.5px; }
+.nav-collapse-btn { margin-left: auto; font-size: 10px; color: var(--gray-400); }
+
+.sidebar-footer {
+  padding: 12px 8px; border-top: 1px solid var(--gray-100);
+}
+.sidebar-user {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+  border-radius: 8px; cursor: pointer;
+}
+.avatar-sm {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--gray-900);
+  color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Main ─────────────────────────────────────────────── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar {
+  background: #fff; border-bottom: 1px solid var(--gray-200);
+  padding: 16px 28px; display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.topbar h1 { font-size: 20px; font-weight: 700; color: var(--gray-900); }
+.btn-primary {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--blue); color: #fff; border: none;
+  border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .15s; font-family: var(--font);
+}
+.btn-primary:hover { background: #1d4ed8; }
+.btn-secondary {
+  background: #fff; color: var(--gray-700); border: 1px solid var(--gray-300);
+  border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all .15s; font-family: var(--font);
+}
+.btn-secondary:hover { background: var(--gray-50); }
+
+.content { flex: 1; overflow-y: auto; padding: 20px 28px; }
+
+/* ── Search ───────────────────────────────────────────── */
+.search-bar {
+  position: relative; margin-bottom: 16px;
+}
+.search-bar input {
+  width: 100%; padding: 10px 12px 10px 36px;
+  border: 1px solid var(--gray-200); border-radius: 10px; background: #fff;
+  font-size: 13.5px; color: var(--gray-700); font-family: var(--font); outline: none;
+  transition: border-color .15s;
+}
+.search-bar input:focus { border-color: var(--blue); }
+.search-bar input::placeholder { color: var(--gray-400); }
+.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gray-400); }
+
+/* ── Cards ────────────────────────────────────────────── */
+.carne-card {
+  background: #fff; border: 1px solid var(--gray-200); border-radius: 12px;
+  padding: 16px 20px; margin-bottom: 10px; cursor: pointer;
+  transition: all .15s; position: relative;
+}
+.carne-card:hover { border-color: var(--blue); box-shadow: 0 2px 12px rgba(37,99,235,.08); }
+.carne-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.carne-info { flex: 1; min-width: 0; }
+.carne-name { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+.carne-meta { display: flex; align-items: center; gap: 20px; margin-top: 4px; flex-wrap: wrap; }
+.meta-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--gray-500); }
+.meta-item svg { width: 13px; height: 13px; flex-shrink: 0; }
+.carne-value { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+.arrow-icon { color: var(--gray-400); flex-shrink: 0; }
+.progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.prog-label { font-size: 12px; color: var(--gray-500); }
+.prog-pct { font-size: 12px; color: var(--gray-500); }
+.progress-bar { height: 4px; background: var(--gray-100); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+.progress-fill { height: 100%; background: var(--blue); border-radius: 99px; transition: width .3s; }
+.carne-footer { font-size: 12px; color: var(--gray-500); }
+
+/* ── Modal base ───────────────────────────────────────── */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100;
+  display: none; align-items: center; justify-content: center;
+  animation: fadeIn .15s ease;
+}
+.overlay.open { display: flex; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.modal {
+  background: #fff; border-radius: 16px; width: 600px; max-width: 95vw;
+  max-height: 90vh; display: flex; flex-direction: column;
+  animation: slideUp .2s ease;
+  overflow: hidden;
+}
+@keyframes slideUp { from { transform: translateY(16px); opacity:0; } to { transform: none; opacity:1; } }
+.modal-header {
+  padding: 20px 24px 16px; border-bottom: 1px solid var(--gray-100);
+  display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0;
+}
+.modal-title { font-size: 17px; font-weight: 700; color: var(--gray-900); }
+.modal-sub { font-size: 13px; color: var(--gray-500); margin-top: 3px; }
+.modal-close {
+  width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--gray-100);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--gray-600); transition: all .15s; flex-shrink: 0;
+}
+.modal-close:hover { background: var(--gray-200); }
+.modal-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--gray-100); display: flex; gap: 10px; justify-content: flex-end; flex-shrink: 0; }
+
+/* ── Modal Detalhes ───────────────────────────────────── */
+.prog-section { margin-bottom: 16px; }
+.prog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.prog-header span { font-size: 13px; color: var(--gray-600); }
+.prog-header strong { font-size: 13px; font-weight: 600; }
+
+.parcelas-table { width: 100%; border-collapse: collapse; }
+.parcelas-table th {
+  text-align: left; font-size: 11px; font-weight: 600; color: var(--gray-500);
+  text-transform: uppercase; letter-spacing: .05em; padding: 8px 12px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.parcelas-table td {
+  padding: 12px 12px; border-bottom: 1px solid var(--gray-50);
+  font-size: 13px; color: var(--gray-700); vertical-align: middle;
+}
+.parcelas-table tr:last-child td { border-bottom: none; }
+.parcelas-table tr:hover td { background: var(--gray-50); }
+.parcela-num { font-weight: 600; color: var(--gray-900); }
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 600;
+}
+.badge.pend { background: var(--amber-bg); color: var(--amber); }
+.badge.paid { background: var(--green-bg); color: var(--green); }
+.btn-action {
+  background: #fff; border: 1px solid var(--gray-200); color: var(--gray-700);
+  border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 500;
+  cursor: pointer; font-family: var(--font); transition: all .15s;
+}
+.btn-action:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+.btn-print {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--blue-mid); color: #fff; border: none;
+  border-radius: 8px; padding: 9px 18px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .15s; font-family: var(--font);
+}
+.btn-print:hover { background: #162d4a; }
+.btn-print svg { width: 15px; height: 15px; }
+
+/* ── Modal Gerar ──────────────────────────────────────── */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 12px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px; }
+.form-label span { color: var(--red); }
+.form-input, .form-select {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--gray-200);
+  border-radius: 8px; font-size: 13px; font-family: var(--font); color: var(--gray-900);
+  outline: none; transition: border-color .15s; background: #fff;
+}
+.form-input:focus, .form-select:focus { border-color: var(--blue); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* ── Modal Registrar Pagamento ────────────────────────── */
+.payment-header {
+  background: var(--gray-900); padding: 20px 24px;
+  border-radius: 12px 12px 0 0; flex-shrink: 0;
+}
+.payment-header .modal-title { color: #fff; }
+.modal.payment { padding: 0; }
+.payment-valor {
+  text-align: center; padding: 24px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.payment-valor p { font-size: 13px; color: var(--gray-500); margin-bottom: 6px; }
+.payment-valor strong { font-size: 28px; font-weight: 700; color: var(--gray-900); }
+.payment-methods { padding: 16px 24px; display: flex; flex-direction: column; gap: 10px; }
+.method-btn {
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+  border: 1.5px solid var(--gray-200); border-radius: 10px; cursor: pointer;
+  transition: all .15s; background: #fff;
+}
+.method-btn:hover { border-color: var(--blue); background: var(--blue-light); }
+.method-btn.selected { border-color: var(--blue); background: var(--blue-light); }
+.method-icon {
+  width: 40px; height: 40px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.method-icon.green { background: var(--green-bg); color: var(--green); }
+.method-icon.blue { background: var(--blue-light); color: var(--blue); }
+.method-text strong { display: block; font-size: 14px; font-weight: 600; color: var(--gray-900); }
+.method-text span { font-size: 12px; color: var(--gray-500); }
+.payment-footer { padding: 16px 24px; border-top: 1px solid var(--gray-100); display: flex; gap: 10px; }
+
+/* ── Modal Imprimir ───────────────────────────────────── */
+.print-preview {
+  background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 10px;
+  padding: 20px; margin-bottom: 16px;
+}
+.print-coupon {
+  background: #fff; border: 1px solid var(--gray-200); border-radius: 8px;
+  display: flex; margin-bottom: 8px; overflow: hidden; height: 80px;
+}
+.coupon-left {
+  width: 38%; background: #dbeafe; border-right: none;
+  display: flex; flex-direction: column;
+}
+.coupon-left-bar { background: #1e3a5f; padding: 5px 8px; display: flex; justify-content: space-between; align-items: center; }
+.coupon-left-bar span { font-size: 7px; font-weight: 700; color: #fff; }
+.coupon-left-bar small { font-size: 6px; color: #93c5fd; }
+.coupon-left-body { flex: 1; padding: 5px 8px; display: flex; justify-content: space-between; align-items: center; }
+.coupon-left-info { font-size: 7px; color: #1e293b; }
+.coupon-left-info strong { display: block; font-size: 9px; font-weight: 700; color: #1e3a5f; }
+.coupon-num { font-size: 16px; font-weight: 800; color: #2563eb; }
+.coupon-perf {
+  width: 12px; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 3px; background: #f1f5f9;
+}
+.coupon-perf span { width: 2px; height: 2px; border-radius: 50%; background: #93c5fd; }
+.coupon-right { flex: 1; display: flex; flex-direction: column; }
+.coupon-right-bar { background: #1e3a5f; padding: 5px 8px; display: flex; justify-content: space-between; align-items: center; }
+.coupon-right-bar span { font-size: 7px; font-weight: 700; color: #fff; }
+.coupon-right-bar small { font-size: 6px; color: #93c5fd; }
+.coupon-right-body { flex: 1; display: grid; grid-template-columns: 1fr 1fr; padding: 5px 8px; gap: 4px; }
+.coupon-col { display: flex; flex-direction: column; justify-content: space-around; }
+.coupon-col .clabel { font-size: 6px; color: #94a3b8; text-transform: uppercase; }
+.coupon-col .cval { font-size: 7.5px; font-weight: 600; color: #1e293b; }
+.coupon-col .cbig { font-size: 12px; font-weight: 800; color: #2563eb; }
+.coupon-cut { border-top: 1px dashed #c4b5fd; margin: 4px 0; position: relative; }
+.coupon-cut::before { content: '✂'; position: absolute; left: -10px; top: -8px; font-size: 8px; color: #c4b5fd; }
+
+.print-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.print-opt {
+  border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 12px;
+  cursor: pointer; transition: all .15s;
+}
+.print-opt:hover { border-color: var(--blue); background: var(--blue-light); }
+.print-opt.selected { border-color: var(--blue); background: var(--blue-light); }
+.print-opt strong { display: block; font-size: 13px; font-weight: 600; color: var(--gray-900); margin-bottom: 2px; }
+.print-opt span { font-size: 11px; color: var(--gray-500); }
+.palette-dots { display: flex; gap: 4px; margin-top: 8px; }
+.pdot { width: 14px; height: 14px; border-radius: 3px; }
+
+/* ── Toast ────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 200;
+  background: var(--gray-900); color: #fff; padding: 12px 18px;
+  border-radius: 10px; font-size: 13px; font-weight: 500;
+  display: none; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,.2);
+  animation: slideIn .2s ease;
+}
+.toast.show { display: flex; }
+@keyframes slideIn { from { transform: translateY(8px); opacity:0; } to { transform: none; opacity:1; } }
+
+/* ── Scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 99px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-img">🦅</div>
+    <div class="logo-text">
+      <strong>Posthumous</strong>
+      <span>Gestão de Serviços Póstumos</span>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-item" onclick="setActive(this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1" stroke-width="1.8"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" onclick="setActive(this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke-width="1.8"/><circle cx="9" cy="7" r="4" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke-width="1.8"/><path d="M16 3.13a4 4 0 0 1 0 7.75" stroke-width="1.8"/></svg>
+      Clientes
+    </div>
+    <div class="nav-section">Cobrança</div>
+    <div class="nav-item active" onclick="setActive(this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-width="1.8"/><polyline points="14,2 14,8 20,8" stroke-width="1.8"/><line x1="16" y1="13" x2="8" y2="13" stroke-width="1.8"/><line x1="16" y1="17" x2="8" y2="17" stroke-width="1.8"/><line x1="10" y1="9" x2="8" y2="9" stroke-width="1.8"/></svg>
+      Carnês
+    </div>
+    <div class="nav-sub">
+      <div class="nav-item" onclick="setActive(this)">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke-width="1.8"/><circle cx="12" cy="10" r="3" stroke-width="1.8"/></svg>
+        Mapa / Rotas
+      </div>
+      <div class="nav-item" onclick="setActive(this)">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13" stroke-width="1.8"/><polygon points="22,2 15,22 11,13 2,9 22,2" stroke-width="1.8"/></svg>
+        Rotas de Cobrança
+      </div>
+    </div>
+    <div class="nav-section">Estoque & Serviços</div>
+    <div class="nav-item" onclick="setActive(this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke-width="1.8"/><line x1="3" y1="6" x2="21" y2="6" stroke-width="1.8"/><path d="M16 10a4 4 0 0 1-8 0" stroke-width="1.8"/></svg>
+      Mercadorias
+    </div>
+    <div class="nav-item" onclick="setActive(this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke-width="1.8"/></svg>
+      Serviços
+    </div>
+    <div class="nav-section">Financeiro</div>
+    <div class="nav-item" onclick="setActive(this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23" stroke-width="1.8"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke-width="1.8"/></svg>
+      Fluxo de Caixa
+    </div>
+    <div class="nav-item" onclick="setActive(this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 20V10" stroke-width="1.8"/><path d="M12 20V4" stroke-width="1.8"/><path d="M6 20v-6" stroke-width="1.8"/></svg>
+      Relatórios
+    </div>
+    <div class="nav-section">Administração</div>
+    <div class="nav-item" onclick="setActive(this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke-width="1.8"/></svg>
+      Configurações
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="avatar-sm">N</div>
+      <span style="font-size:12px;font-weight:500;color:var(--gray-700)">Sair</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div class="main">
+  <div class="topbar">
+    <h1>Carnês</h1>
+    <button class="btn-primary" onclick="openModalGerar()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19" stroke-width="2"/><line x1="5" y1="12" x2="19" y2="12" stroke-width="2"/></svg>
+      Gerar Carnê
+    </button>
+  </div>
+  <div class="content">
+    <div class="search-bar">
+      <svg class="search-icon" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2"/></svg>
+      <input type="text" id="searchInput" placeholder="Buscar por nome do cliente..." oninput="filterCarnes()"/>
+    </div>
+    <div id="carneList"></div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: DETALHES DO CARNÊ ═══════════ -->
+<div class="overlay" id="modalDetalhes">
+  <div class="modal" style="width:680px;">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="det-nome"></div>
+        <div class="modal-sub" id="det-sub"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalDetalhes')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/><line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="prog-section">
+        <div class="prog-header">
+          <span>Progresso do Pagamento</span>
+          <strong id="det-prog"></strong>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="det-bar" style="width:0%"></div></div>
+      </div>
+      <table class="parcelas-table">
+        <thead>
+          <tr>
+            <th>PARCELA</th>
+            <th>VENCIMENTO</th>
+            <th>VALOR</th>
+            <th>STATUS</th>
+            <th>AÇÃO</th>
+          </tr>
+        </thead>
+        <tbody id="parcelasBody"></tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modalDetalhes')">Fechar</button>
+      <button class="btn-print" onclick="openModalImprimir()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6,9 6,2 18,2 18,9" stroke-width="1.8"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" stroke-width="1.8"/><rect x="6" y="14" width="12" height="8" stroke-width="1.8"/></svg>
+        Imprimir Carnê
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: REGISTRAR PAGAMENTO ═══════════ -->
+<div class="overlay" id="modalPagamento">
+  <div class="modal" style="width:480px;padding:0;">
+    <div class="payment-header" style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="modal-title" style="color:#fff;">Registrar Pagamento</div>
+      <button class="modal-close" style="background:rgba(255,255,255,.1);color:#fff;" onclick="closeModal('modalPagamento')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/><line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/></svg>
+      </button>
+    </div>
+    <div class="payment-valor">
+      <p>Valor da Parcela</p>
+      <strong id="pag-valor">R$ 0,00</strong>
+    </div>
+    <div class="payment-methods">
+      <div class="method-btn selected" onclick="selectMethod(this,'dinheiro')">
+        <div class="method-icon green">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23" stroke-width="1.8"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke-width="1.8"/></svg>
+        </div>
+        <div class="method-text">
+          <strong>Dinheiro</strong>
+          <span>Pagamento em espécie</span>
+        </div>
+      </div>
+      <div class="method-btn" onclick="selectMethod(this,'cartao')">
+        <div class="method-icon blue">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2" stroke-width="1.8"/><line x1="1" y1="10" x2="23" y2="10" stroke-width="1.8"/></svg>
+        </div>
+        <div class="method-text">
+          <strong>Cartão</strong>
+          <span>Débito ou crédito</span>
+        </div>
+      </div>
+      <div class="method-btn" onclick="selectMethod(this,'pix')">
+        <div class="method-icon" style="background:#e0f2fe;color:#0284c7;">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-width="1.8"/></svg>
+        </div>
+        <div class="method-text">
+          <strong>Pix</strong>
+          <span>Transferência instantânea</span>
+        </div>
+      </div>
+    </div>
+    <div class="payment-footer">
+      <button class="btn-secondary" style="flex:1;" onclick="closeModal('modalPagamento')">Cancelar</button>
+      <button class="btn-primary" style="flex:1;" onclick="confirmarPagamento()">Confirmar Pagamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: GERAR CARNÊ ═══════════ -->
+<div class="overlay" id="modalGerar">
+  <div class="modal" style="width:500px;">
+    <div class="modal-header">
+      <div class="modal-title">Gerar Novo Carnê</div>
+      <button class="modal-close" onclick="closeModal('modalGerar')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/><line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Cliente <span>*</span></label>
+        <select class="form-select" id="gen-cliente">
+          <option value="">Buscar cliente por nome ou CPF...</option>
+          <option value="Carla Souza Ribeiro">Carla Souza Ribeiro – 789.012.345-00</option>
+          <option value="Roberto Ferreira Mendes">Roberto Ferreira Mendes – 456.789.123-00</option>
+          <option value="Ana Clara Oliveira Costa">Ana Clara Oliveira Costa – 987.654.321-00</option>
+          <option value="José da Silva Santos">José da Silva Santos – 321.654.987-00</option>
+          <option value="Maria Fernanda Lima">Maria Fernanda Lima – 654.321.098-00</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ano</label>
+          <input class="form-input" id="gen-ano" type="number" value="2026"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Parcelas</label>
+          <input class="form-input" id="gen-parc" type="number" value="12" min="1" max="60"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Valor Total <span>*</span></label>
+          <input class="form-input" id="gen-total" type="text" placeholder="R$ 0,00" oninput="calcParcela()"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor da Parcela</label>
+          <input class="form-input" id="gen-parcval" type="text" placeholder="—" readonly style="background:var(--gray-50);color:var(--gray-500);"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Dia de Vencimento</label>
+        <input class="form-input" id="gen-dia" type="number" value="15" min="1" max="28"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modalGerar')">Cancelar</button>
+      <button class="btn-primary" onclick="gerarCarne()">Gerar Carnê</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: IMPRIMIR CARNÊ ═══════════ -->
+<div class="overlay" id="modalImprimir">
+  <div class="modal" style="width:600px;">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Imprimir Carnê</div>
+        <div class="modal-sub" id="imp-sub">Prévia do layout de impressão</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalImprimir')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/><line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Prévia dos cupons -->
+      <p style="font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;">Prévia dos cupons</p>
+      <div class="print-preview" id="printPreview"></div>
+
+      <!-- Opções de paleta -->
+      <p style="font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;">Paleta de cores</p>
+      <div class="print-options">
+        <div class="print-opt selected" onclick="selectPaleta(this,'azul')" data-pal="azul">
+          <strong>Azul Corporativo</strong>
+          <span>Formal e confiável</span>
+          <div class="palette-dots">
+            <div class="pdot" style="background:#1e3a5f"></div>
+            <div class="pdot" style="background:#2563eb"></div>
+            <div class="pdot" style="background:#dbeafe"></div>
+          </div>
+        </div>
+        <div class="print-opt" onclick="selectPaleta(this,'verde')" data-pal="verde">
+          <strong>Verde Institucional</strong>
+          <span>Equilíbrio e seriedade</span>
+          <div class="palette-dots">
+            <div class="pdot" style="background:#14532d"></div>
+            <div class="pdot" style="background:#16a34a"></div>
+            <div class="pdot" style="background:#dcfce7"></div>
+          </div>
+        </div>
+        <div class="print-opt" onclick="selectPaleta(this,'vinho')" data-pal="vinho">
+          <strong>Vinho / Bordô</strong>
+          <span>Distinção e cerimônia</span>
+          <div class="palette-dots">
+            <div class="pdot" style="background:#4a0e1a"></div>
+            <div class="pdot" style="background:#9b1c31"></div>
+            <div class="pdot" style="background:#ffe4e6"></div>
+          </div>
+        </div>
+        <div class="print-opt" onclick="selectPaleta(this,'preto')" data-pal="preto">
+          <strong>Preto & Dourado</strong>
+          <span>Premium e sofisticado</span>
+          <div class="palette-dots">
+            <div class="pdot" style="background:#111827"></div>
+            <div class="pdot" style="background:#b8960c"></div>
+            <div class="pdot" style="background:#fef9c3"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opções de impressão -->
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--gray-100);display:flex;gap:16px;flex-wrap:wrap;">
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--gray-700);cursor:pointer;">
+          <input type="checkbox" id="opt-pendentes" checked style="accent-color:var(--blue);"> Apenas parcelas pendentes
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--gray-700);cursor:pointer;">
+          <input type="checkbox" id="opt-assinatura" checked style="accent-color:var(--blue);"> Campo de assinatura
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modalImprimir')">Cancelar</button>
+      <button class="btn-print" onclick="gerarPDF()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6,9 6,2 18,2 18,9" stroke-width="1.8"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" stroke-width="1.8"/><rect x="6" y="14" width="12" height="8" stroke-width="1.8"/></svg>
+        Gerar PDF / Imprimir
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12" stroke-width="2"/></svg>
+  <span id="toast-msg"></span>
+</div>
+
+<script>
+// ═══════════ DADOS ═══════════════════════════════════════
+const PALETAS = {
+  azul:  { dark:'#1e3a5f', accent:'#2563eb', light:'#dbeafe' },
+  verde: { dark:'#14532d', accent:'#16a34a', light:'#dcfce7' },
+  vinho: { dark:'#4a0e1a', accent:'#9b1c31', light:'#ffe4e6' },
+  preto: { dark:'#111827', accent:'#b8960c', light:'#fef9c3' },
+};
+
+const AVATARS = ['#10b981','#3b82f6','#f59e0b','#ec4899','#8b5cf6','#06b6d4'];
+const avatarColor = (n,i) => AVATARS[i % AVATARS.length];
+
+let carnes = [
+  { id:1, nome:'Carla Souza Ribeiro',     cpf:'789.012.345-00', ano:2026, total:'R$ 9.600,00', totalNum:9600,  parc:12, valor:800,  pagos:0, dia:15 },
+  { id:2, nome:'Roberto Ferreira Mendes', cpf:'456.789.123-00', ano:2026, total:'R$ 7.200,00', totalNum:7200,  parc:12, valor:600,  pagos:0, dia:15 },
+  { id:3, nome:'Ana Clara Oliveira Costa',cpf:'987.654.321-00', ano:2026, total:'R$ 9.000,00', totalNum:9000,  parc:12, valor:750,  pagos:0, dia:15 },
+  { id:4, nome:'José da Silva Santos',    cpf:'321.654.987-00', ano:2026, total:'R$ 6.000,00', totalNum:6000,  parc:12, valor:500,  pagos:3, dia:10 },
+  { id:5, nome:'Maria Fernanda Lima',     cpf:'654.321.098-00', ano:2026, total:'R$ 4.800,00', totalNum:4800,  parc:12, valor:400,  pagos:6, dia:20 },
+];
+
+let currentCarne = null;
+let currentParcela = null;
+let selectedPaleta = 'azul';
+let selectedMethod = 'dinheiro';
+
+// ═══════════ RENDER LISTA ════════════════════════════════
+function renderList(data) {
+  const list = document.getElementById('carneList');
+  list.innerHTML = '';
+  if (!data.length) {
+    list.innerHTML = '<div style="text-align:center;padding:48px 0;color:var(--gray-400);font-size:14px;">Nenhum carnê encontrado</div>';
+    return;
+  }
+  data.forEach((c, i) => {
+    const pct = Math.round((c.pagos / c.parc) * 100);
+    const initials = c.nome.split(' ').slice(0,2).map(w=>w[0]).join('');
+    const card = document.createElement('div');
+    card.className = 'carne-card';
+    card.innerHTML = `
+      <div class="carne-card-header">
+        <div class="avatar" style="background:${avatarColor(c.nome,i)};color:#fff;">${initials}</div>
+        <div class="carne-info">
+          <div class="carne-name">${c.nome}</div>
+          <div class="carne-meta">
+            <div class="meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-width="1.8"/><polyline points="14,2 14,8 20,8" stroke-width="1.8"/></svg>
+              ${c.cpf}
+            </div>
+            <div class="meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-width="1.8"/><line x1="16" y1="2" x2="16" y2="6" stroke-width="1.8"/><line x1="8" y1="2" x2="8" y2="6" stroke-width="1.8"/><line x1="3" y1="10" x2="21" y2="10" stroke-width="1.8"/></svg>
+              Ano ${c.ano}
+            </div>
+            <div class="meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23" stroke-width="1.8"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke-width="1.8"/></svg>
+              ${c.total}
+            </div>
+          </div>
+        </div>
+        <svg class="arrow-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6" stroke-width="2"/></svg>
+      </div>
+      <div class="progress-row">
+        <span class="prog-label">${c.pagos}/${c.parc} pagos</span>
+        <span class="prog-pct">${pct}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="carne-footer">${c.parc}x de R$ ${c.valor.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
+    `;
+    card.onclick = () => openDetalhes(c);
+    list.appendChild(card);
+  });
+}
+
+// ═══════════ PARCELAS ════════════════════════════════════
+function gerarParcelas(c) {
+  const parcelas = [];
+  for (let i = 0; i < c.parc; i++) {
+    const mes = (i % 12) + 1;
+    const ano = c.ano + Math.floor(i / 12);
+    parcelas.push({
+      num: i + 1,
+      venc: `${String(c.dia).padStart(2,'0')}/${String(mes).padStart(2,'0')}/${ano}`,
+      valor: c.valor,
+      pago: i < c.pagos,
+    });
+  }
+  return parcelas;
+}
+
+// ═══════════ MODAL DETALHES ══════════════════════════════
+function openDetalhes(c) {
+  currentCarne = c;
+  document.getElementById('det-nome').textContent = c.nome;
+  document.getElementById('det-sub').textContent = `Carnê ${c.ano} • ${c.total}`;
+  document.getElementById('det-prog').textContent = `${c.pagos}/${c.parc} pagos`;
+  const pct = Math.round((c.pagos / c.parc) * 100);
+  document.getElementById('det-bar').style.width = pct + '%';
+
+  const tbody = document.getElementById('parcelasBody');
+  tbody.innerHTML = '';
+  gerarParcelas(c).forEach(p => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="parcela-num">${p.num}/${c.parc}</span></td>
+      <td>${p.venc}</td>
+      <td><strong>R$ ${p.valor.toLocaleString('pt-BR',{minimumFractionDigits:2})}</strong></td>
+      <td>${p.pago
+        ? '<span class="badge paid">✓ Pago</span>'
+        : '<span class="badge pend">⏰ Pendente</span>'}</td>
+      <td>${p.pago
+        ? '<span style="font-size:12px;color:var(--gray-400);">—</span>'
+        : `<button class="btn-action" onclick="openPagamento(${p.num},${p.valor})">Registrar</button>`}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  openModal('modalDetalhes');
+}
+
+// ═══════════ MODAL PAGAMENTO ═════════════════════════════
+function openPagamento(num, valor) {
+  currentParcela = num;
+  document.getElementById('pag-valor').textContent =
+    'R$ ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+  // reset métodos
+  document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelector('.method-btn').classList.add('selected');
+  selectedMethod = 'dinheiro';
+  openModal('modalPagamento');
+}
+
+function selectMethod(btn, method) {
+  document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedMethod = method;
+}
+
+function confirmarPagamento() {
+  if (!currentCarne || !currentParcela) return;
+  currentCarne.pagos = Math.max(currentCarne.pagos, currentParcela);
+  closeModal('modalPagamento');
+  openDetalhes(currentCarne);
+  renderList(getFiltered());
+  showToast(`Parcela ${currentParcela}/${currentCarne.parc} registrada como paga!`);
+}
+
+// ═══════════ MODAL GERAR ═════════════════════════════════
+function openModalGerar() { openModal('modalGerar'); }
+
+function calcParcela() {
+  const total = parseFloat(document.getElementById('gen-total').value.replace(/[^0-9,]/g,'').replace(',','.'));
+  const parc  = parseInt(document.getElementById('gen-parc').value) || 12;
+  if (total) {
+    const v = (total / parc).toFixed(2).replace('.',',');
+    document.getElementById('gen-parcval').value = 'R$ ' + v;
+  } else {
+    document.getElementById('gen-parcval').value = '';
+  }
+}
+
+function gerarCarne() {
+  const cliente = document.getElementById('gen-cliente').value;
+  const totalStr = document.getElementById('gen-total').value;
+  if (!cliente) { alert('Selecione um cliente.'); return; }
+  if (!totalStr) { alert('Informe o valor total.'); return; }
+
+  const totalNum = parseFloat(totalStr.replace(/[^0-9,]/g,'').replace(',','.')) || 0;
+  const parc = parseInt(document.getElementById('gen-parc').value) || 12;
+  const ano  = parseInt(document.getElementById('gen-ano').value) || 2026;
+  const dia  = parseInt(document.getElementById('gen-dia').value) || 15;
+  const valor = totalNum / parc;
+  const cpf = '000.000.000-00';
+
+  const novo = {
+    id: carnes.length + 1,
+    nome: cliente,
+    cpf, ano, parc, valor, dia,
+    total: 'R$ ' + totalNum.toLocaleString('pt-BR',{minimumFractionDigits:2}),
+    totalNum, pagos: 0,
+  };
+  carnes.unshift(novo);
+  renderList(getFiltered());
+  closeModal('modalGerar');
+  showToast(`Carnê gerado para ${cliente}!`);
+}
+
+// ═══════════ MODAL IMPRIMIR ══════════════════════════════
+function openModalImprimir() {
+  if (!currentCarne) return;
+  document.getElementById('imp-sub').textContent =
+    `${currentCarne.nome} • ${currentCarne.parc} parcelas • ${currentCarne.total}`;
+  renderPrintPreview();
+  openModal('modalImprimir');
+}
+
+function selectPaleta(el, key) {
+  document.querySelectorAll('.print-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPaleta = key;
+  renderPrintPreview();
+}
+
+function renderPrintPreview() {
+  const c = currentCarne;
+  const pal = PALETAS[selectedPaleta];
+  const parcelas = gerarParcelas(c);
+  const pend = document.getElementById('opt-pendentes')?.checked;
+  const mostrar = pend ? parcelas.filter(p => !p.pago) : parcelas.slice(0, 3);
+  const preview = document.getElementById('printPreview');
+  preview.innerHTML = '';
+
+  mostrar.slice(0, 3).forEach((p, i) => {
+    if (i > 0) {
+      const cut = document.createElement('div');
+      cut.className = 'coupon-cut';
+      preview.appendChild(cut);
+    }
+    const div = document.createElement('div');
+    div.className = 'print-coupon';
+    div.innerHTML = `
+      <div class="coupon-left" style="background:${pal.light};">
+        <div class="coupon-left-bar" style="background:${pal.dark};">
+          <span>Posthumous</span><small>VIA COBRADOR</small>
+        </div>
+        <div class="coupon-left-body">
+          <div class="coupon-left-info">
+            <small style="color:#94a3b8;font-size:6px;">CLIENTE</small>
+            <strong style="color:${pal.dark}">${c.nome.split(' ').slice(0,2).join(' ')}</strong>
+            <div style="font-size:6px;color:#64748b;margin-top:2px;">Ref: ${p.venc}</div>
+          </div>
+          <div class="coupon-num" style="color:${pal.accent};">${String(p.num).padStart(2,'0')}/${String(c.parc).padStart(2,'0')}</div>
+        </div>
+      </div>
+      <div class="coupon-perf">
+        ${Array(6).fill('<span></span>').join('')}
+      </div>
+      <div class="coupon-right">
+        <div class="coupon-right-bar" style="background:${pal.dark};">
+          <span>Posthumous</span><small>VIA CLIENTE / RECIBO</small>
+        </div>
+        <div class="coupon-right-body">
+          <div class="coupon-col">
+            <div><div class="clabel">CLIENTE</div><div class="cval">${c.nome.split(' ').slice(0,2).join(' ')}</div></div>
+            <div><div class="clabel">VENCIMENTO</div><div class="cval">${p.venc}</div></div>
+          </div>
+          <div class="coupon-col">
+            <div><div class="clabel">PARCELA</div><div class="cbig" style="color:${pal.accent}">${String(p.num).padStart(2,'0')}/${String(c.parc).padStart(2,'0')}</div></div>
+            <div><div class="clabel">VALOR</div><div class="cval" style="font-size:10px;font-weight:800;color:${pal.dark}">R$ ${p.valor.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div></div>
+          </div>
+        </div>
+      </div>
+    `;
+    preview.appendChild(div);
+  });
+
+  if (mostrar.length > 3) {
+    const more = document.createElement('p');
+    more.style.cssText = 'font-size:11px;color:var(--gray-400);text-align:center;margin-top:8px;';
+    more.textContent = `+ ${mostrar.length - 3} cupons adicionais no PDF`;
+    preview.appendChild(more);
+  }
+  if (!mostrar.length) {
+    preview.innerHTML = '<p style="font-size:13px;color:var(--gray-400);text-align:center;padding:16px;">Todas as parcelas já estão pagas ✓</p>';
+  }
+}
+
+function gerarPDF() {
+  closeModal('modalImprimir');
+  showToast('PDF gerado! Execute o script Node.js para salvar o arquivo.');
+}
+
+// ═══════════ UTILS ════════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function openModalGerar() { openModal('modalGerar'); }
+
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function filterCarnes() {
+  renderList(getFiltered());
+}
+
+function getFiltered() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  return q ? carnes.filter(c => c.nome.toLowerCase().includes(q) || c.cpf.includes(q)) : carnes;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ═══════════ INIT ═════════════════════════════════════════
+renderList(carnes);
+</script>
+</body>
+</html>
+<script>
+// ═══ INTEGRAÇÃO COM O SERVIDOR NODE.JS (porta 3001) ══════
+const API = 'http://localhost:3001';
+
+// Sobrescreve a função gerarPDF para chamar a API real
+async function gerarPDF() {
+  if (!currentCarne) return;
+
+  const btnPDF = document.querySelector('#modalImprimir .btn-print');
+  const originalHTML = btnPDF.innerHTML;
+  btnPDF.disabled = true;
+  btnPDF.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;"></span> Gerando PDF...';
+
+  const c = currentCarne;
+  const totalNum = c.totalNum || (c.valor * c.parc);
+  const valorFmt = 'R$ ' + c.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+  const totalFmt = 'R$ ' + totalNum.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+  const pend = document.getElementById('opt-pendentes')?.checked;
+
+  // Calcula quantas parcelas pendentes enviar
+  const parc = gerarParcelas(c);
+  const nParc = pend ? parc.filter(p => !p.pago).length : c.parc;
+
+  const payload = {
+    empresa:       'Posthumous',
+    subtitulo:     'Gestão de Serviços Póstumos',
+    cnpj:          '12.345.678/0001-99',
+    cliente:       c.nome,
+    cpf:           c.cpf,
+    endereco:      '',
+    carneId:       `${c.ano}-${c.id}`,
+    total:         totalFmt,
+    nParcelas:     nParc,
+    valorParcela:  valorFmt,
+    jurosDia:      'R$ 0,85/dia',
+    paleta:        selectedPaleta,
+    diaVencimento: c.dia,
+    mesInicio:     1 + c.pagos,
+    anoInicio:     c.ano,
+    ano:           c.ano,
+  };
+
+  try {
+    const resp = await fetch(`${API}/api/gerar-carne`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error || `Erro HTTP ${resp.status}`);
+    }
+
+    // Download automático do PDF
+    const blob = await resp.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `carne_${c.nome.replace(/\s+/g,'_')}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    closeModal('modalImprimir');
+    showToast(`✅ PDF gerado: carne_${c.nome.split(' ')[0]}.pdf`);
+
+  } catch (err) {
+    // Se o servidor não estiver rodando, avisa de forma amigável
+    if (err.message.includes('fetch') || err.message.includes('Failed')) {
+      showToast('⚠️ Servidor offline — rode: npm start na pasta do projeto');
+    } else {
+      showToast('❌ Erro: ' + err.message);
+    }
+    console.error(err);
+  } finally {
+    btnPDF.disabled = false;
+    btnPDF.innerHTML = originalHTML;
+  }
+}
+
+// Verifica se o servidor está online ao carregar
+fetch(`${API}/health`)
+  .then(r => r.json())
+  .then(() => console.log('✅ Servidor Node.js conectado em', API))
+  .catch(() => console.warn('⚠️ Servidor offline. Rode: npm start'));
+</script>

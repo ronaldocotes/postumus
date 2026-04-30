@@ -39,6 +39,17 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Remover campos que não são do modelo Client
+    delete data.dependents;
+    delete data.billingAddressSame;
+    
+    // Remover campos vazios para evitar erros
+    Object.keys(data).forEach(key => {
+      if (data[key] === "" || data[key] === undefined) {
+        delete data[key];
+      }
+    });
+
     const client = await prisma.client.create({ data });
     return NextResponse.json(client, { status: 201 });
   } catch (error: any) {

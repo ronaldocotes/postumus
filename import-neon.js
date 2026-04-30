@@ -1,18 +1,13 @@
+require('dotenv').config();
 const { default: MDBReader } = require("mdb-reader");
 const { Pool } = require("pg");
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
+const { pgPoolConfig } = require("./src/lib/db-config");
 
-const DB_URL = "postgresql://neondb_owner:npg_nw4axRiGgH0K@ep-winter-mountain-acangl3p.sa-east-1.aws.neon.tech/neondb?sslmode=require";
-console.log("Target:", DB_URL.split("@")[1]);
+console.log("Target:", process.env.DATABASE_URL ? process.env.DATABASE_URL.split("@")[1] : "Local/Env DB");
 
-const pool = new Pool({
-  connectionString: DB_URL,
-  ssl: { rejectUnauthorized: false },
-  connectionTimeoutMillis: 60000,
-  statement_timeout: 300000,
-  max: 1,
-});
+const pool = new Pool(pgPoolConfig);
 
 const buffer = fs.readFileSync("C:\\Users\\sdcot\\Downloads\\FC - CenterPAX-DESKTOP-F14286F.accdb");
 const reader = new MDBReader(buffer);

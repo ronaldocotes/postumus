@@ -118,7 +118,50 @@ export default function ClientesPage() {
   useEffect(() => { loadClients(); }, [search, statusFilter, page]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    let maskedValue = value;
+    
+    // Aplicar máscaras
+    if (name === 'cpf') {
+      maskedValue = maskCPF(value);
+    } else if (name === 'cellphone') {
+      maskedValue = maskCelular(value);
+    } else if (name === 'phone') {
+      maskedValue = maskTelefone(value);
+    } else if (name === 'zipCode') {
+      maskedValue = maskCEP(value);
+    }
+    
+    setForm({ ...form, [name]: maskedValue });
+  }
+  
+  // Máscaras
+  function maskCPF(v: string): string {
+    v = v.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 9) return v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+    if (v.length > 6) return v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+    if (v.length > 3) return v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+    return v;
+  }
+  
+  function maskCelular(v: string): string {
+    v = v.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 6) return v.replace(/(\d{2})(\d{5})(\d{1,4})/, '($1) $2-$3');
+    if (v.length > 2) return v.replace(/(\d{2})(\d{1,5})/, '($1) $2');
+    return v;
+  }
+  
+  function maskTelefone(v: string): string {
+    v = v.replace(/\D/g, '').slice(0, 10);
+    if (v.length > 6) return v.replace(/(\d{2})(\d{4})(\d{1,4})/, '($1) $2-$3');
+    if (v.length > 2) return v.replace(/(\d{2})(\d{1,4})/, '($1) $2');
+    return v;
+  }
+  
+  function maskCEP(v: string): string {
+    v = v.replace(/\D/g, '').slice(0, 8);
+    if (v.length > 5) return v.replace(/(\d{5})(\d{1,3})/, '$1-$2');
+    return v;
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -129,6 +172,11 @@ export default function ClientesPage() {
     const url = editId ? `/api/clientes/${editId}` : "/api/clientes";
     const method = editId ? "PUT" : "POST";
     const payload = { ...form, dueDay: parseInt(form.dueDay) || 10 };
+    // Remover máscaras antes de enviar
+    if (payload.cpf) payload.cpf = payload.cpf.replace(/\D/g, '');
+    if (payload.cellphone) payload.cellphone = payload.cellphone.replace(/\D/g, '');
+    if (payload.phone) payload.phone = payload.phone.replace(/\D/g, '');
+    if (payload.zipCode) payload.zipCode = payload.zipCode.replace(/\D/g, '');
     if (!payload.cpf) delete payload.cpf;
     
     try {
@@ -159,6 +207,11 @@ export default function ClientesPage() {
     f.paymentLocation = c.paymentLocation || "RESIDENCIA";
     f.billingAddressSame = c.billingAddressSame !== false;
     f.isAssured = c.isAssured || false;
+    // Aplicar máscaras nos dados carregados
+    if (f.cpf) f.cpf = maskCPF(f.cpf);
+    if (f.cellphone) f.cellphone = maskCelular(f.cellphone);
+    if (f.phone) f.phone = maskTelefone(f.phone);
+    if (f.zipCode) f.zipCode = maskCEP(f.zipCode);
     setForm(f);
     setDependents(c.dependents || []);
     setEditId(id);
@@ -408,19 +461,19 @@ export default function ClientesPage() {
       {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 border border-gray-200 shadow-lg">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden border border-gray-200 shadow-lg flex flex-col">
+            <div className="flex items-center justify-between p-6 pb-4 flex-shrink-0">
               <h2 className="text-xl font-bold text-gray-900">{editId ? "Editar Cliente" : "Novo Cliente"}</h2>
               <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto px-6 pb-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700 mb-1">Nome *</label><input name="name" value={form.name} onChange={handleChange} required className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">CPF</label><input name="cpf" value={form.cpf} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                <div><label className="block text-sm font-medium text-gray-700 mb-1">CPF</label><input name="cpf" value={form.cpf} onChange={handleChange} placeholder="000.000.000-00" maxLength={14} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div><label className="block text-sm font-medium text-gray-700 mb-1">RG</label><input name="rg" value={form.rg} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Celular</label><input name="cellphone" value={form.cellphone} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label><input name="phone" value={form.phone} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                <div><label className="block text-sm font-medium text-gray-700 mb-1">Celular</label><input name="cellphone" value={form.cellphone} onChange={handleChange} placeholder="(00) 00000-0000" maxLength={15} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                <div><label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label><input name="phone" value={form.phone} onChange={handleChange} placeholder="(00) 0000-0000" maxLength={14} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700 mb-1">Endereço</label><input name="address" value={form.address} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 
                 {/* Estado */}
@@ -483,7 +536,7 @@ export default function ClientesPage() {
                   )}
                 </div>
                 
-                <div><label className="block text-sm font-medium text-gray-700 mb-1">CEP</label><input name="zipCode" value={form.zipCode} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                <div><label className="block text-sm font-medium text-gray-700 mb-1">CEP</label><input name="zipCode" value={form.zipCode} onChange={handleChange} placeholder="00000-000" maxLength={9} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 
                 {/* Estado Civil */}
                 <div>

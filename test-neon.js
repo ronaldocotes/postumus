@@ -1,14 +1,15 @@
+require('dotenv').config();
 const { Pool } = require("pg");
-const pool = new Pool({
-  connectionString: "postgresql://neondb_owner:npg_nw4axRiGgH0K@ep-winter-mountain-acangl3p.sa-east-1.aws.neon.tech/neondb?sslmode=require",
-  ssl: { rejectUnauthorized: false },
-  connectionTimeoutMillis: 60000,
-});
-console.log("Trying to connect...");
-pool.query("SELECT 1 as test").then(r => {
-  console.log("Connected!", r.rows);
-  pool.end();
-}).catch(e => {
-  console.error("Failed:", e.message);
-  pool.end();
-});
+const { pgPoolConfig } = require("./src/lib/db-config");
+
+const pool = new Pool(pgPoolConfig);
+console.log("🔌 Testando conexão Neon...");
+pool.query("SELECT 1 as test, version() as pg_version")
+  .then(r => {
+    console.log("✅ Neon conectado!", r.rows[0]);
+    pool.end();
+  })
+  .catch(e => {
+    console.error("❌ Falha:", e.message);
+    process.exit(1);
+  });

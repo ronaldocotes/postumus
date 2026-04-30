@@ -1,0 +1,73 @@
+/**
+ * Paletas de cores disponíveis para o carnê
+ */
+
+const palettes = {
+  azul: {
+    name: 'Azul Corporativo',
+    dark: '#1e3a5f',
+    accent: '#2563eb',
+    accentMid: '#3b82f6',
+    light: '#dbeafe',
+    xlight: '#eff6ff',
+    label: '#93c5fd',
+    border: '#bfdbfe',
+    perf: '#60a5fa',
+    text: '#1e293b',
+    muted: '#64748b',
+  },
+  verde: {
+    name: 'Verde Institucional',
+    dark: '#14532d',
+    accent: '#16a34a',
+    accentMid: '#22c55e',
+    light: '#dcfce7',
+    xlight: '#f0fdf4',
+    label: '#86efac',
+    border: '#bbf7d0',
+    perf: '#4ade80',
+    text: '#14532d',
+    muted: '#4b7a5c',
+  },
+  cinza: {
+    name: 'Cinza Profissional',
+    dark: '#1f2937',
+    accent: '#4b5563',
+    accentMid: '#6b7280',
+    light: '#f3f4f6',
+    xlight: '#f9fafb',
+    label: '#d1d5db',
+    border: '#e5e7eb',
+    perf: '#9ca3af',
+    text: '#111827',
+    muted: '#6b7280',
+  },
+  vinho: {
+    name: 'Vinho / Bordô',
+    dark: '#4a0e1a',
+    accent: '#9b1c31',
+    accentMid: '#be123c',
+    light: '#ffe4e6',
+    xlight: '#fff1f2',
+    label: '#fca5a5',
+    border: '#fecdd3',
+    perf: '#fb7185',
+    text: '#3f0713',
+    muted: '#7f1d1d',
+  },
+  preto: {
+    name: 'Preto & Dourado',
+    dark: '#111827',
+    accent: '#b8960c',
+    accentMid: '#d4af37',
+    light: '#fef9c3',
+    xlight: '#fefce8',
+    label: '#fde68a',
+    border: '#fde68a',
+    perf: '#f59e0b',
+    text: '#111827',
+    muted: '#6b7280',
+  },
+};
+
+module.exports = palettes;
