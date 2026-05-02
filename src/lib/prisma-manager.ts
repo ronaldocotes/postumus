@@ -1,7 +1,7 @@
 // src/lib/prisma-manager.ts
 // Gerenciador de conexões Prisma por empresa (multi-tenant database-based)
 
-import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaClient } from "@/generated/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
