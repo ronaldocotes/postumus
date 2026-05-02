@@ -26,9 +26,11 @@ import {
   Cog,
   Navigation,
   ShoppingCart,
+  BarChart3,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { signOut } from "next-auth/react";
+import CompanySelector from "./CompanySelector";
 
 interface SubMenuItem {
   href: string;
@@ -60,6 +62,7 @@ const menuItems: MenuItem[] = [
     icon: Store,
     children: [
       { href: "/mercadorias", label: "Mercadorias", icon: Package },
+      { href: "/estoque", label: "Controle de Estoque", icon: BarChart3 },
       { href: "/servicos", label: "Serviços", icon: Wrench },
       { href: "/vendas", label: "Vendas", icon: ShoppingCart },
       { href: "/fornecedores", label: "Fornecedores", icon: Truck },
@@ -167,6 +170,9 @@ export default function Sidebar() {
           <p className="text-xs text-slate-500 mt-1 text-center">Gestão de Serviços Póstumos</p>
         </div>
 
+        {/* Company Selector */}
+        <CompanySelector />
+
         {/* Navigation */}
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {menuItems.map((item) => {
@@ -206,7 +212,7 @@ export default function Sidebar() {
                   <div
                     className={cn(
                       "overflow-hidden transition-all duration-200 ease-in-out",
-                      isExpanded ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
+                      isExpanded ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
                     )}
                   >
                     <div className="pl-4 space-y-1 border-l-2 border-slate-100 ml-4">

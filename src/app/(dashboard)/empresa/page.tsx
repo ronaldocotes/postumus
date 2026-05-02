@@ -16,6 +16,7 @@ interface Company {
   state?: string;
   zipCode?: string;
   logo?: string;
+  databaseUrl?: string;
   pixKeyType?: string;
   pixKey?: string;
   pixName?: string;
@@ -45,6 +46,7 @@ export default function EmpresaPage() {
     city: "",
     state: "",
     zipCode: "",
+    databaseUrl: "",
     pixKeyType: "ALEATORIA",
     pixKey: "",
     pixName: "",
@@ -93,6 +95,7 @@ export default function EmpresaPage() {
       city: "",
       state: "",
       zipCode: "",
+      databaseUrl: "",
       pixKeyType: "ALEATORIA",
       pixKey: "",
       pixName: "",
@@ -126,6 +129,7 @@ export default function EmpresaPage() {
       formData.append("city", form.city);
       formData.append("state", form.state);
       formData.append("zipCode", form.zipCode);
+      formData.append("databaseUrl", form.databaseUrl);
       formData.append("pixKeyType", form.pixKeyType);
       formData.append("pixKey", form.pixKey);
       formData.append("pixName", form.pixName);
@@ -182,6 +186,7 @@ export default function EmpresaPage() {
       city: company.city || "",
       state: company.state || "",
       zipCode: company.zipCode || "",
+      databaseUrl: company.databaseUrl || "",
       pixKeyType: company.pixKeyType || "ALEATORIA",
       pixKey: company.pixKey || "",
       pixName: company.pixName || "",
@@ -441,6 +446,28 @@ export default function EmpresaPage() {
                     onChange={(e) => setForm({ ...form, zipCode: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
+                </div>
+              </div>
+
+              {/* Database URL */}
+              <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+                <h3 className="font-semibold text-amber-900 mb-3 flex items-center gap-2">
+                  <Building2 size={18} /> Banco de Dados da Empresa
+                </h3>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Connection String PostgreSQL
+                  </label>
+                  <input
+                    type="text"
+                    value={form.databaseUrl}
+                    onChange={(e) => setForm({ ...form, databaseUrl: e.target.value })}
+                    placeholder="postgresql://usuario:senha@host:5432/banco"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                  />
+                  <p className="text-xs text-amber-700 mt-1">
+                    Cada empresa pode ter seu próprio banco de dados. Deixe em branco para usar o banco padrão do sistema.
+                  </p>
                 </div>
               </div>
 

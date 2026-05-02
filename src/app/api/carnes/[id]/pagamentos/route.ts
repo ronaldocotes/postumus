@@ -15,6 +15,16 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: "Parcela já paga" }, { status: 400 });
     }
 
+    // Buscar parcela com dados do carnê e cliente para criar transação financeira
+    const installment = await prisma.installment.findUnique({
+      where: { id: installmentId },
+      include: {
+        carne: {
+          include: { client: { select: { id: true, name: true } } },
+        },
+      },
+    });
+
     // Criar pagamento
     const payment = await prisma.payment.create({
       data: {
@@ -32,6 +42,26 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       where: { id: installmentId },
       data: { status: "PAID" },
     });
+
+    // Auto-criar transação financeira de receita (somente se não vier da tela de clientes que já cria)
+    if (installment && !data.skipFinancial) {
+      try {
+        await prisma.financialTransaction.create({
+          data: {
+            type: "INCOME",
+            description: `Pagamento carnê ${installment.carne.year} - parcela ${installment.numero}`,
+            amount: installment.valor,
+            date: new Date(),
+            category: "Carnê",
+            status: "PAID",
+            clientId: installment.carne.clientId,
+          },
+        });
+      } catch (e) {
+        // Non-critical: log but don't fail the payment
+        console.error("Erro ao criar transação financeira:", e);
+      }
+    }
 
     return NextResponse.json(payment, { status: 201 });
   } catch (error: any) {

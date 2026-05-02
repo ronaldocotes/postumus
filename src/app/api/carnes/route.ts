@@ -7,6 +7,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const page = parseInt(searchParams.get("page") || "1");
     const year = searchParams.get("year");
+    const clientId = searchParams.get("clientId");
     const limit = 20;
 
     const where: any = {};
@@ -15,6 +16,9 @@ export async function GET(request: NextRequest) {
     }
     if (year) {
       where.year = parseInt(year);
+    }
+    if (clientId) {
+      where.clientId = clientId;
     }
 
     const [carnes, total] = await Promise.all([

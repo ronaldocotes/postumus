@@ -1,208 +1,210 @@
-// Service Worker para notificações push e sincronização offline
+// Service Worker - Posthumous PWA
+// Cache name with version for easy updates
 
-const CACHE_NAME = "funeraria-v1";
-const STATIC_ASSETS = [
+const CACHE_VERSION = "posthumous-v2";
+const STATIC_CACHE = `${CACHE_VERSION}-static`;
+const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
+
+const PRECACHE_URLS = [
   "/",
-  "/cobranca",
-  "/cobranca/pagamento",
+  "/dashboard",
+  "/mobile/gerente",
+  "/mobile/cliente",
   "/manifest.json",
+  "/logo-oficial.png",
+  "/icon-192x192.png",
+  "/icon-512x512.png",
+  "/offline.html",
 ];
 
-// Instalação - cacheia assets estáticos
+// ─── Install ──────────────────────────────────────────────────────────────────
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
-    })
+    caches
+      .open(STATIC_CACHE)
+      .then((cache) => cache.addAll(PRECACHE_URLS.filter(Boolean)))
+      .then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-// Ativação - limpa caches antigos
+// ─── Activate ─────────────────────────────────────────────────────────────────
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
-      );
-    })
+    caches
+      .keys()
+      .then((cacheNames) =>
+        Promise.all(
+          cacheNames
+            .filter((name) => name.startsWith("posthumous-") && name !== STATIC_CACHE && name !== DYNAMIC_CACHE)
+            .map((name) => caches.delete(name))
+        )
+      )
+      .then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// Intercepta requisições
+// ─── Fetch ────────────────────────────────────────────────────────────────────
 self.addEventListener("fetch", (event) => {
   const { request } = event;
+  const url = new URL(request.url);
 
-  // API calls - network first, cache fallback
-  if (request.url.includes("/api/")) {
+  // Skip non-GET and chrome-extension requests
+  if (request.method !== "GET" || url.protocol === "chrome-extension:") return;
+
+  // API routes: network-first, no cache for POST/mutations
+  if (url.pathname.startsWith("/api/")) {
+    event.respondWith(networkFirstWithFallback(request));
+    return;
+  }
+
+  // Next.js internals: network only
+  if (url.pathname.startsWith("/_next/")) {
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          // Cacheia respostas GET
-          if (request.method === "GET") {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, clone);
-            });
-          }
-          return response;
-        })
-        .catch(() => {
-          // Retorna do cache se offline
-          return caches.match(request).then((cached) => {
-            if (cached) return cached;
-            // Retorna resposta offline para POST
-            if (request.method === "POST") {
-              // Salva para sincronização posterior
-              saveForSync(request);
-              return new Response(
-                JSON.stringify({
-                  offline: true,
-                  message: "Dados salvos. Serão sincronizados quando houver conexão.",
-                }),
-                {
-                  headers: { "Content-Type": "application/json" },
-                }
-              );
-            }
-            return new Response("Offline", { status: 503 });
-          });
-        })
+      fetch(request).catch(() => new Response("", { status: 503 }))
     );
     return;
   }
 
-  // Static assets - cache first, network fallback
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) return cached;
-      return fetch(request).then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(request, clone);
-        });
-        return response;
-      });
-    })
-  );
+  // Pages & assets: stale-while-revalidate
+  event.respondWith(staleWhileRevalidate(request));
 });
 
-// Recebe push notifications
+async function networkFirstWithFallback(request) {
+  try {
+    const response = await fetch(request);
+    // Cache successful GET API responses
+    if (response.ok) {
+      const cache = await caches.open(DYNAMIC_CACHE);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    const cached = await caches.match(request);
+    if (cached) return cached;
+    return new Response(
+      JSON.stringify({
+        offline: true,
+        error: "Sem conexão com a internet. Dados podem estar desatualizados.",
+      }),
+      {
+        status: 503,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+}
+
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(DYNAMIC_CACHE);
+  const cached = await caches.match(request);
+
+  const fetchPromise = fetch(request)
+    .then((response) => {
+      if (response.ok) {
+        cache.put(request, response.clone());
+      }
+      return response;
+    })
+    .catch(() => null);
+
+  // Return cached immediately if available, otherwise wait for network
+  if (cached) {
+    // Refresh in background
+    fetchPromise.catch(() => {});
+    return cached;
+  }
+
+  const networkResponse = await fetchPromise;
+  if (networkResponse) return networkResponse;
+
+  // Offline fallback page
+  const offlineFallback = await caches.match("/offline.html");
+  if (offlineFallback) return offlineFallback;
+
+  return new Response(
+    "<!DOCTYPE html><html lang='pt-BR'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Offline - Posthumous</title><style>body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f8fafc;color:#334155}.card{background:white;border-radius:16px;padding:40px;text-align:center;max-width:380px;box-shadow:0 4px 24px rgba(0,0,0,.08)}h1{color:#4a6fa5;margin-top:0}p{color:#64748b}</style></head><body><div class='card'><h1>Sem Conexão</h1><p>Você está offline. Verifique sua conexão com a internet e tente novamente.</p><button onclick='location.reload()' style='background:#4a6fa5;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:16px;cursor:pointer;margin-top:8px'>Tentar novamente</button></div></body></html>",
+    {
+      headers: { "Content-Type": "text/html" },
+    }
+  );
+}
+
+// ─── Push Notifications ───────────────────────────────────────────────────────
 self.addEventListener("push", (event) => {
   if (!event.data) return;
+  let data;
+  try { data = event.data.json(); } catch { data = { title: "Posthumous", body: event.data.text() }; }
 
-  const data = event.data.json();
   const options = {
     body: data.body || "Nova notificação",
     icon: "/icon-192x192.png",
-    badge: "/badge-72x72.png",
-    tag: data.tag || "default",
-    requireInteraction: true,
-    actions: data.actions || [],
+    badge: "/icon-192x192.png",
+    tag: data.tag || "posthumous-notification",
+    requireInteraction: false,
     data: data.data || {},
+    actions: data.actions || [],
   };
 
   event.waitUntil(
-    self.registration.showNotification(data.title || "Funeraria System", options)
+    self.registration.showNotification(data.title || "Posthumous", options)
   );
 });
 
-// Clique na notificação
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-
-  const { notification } = event;
-  const { data } = notification;
-
+  const targetUrl = event.notification.data?.url || "/dashboard";
   event.waitUntil(
-    clients.matchAll({ type: "window" }).then((clientList) => {
-      // Abre ou foca janela existente
-      for (const client of clientList) {
-        if (client.url.includes("/cobranca") && "focus" in client) {
-          return client.focus();
-        }
-      }
-      // Abre nova janela
-      if (clients.openWindow) {
-        return clients.openWindow(data.url || "/cobranca");
-      }
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+      const existingWindow = clientList.find((c) => c.url.includes(targetUrl));
+      if (existingWindow) return existingWindow.focus();
+      return clients.openWindow(targetUrl);
     })
   );
 });
 
-// Sincronização em background
+// ─── Background Sync ──────────────────────────────────────────────────────────
 self.addEventListener("sync", (event) => {
   if (event.tag === "sync-payments") {
     event.waitUntil(syncPendingPayments());
   }
 });
 
-// Salva requisição para sincronização
-async function saveForSync(request: Request) {
-  const db = await openDB();
-  const tx = db.transaction("sync-queue", "readwrite");
-  const store = tx.objectStore("sync-queue");
-
-  const body = await request.clone().text();
-  await store.add({
-    url: request.url,
-    method: request.method,
-    body,
-    headers: Object.fromEntries(request.headers.entries()),
-    timestamp: Date.now(),
-  });
-}
-
-// Sincroniza pagamentos pendentes
 async function syncPendingPayments() {
-  const db = await openDB();
-  const tx = db.transaction("sync-queue", "readonly");
-  const store = tx.objectStore("sync-queue");
-  const requests = await store.getAll();
+  try {
+    const db = await openDB();
+    const tx = db.transaction("sync-queue", "readonly");
+    const store = tx.objectStore("sync-queue");
+    const requests = await new Promise((resolve, reject) => {
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
 
-  for (const req of requests) {
-    try {
-      const response = await fetch(req.url, {
-        method: req.method,
-        headers: req.headers,
-        body: req.body,
-      });
-
-      if (response.ok) {
-        // Remove do queue
-        const deleteTx = db.transaction("sync-queue", "readwrite");
-        await deleteTx.objectStore("sync-queue").delete(req.timestamp);
-
-        // Notifica sucesso
-        self.registration.showNotification("Sincronização", {
-          body: "Pagamentos sincronizados com sucesso!",
-          icon: "/icon-192x192.png",
+    for (const req of requests) {
+      try {
+        const response = await fetch(req.url, {
+          method: req.method,
+          headers: req.headers,
+          body: req.body,
         });
-      }
-    } catch (error) {
-      console.error("Erro ao sincronizar:", error);
+        if (response.ok) {
+          const deleteTx = db.transaction("sync-queue", "readwrite");
+          deleteTx.objectStore("sync-queue").delete(req.timestamp);
+        }
+      } catch {}
     }
-  }
+  } catch {}
 }
 
-// Abre IndexedDB
-function openDB(): Promise<IDBDatabase> {
+function openDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("funeraria-offline", 1);
-
+    const request = indexedDB.open("posthumous-offline", 2);
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
-
     request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
+      const db = event.target.result;
       if (!db.objectStoreNames.contains("sync-queue")) {
         db.createObjectStore("sync-queue", { keyPath: "timestamp" });
-      }
-      if (!db.objectStoreNames.contains("routes-cache")) {
-        db.createObjectStore("routes-cache", { keyPath: "id" });
       }
     };
   });

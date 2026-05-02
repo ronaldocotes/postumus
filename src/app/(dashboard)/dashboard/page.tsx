@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
+import Link from "next/link";
 import { Users, Truck, Package, FileText, DollarSign, AlertTriangle, TrendingUp, CheckCircle } from "lucide-react";
 import DashboardCharts from "@/components/dashboard/DashboardCharts";
 
@@ -32,6 +33,13 @@ async function getStats() {
       prisma.serviceSale.count({ where: { status: "PAID" } }),
     ]);
 
+  // Produtos com estoque abaixo do mínimo (comparar stock < minStock)
+  const allProducts = await prisma.product.findMany({
+    where: { active: true, minStock: { gt: 0 } },
+    select: { stock: true, minStock: true },
+  });
+  const lowStockCount = allProducts.filter((p) => p.stock < p.minStock).length;
+
   return {
     clients,
     suppliers,
@@ -41,6 +49,7 @@ async function getStats() {
     totalPayable: totalPayable._sum.amount || 0,
     paidInstallments,
     completedServices,
+    lowStockCount,
   };
 }
 
@@ -168,7 +177,7 @@ export default async function DashboardPage() {
         })}
       </div>
 
-      {/* Alert Banner */}
+      {/* Alert Banner: Atrasos */}
       {stats.overdueInstallments > 10 && (
         <div className="mt-8 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-xl p-6">
           <div className="flex items-start gap-4">
@@ -179,6 +188,27 @@ export default async function DashboardPage() {
                 Existem {stats.overdueInstallments} parcelas com atraso. Considere intensificar as ações de cobrança.
               </p>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Alert Banner: Estoque baixo */}
+      {stats.lowStockCount > 0 && (
+        <div className="mt-4 bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-xl p-6">
+          <div className="flex items-start gap-4">
+            <Package className="text-orange-600 flex-shrink-0" size={24} />
+            <div className="flex-1">
+              <h3 className="font-bold text-orange-900 mb-1">Alerta de Estoque Baixo</h3>
+              <p className="text-sm text-orange-800">
+                {stats.lowStockCount} produto{stats.lowStockCount > 1 ? "s" : ""} com estoque abaixo do mínimo definido.
+              </p>
+            </div>
+            <Link
+              href="/estoque"
+              className="shrink-0 px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors"
+            >
+              Ver Estoque
+            </Link>
           </div>
         </div>
       )}

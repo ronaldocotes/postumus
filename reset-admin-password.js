@@ -8,7 +8,7 @@ const pool = new Pool({
 
 async function resetUserPassword() {
   try {
-    const email = 'admin@funeraria.com';
+    const email = 'admin@postumus.com.br';
     const newPassword = 'admin123';
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     

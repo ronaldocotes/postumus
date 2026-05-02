@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Search, Edit, Trash2, X, Eye, Users, MapPin } from "lucide-react";
+import { Plus, Search, Edit, Trash2, X, Eye, Users, MapPin, FileText, CreditCard } from "lucide-react";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useToast } from "@/components/ui/Toast";
 import { estados, cidadesPorEstado, bairrosPorCidade, estadosCivis, getCidades, getBairros } from "@/lib/location-data";
+import PaymentModal from "@/components/carnes/PaymentModal";
 
 interface Client {
   id: string;
@@ -20,6 +21,7 @@ interface Client {
   paymentLocation?: string;
   isAssured?: boolean;
   _count?: { dependents: number };
+  hasActiveCarne?: boolean;
 }
 
 const statusLabels: Record<string, string> = { ACTIVE: "Ativo", CANCELLED: "Cancelado", SUSPENDED: "Suspenso" };
@@ -51,6 +53,12 @@ export default function ClientesPage() {
   const [pages, setPages] = useState(1);
   const [dependents, setDependents] = useState<any[]>([]);
   const [newDependent, setNewDependent] = useState({ name: "", relationship: "OUTRO", cpf: "", phone: "", birthDate: "" });
+
+  // Payment modal state
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedInstallment, setSelectedInstallment] = useState<any>(null);
+  const [selectedCarne, setSelectedCarne] = useState<any>(null);
+  const [pixData, setPixData] = useState<any>(null);
   
   // Geolocalização
   const { cidade: geoCidade, estado: geoEstado, loading: geoLoading } = useGeolocation();
@@ -222,6 +230,82 @@ export default function ClientesPage() {
     const res = await fetch(`/api/clientes/${id}`);
     const data = await res.json();
     setShowDetail(data);
+    // Load PIX data for payment modal
+    if (!pixData) {
+      try {
+        const pixRes = await fetch("/api/empresa");
+        if (pixRes.ok) {
+          const pixD = await pixRes.json();
+          const company = pixD.companies?.[0];
+          if (company) {
+            setPixData({ keyType: company.pixKeyType, key: company.pixKey, name: company.pixName, city: company.pixCity });
+          }
+        }
+      } catch {}
+    }
+  }
+
+  async function handlePayFromClient(clientData: any) {
+    // Find first pending installment from active carne
+    const activeCarne = clientData.carnes?.find((c: any) => {
+      const hasPending = c.installments?.some((i: any) => !i.payment || i.status === "PENDING");
+      return hasPending;
+    });
+    if (!activeCarne) {
+      error("Nenhuma parcela pendente encontrada");
+      return;
+    }
+    const nextInstallment = activeCarne.installments.find((i: any) => !i.payment || i.status === "PENDING");
+    if (!nextInstallment) {
+      error("Nenhuma parcela pendente encontrada");
+      return;
+    }
+    setSelectedCarne(activeCarne);
+    setSelectedInstallment(nextInstallment);
+    setShowPaymentModal(true);
+  }
+
+  async function handlePaymentFromClientModal(method: string) {
+    if (!selectedInstallment || !showDetail) return;
+    const toastId = toastLoading("Registrando pagamento...");
+    try {
+      const res = await fetch(`/api/carnes/${selectedInstallment.id}/pagamentos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paidAmount: selectedInstallment.valor, paymentMethod: method, skipFinancial: true }),
+      });
+      if (res.ok) {
+        // Auto-create financial transaction
+        try {
+          await fetch("/api/financeiro", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: "INCOME",
+              description: `Pagamento carnê ${selectedCarne?.year} - parcela ${selectedInstallment.numero}`,
+              amount: selectedInstallment.valor,
+              date: new Date(),
+              category: "Carnê",
+              status: "PAID",
+              clientId: showDetail.id,
+            }),
+          });
+        } catch {}
+        // Reload client detail
+        const updatedRes = await fetch(`/api/clientes/${showDetail.id}`);
+        const updated = await updatedRes.json();
+        setShowDetail(updated);
+        loadClients();
+        update(toastId, "Pagamento registrado com sucesso! ✅", "success");
+        setShowPaymentModal(false);
+        setSelectedInstallment(null);
+        setSelectedCarne(null);
+      } else {
+        update(toastId, "Erro ao registrar pagamento", "error");
+      }
+    } catch {
+      update(toastId, "Erro de conexão", "error");
+    }
   }
 
   async function handleDelete(id: string) {
@@ -345,9 +429,12 @@ export default function ClientesPage() {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-right space-x-1">
-                  <button onClick={() => handleDetail(c.id)} className="text-emerald-600 hover:text-emerald-800"><Eye size={16} /></button>
-                  <button onClick={() => handleEdit(c.id)} className="text-blue-600 hover:text-blue-800"><Edit size={16} /></button>
-                  <button onClick={() => handleDelete(c.id)} className="text-red-600 hover:text-red-800"><Trash2 size={16} /></button>
+                  <button onClick={() => handleDetail(c.id)} className="text-emerald-600 hover:text-emerald-800" title="Visualizar"><Eye size={16} /></button>
+                  {c.hasActiveCarne && (
+                    <a href="/carnes" className="text-blue-600 hover:text-blue-800 inline-block" title="Ver Carnê"><FileText size={16} /></a>
+                  )}
+                  <button onClick={() => handleEdit(c.id)} className="text-blue-600 hover:text-blue-800" title="Editar"><Edit size={16} /></button>
+                  <button onClick={() => handleDelete(c.id)} className="text-red-600 hover:text-red-800" title="Excluir"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
@@ -432,24 +519,52 @@ export default function ClientesPage() {
             )}
 
             {/* Carnês */}
-            {showDetail.carnes?.length > 0 && (
-              <div>
-                <h3 className="font-bold text-[#4a6fa5] mb-2">Carnês</h3>
+            {showDetail.carnes?.length > 0 ? (
+              <div className="mb-4">
+                <h3 className="font-bold text-[#4a6fa5] mb-3 flex items-center gap-2"><FileText size={16} /> Carnês</h3>
                 {showDetail.carnes.slice(0, 3).map((c: any) => {
-                  const paid = c.installments.filter((i: any) => i.payment && i.status === "PAID").length;
+                  const paid = c.installments.filter((i: any) => i.payment || i.status === "PAID").length;
                   const total = c.installments.length;
+                  const nextPending = c.installments.find((i: any) => !i.payment && i.status !== "PAID");
+                  const fmt = (v: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
+                  const fmtDate = (d: string) => new Intl.DateTimeFormat("pt-BR").format(new Date(d));
                   return (
-                    <div key={c.id} className="bg-gray-50 rounded-lg p-3 mb-2 border border-gray-200">
-                      <div className="flex justify-between">
-                        <span className="font-medium text-gray-900">{c.year}</span>
-                        <span className="text-sm text-emerald-600">{paid}/{total} pagos</span>
+                    <div key={c.id} className="bg-blue-50 rounded-lg p-4 mb-3 border border-blue-200">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <span className="font-semibold text-gray-900">Carnê {c.year}</span>
+                          <span className="ml-2 text-sm text-emerald-700 font-medium">{paid}/{total} pagos</span>
+                        </div>
+                        {nextPending && (
+                          <span className="text-xs text-amber-700 bg-amber-100 px-2 py-0.5 rounded font-medium">
+                            Próxima: {fmt(nextPending.valor)} • vence {fmtDate(nextPending.dueDate)}
+                          </span>
+                        )}
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                        <div className="bg-emerald-500 h-2 rounded-full" style={{ width: `${(paid / total) * 100}%` }}></div>
+                      <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
+                        <div className="bg-emerald-500 h-2 rounded-full transition-all" style={{ width: `${total > 0 ? (paid / total) * 100 : 0}%` }}></div>
                       </div>
+                      {nextPending && (
+                        <button
+                          onClick={() => handlePayFromClient(showDetail)}
+                          className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-2.5 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
+                        >
+                          <CreditCard size={16} /> Registrar Pagamento da Parcela {nextPending.numero}/{total}
+                        </button>
+                      )}
+                      {!nextPending && (
+                        <p className="text-sm text-center text-emerald-700 font-medium">Todas as parcelas pagas ✓</p>
+                      )}
                     </div>
                   );
                 })}
+              </div>
+            ) : (
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200 text-center">
+                <p className="text-sm text-gray-500 mb-2">Nenhum carnê gerado para este cliente</p>
+                <a href="/carnes" className="inline-flex items-center gap-1.5 text-sm text-blue-600 font-medium hover:underline">
+                  <FileText size={14} /> Gerar Carnê
+                </a>
               </div>
             )}
 
@@ -457,6 +572,20 @@ export default function ClientesPage() {
           </div>
         </div>
       )}
+
+      {/* Payment Modal (from client detail) */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => {
+          setShowPaymentModal(false);
+          setSelectedInstallment(null);
+          setSelectedCarne(null);
+        }}
+        onPayment={handlePaymentFromClientModal}
+        installmentValue={selectedInstallment?.valor || 0}
+        clientName={showDetail?.name || ""}
+        pixData={pixData}
+      />
 
       {/* Form Modal */}
       {showForm && (

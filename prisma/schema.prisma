@@ -19,6 +19,7 @@ model Company {
   state       String?
   zipCode     String?
   logo        String?
+  databaseUrl String?  // Connection string PostgreSQL exclusiva da empresa
   pixKeyType  String?
   pixKey      String?
   pixName     String?
@@ -143,19 +144,33 @@ model Supplier {
 }
 
 model Product {
-  id          String    @id @default(cuid())
+  id          String          @id @default(cuid())
   name        String
   description String?
-  sku         String?   @unique
+  sku         String?         @unique
   price       Float
   cost        Float?
-  stock       Int       @default(0)
-  minStock    Int       @default(0)
+  stock       Int             @default(0)
+  minStock    Int             @default(0)
   supplierId  String?
-  active      Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  supplier    Supplier? @relation(fields: [supplierId], references: [id])
+  active      Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  supplier    Supplier?       @relation(fields: [supplierId], references: [id])
+  movements   StockMovement[]
+}
+
+model StockMovement {
+  id        String            @id @default(cuid())
+  productId String
+  type      StockMovementType
+  quantity  Int
+  reason    String?
+  reference String?
+  unitCost  Float?
+  createdBy String?
+  createdAt DateTime          @default(now())
+  product   Product           @relation(fields: [productId], references: [id])
 }
 
 model Service {
@@ -390,6 +405,12 @@ enum VisitType {
   PAYMENT
   NAO_ATENDEU
   REMARCADO
+}
+
+enum StockMovementType {
+  ENTRADA
+  SAIDA
+  AJUSTE
 }
 
 // Push Notifications

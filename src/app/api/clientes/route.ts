@@ -9,14 +9,46 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = Math.min(parseInt(searchParams.get("limit") || "20"), 1000);
 
-    // Busca simples sem filtros complexos
-    const clients = await prisma.client.findMany({
-      orderBy: { name: "asc" },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    const where: any = {};
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: "insensitive" } },
+        { cpf: { contains: search } },
+        { code: { contains: search } },
+        { cellphone: { contains: search } },
+      ];
+    }
+    if (status) {
+      where.status = status;
+    }
 
-    const total = await prisma.client.count();
+    const [rawClients, total] = await Promise.all([
+      prisma.client.findMany({
+        where,
+        orderBy: { name: "asc" },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+          _count: { select: { dependents: true } },
+          carnes: {
+            select: {
+              id: true,
+              installments: { select: { id: true, status: true, payment: { select: { id: true } } } },
+            },
+          },
+        },
+      }),
+      prisma.client.count({ where }),
+    ]);
+
+    // Enrich with hasActiveCarne flag
+    const clients = rawClients.map((c) => {
+      const hasActiveCarne = c.carnes.some((carne) =>
+        carne.installments.some((inst) => !inst.payment && inst.status !== "PAID")
+      );
+      const { carnes, ...rest } = c;
+      return { ...rest, hasActiveCarne };
+    });
 
     return NextResponse.json({ clients, total, pages: Math.ceil(total / limit) });
   } catch (error: any) {

@@ -1,5 +1,6 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import QRCode from "qrcode";
 import { DollarSign, QrCode, CreditCard, X } from "lucide-react";
 
 interface PaymentModalProps {
@@ -24,64 +25,39 @@ export default function PaymentModal({
   clientName,
   pixData,
 }: PaymentModalProps) {
-  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSelectedMethod(null);
+      setQrCodeUrl(null);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (selectedMethod === "PIX" && pixData?.key) {
-      generateQRCode();
+      generateQrCode();
     }
-  }, [selectedMethod, pixData]);
+  }, [selectedMethod]);
 
-  const generateQRCode = async () => {
+  const generateQrCode = async () => {
     try {
-      // Generate EMV BR Code payload for PIX
-      const payload = generatePixPayload(installmentValue);
-      const qr = await QRCode.toDataURL(payload);
-      setQrCodeUrl(qr);
-    } catch (error) {
-      console.error("Erro ao gerar QR Code:", error);
+      const QRCode = (await import("qrcode")).default;
+      const payload = generatePixPayload();
+      const url = await QRCode.toDataURL(payload, { width: 200, margin: 2 });
+      setQrCodeUrl(url);
+    } catch (err) {
+      console.error("Erro ao gerar QR Code:", err);
     }
   };
 
-  const generatePixPayload = (value: number): string => {
-    // EMV BR Code Structure for PIX
-    // This is a simplified version - production would use brcode library
+  const generatePixPayload = () => {
     const pixKey = pixData?.key || "";
-    const pixName = pixData?.name || "";
-    const pixCity = pixData?.city || "";
-
-    // Format: 00020126360014br.gov.bcb.pix...
-    // For now, returning a basic payload structure
-    // In production, use @brcode/brcode library for proper encoding
-
-    const brCode = generateBrCode({
-      key: pixKey,
-      name: pixName,
-      city: pixCity,
-      value,
-    });
-
-    return brCode;
-  };
-
-  // Simplified BR Code generator (production should use proper library)
-  const generateBrCode = ({
-    key,
-    name,
-    city,
-    value,
-  }: {
-    key: string;
-    name: string;
-    city: string;
-    value: number;
-  }): string => {
-    // This is a basic implementation
-    // For production, install: npm install @brcode/brcode
-    const payload = `00020126360014br.gov.bcb.pix0136${key}520400005303986540${value
-      .toFixed(2)
-      .replace(".", "")}5802BR5913${name.padEnd(30)}6009${city.padEnd(15)}62410503***63041D3D`;
+    const pixName = (pixData?.name || "Empresa").slice(0, 25);
+    const pixCity = (pixData?.city || "Cidade").slice(0, 15);
+    const value = installmentValue.toFixed(2);
+    const payload = `00020126${(26 + pixKey.length).toString().padStart(2, "0")}0014BR.GOV.BCB.PIX01${pixKey.length.toString().padStart(2, "0")}${pixKey}52040000530398654${value.length.toString().padStart(2, "0")}${value}5802BR59${pixName.length.toString().padStart(2, "0")}${pixName}60${pixCity.length.toString().padStart(2, "0")}${pixCity}6304`;
     return payload;
   };
 
@@ -91,142 +67,132 @@ export default function PaymentModal({
     new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl w-full max-w-md shadow-2xl overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-6 text-white flex items-center justify-between">
+    <div className="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        {/* Header - Claro */}
+        <div className="p-5 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
           <div>
-            <h2 className="text-xl font-bold">Registrar Pagamento</h2>
-            <p className="text-sm text-slate-300 mt-1">{clientName}</p>
+            <h2 className="text-lg font-bold text-gray-900">Registrar Pagamento</h2>
+            <p className="text-sm text-gray-500 mt-0.5">{clientName}</p>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-300 hover:text-white p-1 transition-colors"
+            className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-colors"
           >
-            <X size={24} />
+            <X size={18} />
           </button>
         </div>
 
         {/* Value Display */}
-        <div className="bg-slate-50 border-b border-slate-200 p-6 text-center">
-          <p className="text-sm text-slate-600 mb-2">Valor da Parcela</p>
-          <p className="text-3xl font-bold text-slate-900">{fmt(installmentValue)}</p>
+        <div className="bg-gray-50 border-b border-gray-200 py-6 text-center flex-shrink-0">
+          <p className="text-sm text-gray-500 mb-1">Valor da Parcela</p>
+          <p className="text-3xl font-bold text-gray-900">{fmt(installmentValue)}</p>
         </div>
 
-        {/* Payment Options */}
-        {!selectedMethod ? (
-          <div className="p-6 space-y-3">
-            {/* Dinheiro */}
-            <button
-              onClick={() => setSelectedMethod("CASH")}
-              className="w-full group relative overflow-hidden rounded-lg border-2 border-transparent bg-gradient-to-br from-emerald-50 to-green-50 p-4 hover:border-emerald-500 transition-all hover:shadow-lg"
-            >
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+        {/* Body - Scrollable */}
+        <div className="flex-1 overflow-y-auto p-5">
+          {/* Payment Options */}
+          {!selectedMethod ? (
+            <div className="space-y-3">
+              {/* Dinheiro */}
+              <button
+                onClick={() => setSelectedMethod("CASH")}
+                className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-emerald-200 bg-emerald-50/50 hover:border-emerald-500 hover:bg-emerald-100 hover:shadow-md transition-all duration-200 group"
+              >
+                <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-200 group-hover:scale-110 transition-all">
                   <DollarSign size={24} className="text-emerald-600" />
                 </div>
-                <div className="text-left">
-                  <p className="font-bold text-slate-900">Dinheiro</p>
-                  <p className="text-sm text-slate-600">Pagamento em espécie</p>
+                <div className="text-left flex-1">
+                  <p className="font-bold text-gray-900">Dinheiro</p>
+                  <p className="text-xs text-gray-500">Pagamento em espécie</p>
                 </div>
-              </div>
-            </button>
-
-            {/* PIX */}
-            {pixData?.key && (
-              <button
-                onClick={() => setSelectedMethod("PIX")}
-                className="w-full group relative overflow-hidden rounded-lg border-2 border-transparent bg-gradient-to-br from-cyan-50 to-blue-50 p-4 hover:border-cyan-500 transition-all hover:shadow-lg"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-cyan-100 flex items-center justify-center group-hover:bg-cyan-200 transition-colors">
-                    <QrCode size={24} className="text-cyan-600" />
-                  </div>
-                  <div className="text-left">
-                    <p className="font-bold text-slate-900">PIX</p>
-                    <p className="text-sm text-slate-600">Escaneie o QR Code</p>
-                  </div>
+                <div className="text-emerald-400 group-hover:text-emerald-600 transition-colors">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9,18 15,12 9,6"/></svg>
                 </div>
               </button>
-            )}
 
-            {/* Cartão */}
-            <button
-              onClick={() => setSelectedMethod("CARD")}
-              className="w-full group relative overflow-hidden rounded-lg border-2 border-transparent bg-gradient-to-br from-blue-50 to-indigo-50 p-4 hover:border-blue-500 transition-all hover:shadow-lg"
-            >
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                  <CreditCard size={24} className="text-blue-600" />
+              {/* PIX */}
+              <button
+                onClick={() => setSelectedMethod("PIX")}
+                className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-cyan-200 bg-cyan-50/50 hover:border-cyan-500 hover:bg-cyan-100 hover:shadow-md transition-all duration-200 group"
+              >
+                <div className="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-200 group-hover:scale-110 transition-all">
+                  <QrCode size={24} className="text-cyan-600" />
                 </div>
-                <div className="text-left">
-                  <p className="font-bold text-slate-900">Cartão</p>
-                  <p className="text-sm text-slate-600">Débito ou crédito</p>
+                <div className="text-left flex-1">
+                  <p className="font-bold text-gray-900">PIX</p>
+                  <p className="text-xs text-gray-500">Transferência instantânea</p>
                 </div>
-              </div>
-            </button>
-          </div>
-        ) : selectedMethod === "PIX" ? (
-          /* PIX QR Code Display */
-          <div className="p-6 space-y-4">
-            <div className="bg-slate-50 rounded-lg p-6 flex flex-col items-center">
-              {qrCodeUrl && (
-                <img src={qrCodeUrl} alt="QR Code PIX" className="w-48 h-48 rounded-lg" />
-              )}
-              <div className="mt-4 text-center">
-                <p className="text-sm text-slate-600 mb-2">Chave PIX</p>
-                <p className="font-mono text-sm bg-white p-2 rounded border border-slate-200 truncate w-full">
-                  {pixData?.key}
+                <div className="text-cyan-400 group-hover:text-cyan-600 transition-colors">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9,18 15,12 9,6"/></svg>
+                </div>
+              </button>
+
+              {/* Cartão */}
+              <button
+                onClick={() => setSelectedMethod("CARD")}
+                className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-violet-200 bg-violet-50/50 hover:border-violet-500 hover:bg-violet-100 hover:shadow-md transition-all duration-200 group"
+              >
+                <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center flex-shrink-0 group-hover:bg-violet-200 group-hover:scale-110 transition-all">
+                  <CreditCard size={24} className="text-violet-600" />
+                </div>
+                <div className="text-left flex-1">
+                  <p className="font-bold text-gray-900">Cartão</p>
+                  <p className="text-xs text-gray-500">Débito ou crédito</p>
+                </div>
+                <div className="text-violet-400 group-hover:text-violet-600 transition-colors">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9,18 15,12 9,6"/></svg>
+                </div>
+              </button>
+            </div>
+          ) : selectedMethod === "PIX" && qrCodeUrl ? (
+            <div className="flex flex-col items-center space-y-4">
+              <img src={qrCodeUrl} alt="QR Code PIX" className="w-44 h-44 rounded-lg border border-gray-200" />
+              <div className="text-center w-full">
+                <p className="text-xs text-gray-500 uppercase font-semibold mb-1">Chave PIX</p>
+                <p className="font-mono text-xs bg-gray-50 p-2 rounded-lg border border-gray-200 truncate text-gray-700">
+                  {pixData?.key || "Não configurada"}
                 </p>
               </div>
             </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  setSelectedMethod(null);
-                  setQrCodeUrl(null);
-                }}
-                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium"
-              >
-                Voltar
-              </button>
-              <button
-                onClick={() => onPayment("PIX")}
-                className="flex-1 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 font-medium"
-              >
-                Confirmar PIX
-              </button>
-            </div>
-          </div>
-        ) : (
-          /* Confirmation Screen */
-          <div className="p-6 space-y-4">
-            <div className="bg-slate-50 rounded-lg p-4 text-center">
-              <p className="text-sm text-slate-600 mb-2">Método Selecionado</p>
-              <p className="font-bold text-lg text-slate-900">
-                {selectedMethod === "CASH"
-                  ? "Dinheiro"
-                  : selectedMethod === "CARD"
-                    ? "Cartão"
-                    : "PIX"}
+          ) : (
+            <div className="text-center py-6">
+              <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center mb-3">
+                {selectedMethod === "CASH" && <DollarSign size={28} className="text-green-600" />}
+                {selectedMethod === "CARD" && <CreditCard size={28} className="text-blue-600" />}
+              </div>
+              <p className="font-bold text-lg text-gray-900">
+                {selectedMethod === "CASH" ? "Dinheiro" : "Cartão"}
               </p>
+              <p className="text-sm text-gray-500 mt-1">Confirme o pagamento abaixo</p>
             </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setSelectedMethod(null)}
-                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium"
-              >
-                Voltar
-              </button>
-              <button
-                onClick={() => onPayment(selectedMethod!)}
-                className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium"
-              >
-                Confirmar
-              </button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Footer - Sempre visível */}
+        <div className="p-4 border-t border-gray-200 flex gap-3 flex-shrink-0">
+          <button
+            onClick={() => {
+              if (selectedMethod) {
+                setSelectedMethod(null);
+                setQrCodeUrl(null);
+              } else {
+                onClose();
+              }
+            }}
+            className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium text-sm transition-colors"
+          >
+            {selectedMethod ? "Voltar" : "Cancelar"}
+          </button>
+          {selectedMethod && (
+            <button
+              onClick={() => onPayment(selectedMethod)}
+              className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm transition-colors"
+            >
+              Confirmar Pagamento
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
