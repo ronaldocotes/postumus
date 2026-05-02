@@ -12,23 +12,42 @@ export const authOptions: AuthOptions = {
         password: { label: "Senha", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        console.log('🔐 Tentativa de login:', credentials?.email);
+        if (!credentials?.email || !credentials?.password) {
+          console.log('❌ Credenciais faltando');
+          return null;
+        }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+          });
+          console.log('👤 Usuário encontrado:', user ? 'sim' : 'não');
 
-        if (!user || !user.active) return null;
+          if (!user || !user.active) {
+            console.log('❌ Usuário inativo ou não encontrado');
+            return null;
+          }
 
-        const isValid = await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) return null;
+          const isValid = await bcrypt.compare(credentials.password, user.password);
+          console.log('🔑 Senha válida:', isValid);
 
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
+          if (!isValid) {
+            console.log('❌ Senha inválida');
+            return null;
+          }
+
+          console.log('✅ Login bem-sucedido para:', user.email);
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          };
+        } catch (error) {
+          console.error('❌ Erro no authorize:', error);
+          return null;
+        }
       },
     }),
   ],
