@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     const pdfBuffer = fs.readFileSync(pdfOutput);
 
     // Retorna PDF como anexo para download
-    const response = new NextResponse(pdfBuffer, {
+    const response = new NextResponse(new Uint8Array(pdfBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

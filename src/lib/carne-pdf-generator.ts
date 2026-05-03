@@ -11,7 +11,7 @@ export async function generateCarnePDF(carneId: string): Promise<Buffer> {
     where: { id: carneId },
     include: {
       client: true,
-      installments: { orderBy: { numero: "asc" } },
+      installments: { orderBy: { numero: "asc" }, include: { payment: true } },
     },
   });
 
