@@ -3,18 +3,28 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-// GET: busca dados do cliente pelo CPF (login portal do cliente)
-export async function GET(request: NextRequest) {
+// POST: autentica cliente por CPF + senha (últimos 4 dígitos do CPF como senha padrão)
+export async function POST(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const cpf = searchParams.get("cpf");
+    const body = await request.json();
+    const { cpf, senha } = body;
 
-    if (!cpf) {
-      return NextResponse.json({ error: "CPF obrigatório" }, { status: 400 });
+    if (!cpf || !senha) {
+      return NextResponse.json(
+        { error: "CPF e senha são obrigatórios" },
+        { status: 400 }
+      );
     }
 
     // Normaliza CPF (remove pontuação)
     const cpfClean = cpf.replace(/\D/g, "");
+
+    if (cpfClean.length < 11) {
+      return NextResponse.json(
+        { error: "CPF inválido" },
+        { status: 400 }
+      );
+    }
 
     const client = await prisma.client.findFirst({
       where: {
@@ -24,7 +34,7 @@ export async function GET(request: NextRequest) {
       include: {
         carnes: {
           orderBy: { year: "desc" },
-          take: 3, // Últimos 3 carnês
+          take: 3,
           include: {
             installments: {
               orderBy: { numero: "asc" },
@@ -44,7 +54,19 @@ export async function GET(request: NextRequest) {
     });
 
     if (!client) {
-      return NextResponse.json({ error: "Cliente não encontrado" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Cliente não encontrado" },
+        { status: 404 }
+      );
+    }
+
+    // Valida senha: últimos 4 dígitos do CPF como senha padrão
+    const senhaEsperada = cpfClean.slice(-4);
+    if (senha !== senhaEsperada) {
+      return NextResponse.json(
+        { error: "Senha incorreta" },
+        { status: 401 }
+      );
     }
 
     // Sumariza parcelas
@@ -62,7 +84,8 @@ export async function GET(request: NextRequest) {
       const pagas = parcelas.filter((p) => p.status === "PAID").length;
       const pendentes = parcelas.filter((p) => p.status === "PENDING").length;
       const atrasadas = parcelas.filter((p) => p.status === "LATE").length;
-      const proximaVencer = parcelas.find((p) => p.status === "PENDING" || p.status === "LATE") || null;
+      const proximaVencer =
+        parcelas.find((p) => p.status === "PENDING" || p.status === "LATE") || null;
 
       return {
         id: carne.id,

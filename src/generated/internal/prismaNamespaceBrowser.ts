@@ -68,7 +68,32 @@ export const ModelName = {
   CollectionRouteStop: 'CollectionRouteStop',
   VisitLog: 'VisitLog',
   PaymentReceipt: 'PaymentReceipt',
-  PushSubscription: 'PushSubscription'
+  CashRegister: 'CashRegister',
+  CashRegisterMovement: 'CashRegisterMovement',
+  Sale: 'Sale',
+  SaleItem: 'SaleItem',
+  PushSubscription: 'PushSubscription',
+  Vehicle: 'Vehicle',
+  Driver: 'Driver',
+  FuelRecord: 'FuelRecord',
+  Maintenance: 'Maintenance',
+  Ticket: 'Ticket',
+  VehicleDocument: 'VehicleDocument',
+  AssuredPlan: 'AssuredPlan',
+  PlanCoverage: 'PlanCoverage',
+  PlanUsage: 'PlanUsage',
+  AssuredPlanHistory: 'AssuredPlanHistory',
+  DeathRecord: 'DeathRecord',
+  DeathRecordHistory: 'DeathRecordHistory',
+  DeathRecordService: 'DeathRecordService',
+  CommissionRule: 'CommissionRule',
+  Commission: 'Commission',
+  Resource: 'Resource',
+  Event: 'Event',
+  EventResource: 'EventResource',
+  Budget: 'Budget',
+  BudgetItem: 'BudgetItem',
+  Document: 'Document'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -245,11 +270,18 @@ export const StockMovementScalarFieldEnum = {
   productId: 'productId',
   type: 'type',
   quantity: 'quantity',
+  balanceBefore: 'balanceBefore',
+  balanceAfter: 'balanceAfter',
   reason: 'reason',
   reference: 'reference',
   unitCost: 'unitCost',
-  createdBy: 'createdBy',
-  createdAt: 'createdAt'
+  averageCost: 'averageCost',
+  sourceId: 'sourceId',
+  sourceType: 'sourceType',
+  location: 'location',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
@@ -417,6 +449,72 @@ export const PaymentReceiptScalarFieldEnum = {
 export type PaymentReceiptScalarFieldEnum = (typeof PaymentReceiptScalarFieldEnum)[keyof typeof PaymentReceiptScalarFieldEnum]
 
 
+export const CashRegisterScalarFieldEnum = {
+  id: 'id',
+  openedAt: 'openedAt',
+  closedAt: 'closedAt',
+  openedById: 'openedById',
+  closedById: 'closedById',
+  initialAmount: 'initialAmount',
+  closedAmount: 'closedAmount',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CashRegisterScalarFieldEnum = (typeof CashRegisterScalarFieldEnum)[keyof typeof CashRegisterScalarFieldEnum]
+
+
+export const CashRegisterMovementScalarFieldEnum = {
+  id: 'id',
+  cashRegisterId: 'cashRegisterId',
+  type: 'type',
+  amount: 'amount',
+  reason: 'reason',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+} as const
+
+export type CashRegisterMovementScalarFieldEnum = (typeof CashRegisterMovementScalarFieldEnum)[keyof typeof CashRegisterMovementScalarFieldEnum]
+
+
+export const SaleScalarFieldEnum = {
+  id: 'id',
+  cashRegisterId: 'cashRegisterId',
+  clientId: 'clientId',
+  clientName: 'clientName',
+  totalAmount: 'totalAmount',
+  discount: 'discount',
+  finalAmount: 'finalAmount',
+  planCoveredAmount: 'planCoveredAmount',
+  isPlanUsage: 'isPlanUsage',
+  paymentMethod: 'paymentMethod',
+  status: 'status',
+  paidAt: 'paidAt',
+  notes: 'notes',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SaleScalarFieldEnum = (typeof SaleScalarFieldEnum)[keyof typeof SaleScalarFieldEnum]
+
+
+export const SaleItemScalarFieldEnum = {
+  id: 'id',
+  saleId: 'saleId',
+  productId: 'productId',
+  serviceId: 'serviceId',
+  name: 'name',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  totalPrice: 'totalPrice',
+  isPlanCovered: 'isPlanCovered'
+} as const
+
+export type SaleItemScalarFieldEnum = (typeof SaleItemScalarFieldEnum)[keyof typeof SaleItemScalarFieldEnum]
+
+
 export const PushSubscriptionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -428,6 +526,388 @@ export const PushSubscriptionScalarFieldEnum = {
 } as const
 
 export type PushSubscriptionScalarFieldEnum = (typeof PushSubscriptionScalarFieldEnum)[keyof typeof PushSubscriptionScalarFieldEnum]
+
+
+export const VehicleScalarFieldEnum = {
+  id: 'id',
+  plate: 'plate',
+  brand: 'brand',
+  model: 'model',
+  year: 'year',
+  color: 'color',
+  type: 'type',
+  chassis: 'chassis',
+  renavam: 'renavam',
+  mileage: 'mileage',
+  status: 'status',
+  acquisitionDate: 'acquisitionDate',
+  notes: 'notes',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
+
+
+export const DriverScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  cnh: 'cnh',
+  cnhCategory: 'cnhCategory',
+  cnhExpiry: 'cnhExpiry',
+  phone: 'phone',
+  email: 'email',
+  status: 'status',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DriverScalarFieldEnum = (typeof DriverScalarFieldEnum)[keyof typeof DriverScalarFieldEnum]
+
+
+export const FuelRecordScalarFieldEnum = {
+  id: 'id',
+  vehicleId: 'vehicleId',
+  date: 'date',
+  liters: 'liters',
+  totalValue: 'totalValue',
+  mileage: 'mileage',
+  fuelType: 'fuelType',
+  stationName: 'stationName',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FuelRecordScalarFieldEnum = (typeof FuelRecordScalarFieldEnum)[keyof typeof FuelRecordScalarFieldEnum]
+
+
+export const MaintenanceScalarFieldEnum = {
+  id: 'id',
+  vehicleId: 'vehicleId',
+  date: 'date',
+  type: 'type',
+  description: 'description',
+  cost: 'cost',
+  workshop: 'workshop',
+  nextKm: 'nextKm',
+  nextDate: 'nextDate',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MaintenanceScalarFieldEnum = (typeof MaintenanceScalarFieldEnum)[keyof typeof MaintenanceScalarFieldEnum]
+
+
+export const TicketScalarFieldEnum = {
+  id: 'id',
+  vehicleId: 'vehicleId',
+  driverId: 'driverId',
+  date: 'date',
+  infraction: 'infraction',
+  location: 'location',
+  value: 'value',
+  points: 'points',
+  dueDate: 'dueDate',
+  paidAt: 'paidAt',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
+
+
+export const VehicleDocumentScalarFieldEnum = {
+  id: 'id',
+  vehicleId: 'vehicleId',
+  type: 'type',
+  number: 'number',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VehicleDocumentScalarFieldEnum = (typeof VehicleDocumentScalarFieldEnum)[keyof typeof VehicleDocumentScalarFieldEnum]
+
+
+export const AssuredPlanScalarFieldEnum = {
+  id: 'id',
+  clientId: 'clientId',
+  type: 'type',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  monthlyValue: 'monthlyValue',
+  coverageUrn: 'coverageUrn',
+  coverageCoffin: 'coverageCoffin',
+  coverageService: 'coverageService',
+  coverageTransport: 'coverageTransport',
+  maxDependents: 'maxDependents',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AssuredPlanScalarFieldEnum = (typeof AssuredPlanScalarFieldEnum)[keyof typeof AssuredPlanScalarFieldEnum]
+
+
+export const PlanCoverageScalarFieldEnum = {
+  id: 'id',
+  planId: 'planId',
+  itemType: 'itemType',
+  itemName: 'itemName',
+  quantity: 'quantity',
+  isUnlimited: 'isUnlimited',
+  notes: 'notes'
+} as const
+
+export type PlanCoverageScalarFieldEnum = (typeof PlanCoverageScalarFieldEnum)[keyof typeof PlanCoverageScalarFieldEnum]
+
+
+export const PlanUsageScalarFieldEnum = {
+  id: 'id',
+  planId: 'planId',
+  saleId: 'saleId',
+  productId: 'productId',
+  serviceId: 'serviceId',
+  description: 'description',
+  quantity: 'quantity',
+  costToPlan: 'costToPlan',
+  upgradeAmount: 'upgradeAmount',
+  usedAt: 'usedAt',
+  notes: 'notes'
+} as const
+
+export type PlanUsageScalarFieldEnum = (typeof PlanUsageScalarFieldEnum)[keyof typeof PlanUsageScalarFieldEnum]
+
+
+export const AssuredPlanHistoryScalarFieldEnum = {
+  id: 'id',
+  planId: 'planId',
+  action: 'action',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  createdById: 'createdById'
+} as const
+
+export type AssuredPlanHistoryScalarFieldEnum = (typeof AssuredPlanHistoryScalarFieldEnum)[keyof typeof AssuredPlanHistoryScalarFieldEnum]
+
+
+export const DeathRecordScalarFieldEnum = {
+  id: 'id',
+  clientId: 'clientId',
+  deceasedName: 'deceasedName',
+  deceasedBirthDate: 'deceasedBirthDate',
+  deceasedCpf: 'deceasedCpf',
+  deceasedRg: 'deceasedRg',
+  dateOfDeath: 'dateOfDeath',
+  timeOfDeath: 'timeOfDeath',
+  placeOfDeath: 'placeOfDeath',
+  placeName: 'placeName',
+  deathCertificate: 'deathCertificate',
+  causeOfDeath: 'causeOfDeath',
+  doctorName: 'doctorName',
+  doctorCrm: 'doctorCrm',
+  releaseTime: 'releaseTime',
+  arrivalTime: 'arrivalTime',
+  funeralDate: 'funeralDate',
+  burialDate: 'burialDate',
+  burialType: 'burialType',
+  cemeteryName: 'cemeteryName',
+  graveLocation: 'graveLocation',
+  responsibleName: 'responsibleName',
+  responsiblePhone: 'responsiblePhone',
+  responsibleRelation: 'responsibleRelation',
+  status: 'status',
+  notes: 'notes',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DeathRecordScalarFieldEnum = (typeof DeathRecordScalarFieldEnum)[keyof typeof DeathRecordScalarFieldEnum]
+
+
+export const DeathRecordHistoryScalarFieldEnum = {
+  id: 'id',
+  deathRecordId: 'deathRecordId',
+  action: 'action',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  createdById: 'createdById'
+} as const
+
+export type DeathRecordHistoryScalarFieldEnum = (typeof DeathRecordHistoryScalarFieldEnum)[keyof typeof DeathRecordHistoryScalarFieldEnum]
+
+
+export const DeathRecordServiceScalarFieldEnum = {
+  id: 'id',
+  deathRecordId: 'deathRecordId',
+  serviceId: 'serviceId',
+  productId: 'productId',
+  name: 'name',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  totalPrice: 'totalPrice',
+  isPlanCovered: 'isPlanCovered',
+  notes: 'notes',
+  createdAt: 'createdAt'
+} as const
+
+export type DeathRecordServiceScalarFieldEnum = (typeof DeathRecordServiceScalarFieldEnum)[keyof typeof DeathRecordServiceScalarFieldEnum]
+
+
+export const CommissionRuleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  targetType: 'targetType',
+  basis: 'basis',
+  percentage: 'percentage',
+  fixedAmount: 'fixedAmount',
+  minValue: 'minValue',
+  maxValue: 'maxValue',
+  productId: 'productId',
+  serviceId: 'serviceId',
+  active: 'active',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommissionRuleScalarFieldEnum = (typeof CommissionRuleScalarFieldEnum)[keyof typeof CommissionRuleScalarFieldEnum]
+
+
+export const CommissionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  saleId: 'saleId',
+  ruleId: 'ruleId',
+  basis: 'basis',
+  amount: 'amount',
+  saleAmount: 'saleAmount',
+  percentage: 'percentage',
+  fixedAmount: 'fixedAmount',
+  status: 'status',
+  paidAt: 'paidAt',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommissionScalarFieldEnum = (typeof CommissionScalarFieldEnum)[keyof typeof CommissionScalarFieldEnum]
+
+
+export const ResourceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  description: 'description',
+  capacity: 'capacity',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResourceScalarFieldEnum = (typeof ResourceScalarFieldEnum)[keyof typeof ResourceScalarFieldEnum]
+
+
+export const EventScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  type: 'type',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  allDay: 'allDay',
+  clientId: 'clientId',
+  deathRecordId: 'deathRecordId',
+  location: 'location',
+  description: 'description',
+  color: 'color',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
+export const EventResourceScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  resourceId: 'resourceId'
+} as const
+
+export type EventResourceScalarFieldEnum = (typeof EventResourceScalarFieldEnum)[keyof typeof EventResourceScalarFieldEnum]
+
+
+export const BudgetScalarFieldEnum = {
+  id: 'id',
+  clientId: 'clientId',
+  clientName: 'clientName',
+  title: 'title',
+  description: 'description',
+  subtotal: 'subtotal',
+  discount: 'discount',
+  total: 'total',
+  validUntil: 'validUntil',
+  status: 'status',
+  saleId: 'saleId',
+  notes: 'notes',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetScalarFieldEnum = (typeof BudgetScalarFieldEnum)[keyof typeof BudgetScalarFieldEnum]
+
+
+export const BudgetItemScalarFieldEnum = {
+  id: 'id',
+  budgetId: 'budgetId',
+  productId: 'productId',
+  serviceId: 'serviceId',
+  name: 'name',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  totalPrice: 'totalPrice',
+  notes: 'notes'
+} as const
+
+export type BudgetItemScalarFieldEnum = (typeof BudgetItemScalarFieldEnum)[keyof typeof BudgetItemScalarFieldEnum]
+
+
+export const DocumentScalarFieldEnum = {
+  id: 'id',
+  clientId: 'clientId',
+  deathRecordId: 'deathRecordId',
+  name: 'name',
+  filename: 'filename',
+  url: 'url',
+  size: 'size',
+  mimeType: 'mimeType',
+  category: 'category',
+  notes: 'notes',
+  uploadedById: 'uploadedById',
+  uploadedAt: 'uploadedAt'
+} as const
+
+export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
 
 
 export const SortOrder = {

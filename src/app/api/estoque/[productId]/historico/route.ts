@@ -24,13 +24,16 @@ export async function GET(
     prisma.stockMovement.findMany({
       where,
       orderBy: { createdAt: "desc" },
+      include: {
+        createdBy: { select: { name: true } },
+      },
       skip: (page - 1) * limit,
       take: limit,
     }),
     prisma.stockMovement.count({ where }),
     prisma.product.findUnique({
       where: { id: productId },
-      select: { id: true, name: true, sku: true, stock: true, minStock: true },
+      select: { id: true, name: true, sku: true, stock: true, minStock: true, cost: true },
     }),
   ]);
 

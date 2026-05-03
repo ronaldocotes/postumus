@@ -38,6 +38,13 @@
       "description": "Consulte seu carnê e faça pagamentos",
       "url": "/mobile/cliente",
       "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "App do Cobrador",
+      "short_name": "Cobrador",
+      "description": "Cobranças e rotas do dia",
+      "url": "/cobrador",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }

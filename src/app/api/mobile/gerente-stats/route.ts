@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
     const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
     const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const startOfYear = new Date(today.getFullYear(), 0, 1);
 
     const [
       receitasHoje,
@@ -23,6 +24,9 @@ export async function GET(request: NextRequest) {
       pagamentosHoje,
       ultimosPagamentos,
       receitasMes,
+      evolucaoMensal,
+      totalClientes,
+      cobradorPhone,
     ] = await Promise.all([
       // Receitas de hoje (parcelas pagas hoje)
       prisma.installment.aggregate({
@@ -80,7 +84,48 @@ export async function GET(request: NextRequest) {
         },
         _sum: { valor: true },
       }),
+      // Evolução mensal (últimos 6 meses)
+      prisma.installment.groupBy({
+        by: ["status"],
+        where: {
+          status: "PAID",
+          updatedAt: { gte: startOfYear },
+        },
+        _sum: { valor: true },
+        _count: true,
+      }),
+      // Total de clientes ativos
+      prisma.client.count({ where: { active: true } }),
+      // Telefone da empresa (para ligar para cobrador)
+      prisma.company.findFirst({
+        where: { active: true },
+        select: { phone: true },
+        orderBy: { createdAt: "desc" },
+      }),
     ]);
+
+    // Calcular evolução mensal por mês
+    const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+    const evolucaoPorMes: Array<{ mes: string; valor: number }> = [];
+
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      const fim = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59);
+      const inicio = new Date(d.getFullYear(), d.getMonth(), 1);
+
+      const agg = await prisma.installment.aggregate({
+        where: {
+          status: "PAID",
+          updatedAt: { gte: inicio, lte: fim },
+        },
+        _sum: { valor: true },
+      });
+
+      evolucaoPorMes.push({
+        mes: meses[d.getMonth()],
+        valor: agg._sum.valor || 0,
+      });
+    }
 
     return NextResponse.json({
       receitasHoje: receitasHoje._sum.valor || 0,
@@ -88,6 +133,9 @@ export async function GET(request: NextRequest) {
       clientesInadimplentes,
       pagamentosHoje,
       receitasMes: receitasMes._sum.valor || 0,
+      totalClientes,
+      cobradorPhone: cobradorPhone?.phone || null,
+      evolucaoMensal: evolucaoPorMes,
       ultimosPagamentos: ultimosPagamentos.map((inst) => ({
         id: inst.id,
         valor: inst.valor,

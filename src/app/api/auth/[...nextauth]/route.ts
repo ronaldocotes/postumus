@@ -18,6 +18,23 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
+        // PIN auth bypass - when password is __PIN_AUTH__, we already validated PIN in the API
+        if (credentials.password === "__PIN_AUTH__") {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+          });
+          if (user && user.active && (user.role === "COBRADOR" || user.role === "ADMIN")) {
+            console.log('✅ Login por PIN bem-sucedido para:', user.email);
+            return {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              role: user.role,
+            };
+          }
+          return null;
+        }
+
         try {
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },

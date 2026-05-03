@@ -11,10 +11,10 @@ import {
   Phone,
   RefreshCw,
   LogOut,
-  Wifi,
   WifiOff,
   ArrowRight,
   DollarSign,
+  Bike,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -24,6 +24,9 @@ interface GerenteStats {
   clientesInadimplentes: number;
   pagamentosHoje: number;
   receitasMes: number;
+  totalClientes: number;
+  cobradorPhone: string | null;
+  evolucaoMensal: Array<{ mes: string; valor: number }>;
   ultimosPagamentos: Array<{
     id: string;
     valor: number;
@@ -45,6 +48,35 @@ function formatCurrency(value: number) {
 function formatTime(dateStr: string) {
   const d = new Date(dateStr);
   return d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+}
+
+function SimpleBarChart({ data }: { data: Array<{ mes: string; valor: number }> }) {
+  const max = Math.max(...data.map((d) => d.valor), 1);
+  return (
+    <div className="flex items-end justify-between gap-2 h-32 mt-2">
+      {data.map((item) => {
+        const height = Math.max((item.valor / max) * 100, 4);
+        return (
+          <div key={item.mes} className="flex-1 flex flex-col items-center gap-1">
+            <div className="w-full flex items-end justify-center">
+              <div
+                className="w-full max-w-[28px] rounded-t-lg transition-all"
+                style={{
+                  height: `${height}%`,
+                  background: item.valor > 0 ? "linear-gradient(to top, #4a6fa5, #5a7fb5)" : "#e2e8f0",
+                  minHeight: item.valor > 0 ? "4px" : "4px",
+                }}
+              />
+            </div>
+            <span className="text-[10px] text-slate-400 font-medium">{item.mes}</span>
+            <span className="text-[9px] text-slate-500">
+              {item.valor > 0 ? formatCurrency(item.valor).replace("R$", "") : "—"}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 export default function MobileGerentePage() {
@@ -205,6 +237,38 @@ export default function MobileGerentePage() {
             );
           })}
         </div>
+
+        {/* Gráfico de evolução mensal */}
+        {stats?.evolucaoMensal && stats.evolucaoMensal.length > 0 && (
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden p-4">
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="font-semibold text-slate-700 text-sm">Evolução Mensal</h2>
+              <TrendingUp size={16} className="text-[#4a6fa5]" />
+            </div>
+            <SimpleBarChart data={stats.evolucaoMensal} />
+          </div>
+        )}
+
+        {/* Botão ligar para cobrador */}
+        {stats?.cobradorPhone && (
+          <a
+            href={`tel:${stats.cobradorPhone}`}
+            className="flex items-center justify-between bg-white rounded-2xl shadow-sm border border-slate-100 p-4 active:bg-slate-50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <Bike size={18} className="text-[#4a6fa5]" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-slate-700">Ligar para Cobrador</p>
+                <p className="text-xs text-slate-400">{stats.cobradorPhone}</p>
+              </div>
+            </div>
+            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+              <Phone size={14} className="text-white" />
+            </div>
+          </a>
+        )}
 
         {/* Ações rápidas */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">

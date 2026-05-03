@@ -1,19 +1,23 @@
 // Service Worker - Posthumous PWA
 // Cache name with version for easy updates
 
-const CACHE_VERSION = "posthumous-v2";
+const CACHE_VERSION = "posthumous-v3";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
+const IMAGE_CACHE = `${CACHE_VERSION}-images`;
 
 const PRECACHE_URLS = [
   "/",
+  "/login",
   "/dashboard",
   "/mobile/gerente",
   "/mobile/cliente",
+  "/cobrador",
   "/manifest.json",
   "/logo-oficial.png",
   "/icon-192x192.png",
   "/icon-512x512.png",
+  "/apple-touch-icon.png",
   "/offline.html",
 ];
 
@@ -35,13 +39,38 @@ self.addEventListener("activate", (event) => {
       .then((cacheNames) =>
         Promise.all(
           cacheNames
-            .filter((name) => name.startsWith("posthumous-") && name !== STATIC_CACHE && name !== DYNAMIC_CACHE)
+            .filter(
+              (name) =>
+                name.startsWith("posthumous-") &&
+                name !== STATIC_CACHE &&
+                name !== DYNAMIC_CACHE &&
+                name !== IMAGE_CACHE
+            )
             .map((name) => caches.delete(name))
         )
       )
       .then(() => self.clients.claim())
   );
 });
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function isImage(request) {
+  const accept = request.headers.get("accept") || "";
+  return accept.includes("image/");
+}
+
+function isStaticAsset(url) {
+  return (
+    url.pathname.startsWith("/_next/") ||
+    url.pathname.endsWith(".js") ||
+    url.pathname.endsWith(".css") ||
+    url.pathname.endsWith(".woff2") ||
+    url.pathname.endsWith(".png") ||
+    url.pathname.endsWith(".jpg") ||
+    url.pathname.endsWith(".svg")
+  );
+}
 
 // ─── Fetch ────────────────────────────────────────────────────────────────────
 self.addEventListener("fetch", (event) => {
@@ -57,22 +86,25 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Next.js internals: network only
-  if (url.pathname.startsWith("/_next/")) {
-    event.respondWith(
-      fetch(request).catch(() => new Response("", { status: 503 }))
-    );
+  // Images: cache-first with dedicated image cache
+  if (isImage(request) || url.pathname.match(/\.(png|jpg|jpeg|svg|webp|gif)$/i)) {
+    event.respondWith(imageCacheFirst(request));
     return;
   }
 
-  // Pages & assets: stale-while-revalidate
-  event.respondWith(staleWhileRevalidate(request));
+  // Next.js static assets (JS/CSS/fonts): stale-while-revalidate
+  if (isStaticAsset(url)) {
+    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
+    return;
+  }
+
+  // Pages & HTML: stale-while-revalidate
+  event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
 });
 
 async function networkFirstWithFallback(request) {
   try {
     const response = await fetch(request);
-    // Cache successful GET API responses
     if (response.ok) {
       const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, response.clone());
@@ -94,9 +126,34 @@ async function networkFirstWithFallback(request) {
   }
 }
 
-async function staleWhileRevalidate(request) {
-  const cache = await caches.open(DYNAMIC_CACHE);
-  const cached = await caches.match(request);
+async function imageCacheFirst(request) {
+  const cache = await caches.open(IMAGE_CACHE);
+  const cached = await cache.match(request);
+
+  if (cached) {
+    // Refresh in background
+    fetch(request)
+      .then((response) => {
+        if (response.ok) cache.put(request, response);
+      })
+      .catch(() => {});
+    return cached;
+  }
+
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    return new Response("", { status: 503 });
+  }
+}
+
+async function staleWhileRevalidate(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
 
   const fetchPromise = fetch(request)
     .then((response) => {
@@ -107,9 +164,7 @@ async function staleWhileRevalidate(request) {
     })
     .catch(() => null);
 
-  // Return cached immediately if available, otherwise wait for network
   if (cached) {
-    // Refresh in background
     fetchPromise.catch(() => {});
     return cached;
   }
@@ -133,7 +188,11 @@ async function staleWhileRevalidate(request) {
 self.addEventListener("push", (event) => {
   if (!event.data) return;
   let data;
-  try { data = event.data.json(); } catch { data = { title: "Posthumous", body: event.data.text() }; }
+  try {
+    data = event.data.json();
+  } catch {
+    data = { title: "Posthumous", body: event.data.text() };
+  }
 
   const options = {
     body: data.body || "Nova notificação",
@@ -154,11 +213,13 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   const targetUrl = event.notification.data?.url || "/dashboard";
   event.waitUntil(
-    clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
-      const existingWindow = clientList.find((c) => c.url.includes(targetUrl));
-      if (existingWindow) return existingWindow.focus();
-      return clients.openWindow(targetUrl);
-    })
+    clients
+      .matchAll({ type: "window", includeUncontrolled: true })
+      .then((clientList) => {
+        const existingWindow = clientList.find((c) => c.url.includes(targetUrl));
+        if (existingWindow) return existingWindow.focus();
+        return clients.openWindow(targetUrl);
+      })
   );
 });
 

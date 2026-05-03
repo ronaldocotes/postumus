@@ -616,13 +616,19 @@ export type ClientWhereInput = {
   zone?: Prisma.StringNullableFilter<"Client"> | string | null
   routeOrder?: Prisma.IntNullableFilter<"Client"> | number | null
   routeMode?: Prisma.EnumRouteModeFilter<"Client"> | $Enums.RouteMode
+  assuredPlan?: Prisma.XOR<Prisma.AssuredPlanNullableScalarRelationFilter, Prisma.AssuredPlanWhereInput> | null
   carnes?: Prisma.CarneListRelationFilter
   cobrador?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   collectionRouteStops?: Prisma.CollectionRouteStopListRelationFilter
   dependents?: Prisma.DependentListRelationFilter
   transactions?: Prisma.FinancialTransactionListRelationFilter
   serviceSales?: Prisma.ServiceSaleListRelationFilter
+  sales?: Prisma.SaleListRelationFilter
   visitLogs?: Prisma.VisitLogListRelationFilter
+  deathRecords?: Prisma.DeathRecordListRelationFilter
+  events?: Prisma.EventListRelationFilter
+  budgets?: Prisma.BudgetListRelationFilter
+  documents?: Prisma.DocumentListRelationFilter
 }
 
 export type ClientOrderByWithRelationInput = {
@@ -678,13 +684,19 @@ export type ClientOrderByWithRelationInput = {
   zone?: Prisma.SortOrderInput | Prisma.SortOrder
   routeOrder?: Prisma.SortOrderInput | Prisma.SortOrder
   routeMode?: Prisma.SortOrder
+  assuredPlan?: Prisma.AssuredPlanOrderByWithRelationInput
   carnes?: Prisma.CarneOrderByRelationAggregateInput
   cobrador?: Prisma.UserOrderByWithRelationInput
   collectionRouteStops?: Prisma.CollectionRouteStopOrderByRelationAggregateInput
   dependents?: Prisma.DependentOrderByRelationAggregateInput
   transactions?: Prisma.FinancialTransactionOrderByRelationAggregateInput
   serviceSales?: Prisma.ServiceSaleOrderByRelationAggregateInput
+  sales?: Prisma.SaleOrderByRelationAggregateInput
   visitLogs?: Prisma.VisitLogOrderByRelationAggregateInput
+  deathRecords?: Prisma.DeathRecordOrderByRelationAggregateInput
+  events?: Prisma.EventOrderByRelationAggregateInput
+  budgets?: Prisma.BudgetOrderByRelationAggregateInput
+  documents?: Prisma.DocumentOrderByRelationAggregateInput
 }
 
 export type ClientWhereUniqueInput = Prisma.AtLeast<{
@@ -743,13 +755,19 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   zone?: Prisma.StringNullableFilter<"Client"> | string | null
   routeOrder?: Prisma.IntNullableFilter<"Client"> | number | null
   routeMode?: Prisma.EnumRouteModeFilter<"Client"> | $Enums.RouteMode
+  assuredPlan?: Prisma.XOR<Prisma.AssuredPlanNullableScalarRelationFilter, Prisma.AssuredPlanWhereInput> | null
   carnes?: Prisma.CarneListRelationFilter
   cobrador?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   collectionRouteStops?: Prisma.CollectionRouteStopListRelationFilter
   dependents?: Prisma.DependentListRelationFilter
   transactions?: Prisma.FinancialTransactionListRelationFilter
   serviceSales?: Prisma.ServiceSaleListRelationFilter
+  sales?: Prisma.SaleListRelationFilter
   visitLogs?: Prisma.VisitLogListRelationFilter
+  deathRecords?: Prisma.DeathRecordListRelationFilter
+  events?: Prisma.EventListRelationFilter
+  budgets?: Prisma.BudgetListRelationFilter
+  documents?: Prisma.DocumentListRelationFilter
 }, "id" | "code" | "cpf">
 
 export type ClientOrderByWithAggregationInput = {
@@ -922,13 +940,19 @@ export type ClientCreateInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
   cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
   collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateInput = {
@@ -984,12 +1008,18 @@ export type ClientUncheckedCreateInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientUpdateInput = {
@@ -1044,13 +1074,19 @@ export type ClientUpdateInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
   cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateInput = {
@@ -1106,12 +1142,18 @@ export type ClientUncheckedUpdateInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateManyInput = {
@@ -1645,6 +1687,100 @@ export type ClientUpdateOneRequiredWithoutVisitLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutVisitLogsInput, Prisma.ClientUpdateWithoutVisitLogsInput>, Prisma.ClientUncheckedUpdateWithoutVisitLogsInput>
 }
 
+export type ClientCreateNestedOneWithoutSalesInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutSalesInput, Prisma.ClientUncheckedCreateWithoutSalesInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutSalesInput
+  connect?: Prisma.ClientWhereUniqueInput
+}
+
+export type ClientUpdateOneWithoutSalesNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutSalesInput, Prisma.ClientUncheckedCreateWithoutSalesInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutSalesInput
+  upsert?: Prisma.ClientUpsertWithoutSalesInput
+  disconnect?: Prisma.ClientWhereInput | boolean
+  delete?: Prisma.ClientWhereInput | boolean
+  connect?: Prisma.ClientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutSalesInput, Prisma.ClientUpdateWithoutSalesInput>, Prisma.ClientUncheckedUpdateWithoutSalesInput>
+}
+
+export type ClientCreateNestedOneWithoutAssuredPlanInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutAssuredPlanInput, Prisma.ClientUncheckedCreateWithoutAssuredPlanInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutAssuredPlanInput
+  connect?: Prisma.ClientWhereUniqueInput
+}
+
+export type ClientUpdateOneRequiredWithoutAssuredPlanNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutAssuredPlanInput, Prisma.ClientUncheckedCreateWithoutAssuredPlanInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutAssuredPlanInput
+  upsert?: Prisma.ClientUpsertWithoutAssuredPlanInput
+  connect?: Prisma.ClientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutAssuredPlanInput, Prisma.ClientUpdateWithoutAssuredPlanInput>, Prisma.ClientUncheckedUpdateWithoutAssuredPlanInput>
+}
+
+export type ClientCreateNestedOneWithoutDeathRecordsInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutDeathRecordsInput, Prisma.ClientUncheckedCreateWithoutDeathRecordsInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutDeathRecordsInput
+  connect?: Prisma.ClientWhereUniqueInput
+}
+
+export type ClientUpdateOneWithoutDeathRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutDeathRecordsInput, Prisma.ClientUncheckedCreateWithoutDeathRecordsInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutDeathRecordsInput
+  upsert?: Prisma.ClientUpsertWithoutDeathRecordsInput
+  disconnect?: Prisma.ClientWhereInput | boolean
+  delete?: Prisma.ClientWhereInput | boolean
+  connect?: Prisma.ClientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutDeathRecordsInput, Prisma.ClientUpdateWithoutDeathRecordsInput>, Prisma.ClientUncheckedUpdateWithoutDeathRecordsInput>
+}
+
+export type ClientCreateNestedOneWithoutEventsInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutEventsInput, Prisma.ClientUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutEventsInput
+  connect?: Prisma.ClientWhereUniqueInput
+}
+
+export type ClientUpdateOneWithoutEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutEventsInput, Prisma.ClientUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutEventsInput
+  upsert?: Prisma.ClientUpsertWithoutEventsInput
+  disconnect?: Prisma.ClientWhereInput | boolean
+  delete?: Prisma.ClientWhereInput | boolean
+  connect?: Prisma.ClientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutEventsInput, Prisma.ClientUpdateWithoutEventsInput>, Prisma.ClientUncheckedUpdateWithoutEventsInput>
+}
+
+export type ClientCreateNestedOneWithoutBudgetsInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutBudgetsInput, Prisma.ClientUncheckedCreateWithoutBudgetsInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutBudgetsInput
+  connect?: Prisma.ClientWhereUniqueInput
+}
+
+export type ClientUpdateOneWithoutBudgetsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutBudgetsInput, Prisma.ClientUncheckedCreateWithoutBudgetsInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutBudgetsInput
+  upsert?: Prisma.ClientUpsertWithoutBudgetsInput
+  disconnect?: Prisma.ClientWhereInput | boolean
+  delete?: Prisma.ClientWhereInput | boolean
+  connect?: Prisma.ClientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutBudgetsInput, Prisma.ClientUpdateWithoutBudgetsInput>, Prisma.ClientUncheckedUpdateWithoutBudgetsInput>
+}
+
+export type ClientCreateNestedOneWithoutDocumentsInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutDocumentsInput, Prisma.ClientUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutDocumentsInput
+  connect?: Prisma.ClientWhereUniqueInput
+}
+
+export type ClientUpdateOneWithoutDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutDocumentsInput, Prisma.ClientUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutDocumentsInput
+  upsert?: Prisma.ClientUpsertWithoutDocumentsInput
+  disconnect?: Prisma.ClientWhereInput | boolean
+  delete?: Prisma.ClientWhereInput | boolean
+  connect?: Prisma.ClientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutDocumentsInput, Prisma.ClientUpdateWithoutDocumentsInput>, Prisma.ClientUncheckedUpdateWithoutDocumentsInput>
+}
+
 export type ClientCreateWithoutCobradorInput = {
   id?: string
   code?: string | null
@@ -1697,12 +1833,18 @@ export type ClientCreateWithoutCobradorInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
   collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutCobradorInput = {
@@ -1757,12 +1899,18 @@ export type ClientUncheckedCreateWithoutCobradorInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutCobradorInput = {
@@ -1901,12 +2049,18 @@ export type ClientCreateWithoutDependentsInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
   cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
   collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutDependentsInput = {
@@ -1962,11 +2116,17 @@ export type ClientUncheckedCreateWithoutDependentsInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutDependentsInput = {
@@ -2037,12 +2197,18 @@ export type ClientUpdateWithoutDependentsInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
   cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutDependentsInput = {
@@ -2098,11 +2264,17 @@ export type ClientUncheckedUpdateWithoutDependentsInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutServiceSalesInput = {
@@ -2157,12 +2329,18 @@ export type ClientCreateWithoutServiceSalesInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
   cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
   collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutServiceSalesInput = {
@@ -2218,11 +2396,17 @@ export type ClientUncheckedCreateWithoutServiceSalesInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutServiceSalesInput = {
@@ -2293,12 +2477,18 @@ export type ClientUpdateWithoutServiceSalesInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
   cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutServiceSalesInput = {
@@ -2354,11 +2544,17 @@ export type ClientUncheckedUpdateWithoutServiceSalesInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutCarnesInput = {
@@ -2413,12 +2609,18 @@ export type ClientCreateWithoutCarnesInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
   cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
   collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutCarnesInput = {
@@ -2474,11 +2676,17 @@ export type ClientUncheckedCreateWithoutCarnesInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutCarnesInput = {
@@ -2549,12 +2757,18 @@ export type ClientUpdateWithoutCarnesInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
   cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutCarnesInput = {
@@ -2610,11 +2824,17 @@ export type ClientUncheckedUpdateWithoutCarnesInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutTransactionsInput = {
@@ -2669,12 +2889,18 @@ export type ClientCreateWithoutTransactionsInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
   cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
   collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutTransactionsInput = {
@@ -2730,11 +2956,17 @@ export type ClientUncheckedCreateWithoutTransactionsInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutTransactionsInput = {
@@ -2805,12 +3037,18 @@ export type ClientUpdateWithoutTransactionsInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
   cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutTransactionsInput = {
@@ -2866,11 +3104,17 @@ export type ClientUncheckedUpdateWithoutTransactionsInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutCollectionRouteStopsInput = {
@@ -2925,12 +3169,18 @@ export type ClientCreateWithoutCollectionRouteStopsInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
   cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
   dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutCollectionRouteStopsInput = {
@@ -2986,11 +3236,17 @@ export type ClientUncheckedCreateWithoutCollectionRouteStopsInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutCollectionRouteStopsInput = {
@@ -3061,12 +3317,18 @@ export type ClientUpdateWithoutCollectionRouteStopsInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
   cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
   dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutCollectionRouteStopsInput = {
@@ -3122,11 +3384,17 @@ export type ClientUncheckedUpdateWithoutCollectionRouteStopsInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutVisitLogsInput = {
@@ -3181,12 +3449,18 @@ export type ClientCreateWithoutVisitLogsInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
   cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
   collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutVisitLogsInput = {
@@ -3242,11 +3516,17 @@ export type ClientUncheckedCreateWithoutVisitLogsInput = {
   zone?: string | null
   routeOrder?: number | null
   routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
   carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
   dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
   transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
   serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutVisitLogsInput = {
@@ -3317,15 +3597,581 @@ export type ClientUpdateWithoutVisitLogsInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
   cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutVisitLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cobradorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type ClientCreateWithoutSalesInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
+  carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
+  cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
+  collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
+}
+
+export type ClientUncheckedCreateWithoutSalesInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  cobradorId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
+  carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
+}
+
+export type ClientCreateOrConnectWithoutSalesInput = {
+  where: Prisma.ClientWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientCreateWithoutSalesInput, Prisma.ClientUncheckedCreateWithoutSalesInput>
+}
+
+export type ClientUpsertWithoutSalesInput = {
+  update: Prisma.XOR<Prisma.ClientUpdateWithoutSalesInput, Prisma.ClientUncheckedUpdateWithoutSalesInput>
+  create: Prisma.XOR<Prisma.ClientCreateWithoutSalesInput, Prisma.ClientUncheckedCreateWithoutSalesInput>
+  where?: Prisma.ClientWhereInput
+}
+
+export type ClientUpdateToOneWithWhereWithoutSalesInput = {
+  where?: Prisma.ClientWhereInput
+  data: Prisma.XOR<Prisma.ClientUpdateWithoutSalesInput, Prisma.ClientUncheckedUpdateWithoutSalesInput>
+}
+
+export type ClientUpdateWithoutSalesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
+  cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
+}
+
+export type ClientUncheckedUpdateWithoutSalesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cobradorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type ClientCreateWithoutAssuredPlanInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
+  cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
+  collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
+}
+
+export type ClientUncheckedCreateWithoutAssuredPlanInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  cobradorId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
+}
+
+export type ClientCreateOrConnectWithoutAssuredPlanInput = {
+  where: Prisma.ClientWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientCreateWithoutAssuredPlanInput, Prisma.ClientUncheckedCreateWithoutAssuredPlanInput>
+}
+
+export type ClientUpsertWithoutAssuredPlanInput = {
+  update: Prisma.XOR<Prisma.ClientUpdateWithoutAssuredPlanInput, Prisma.ClientUncheckedUpdateWithoutAssuredPlanInput>
+  create: Prisma.XOR<Prisma.ClientCreateWithoutAssuredPlanInput, Prisma.ClientUncheckedCreateWithoutAssuredPlanInput>
+  where?: Prisma.ClientWhereInput
+}
+
+export type ClientUpdateToOneWithWhereWithoutAssuredPlanInput = {
+  where?: Prisma.ClientWhereInput
+  data: Prisma.XOR<Prisma.ClientUpdateWithoutAssuredPlanInput, Prisma.ClientUncheckedUpdateWithoutAssuredPlanInput>
+}
+
+export type ClientUpdateWithoutAssuredPlanInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
+  cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
+}
+
+export type ClientUncheckedUpdateWithoutAssuredPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3383,6 +4229,1132 @@ export type ClientUncheckedUpdateWithoutVisitLogsInput = {
   dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type ClientCreateWithoutDeathRecordsInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
+  carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
+  cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
+  collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
+}
+
+export type ClientUncheckedCreateWithoutDeathRecordsInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  cobradorId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
+  carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
+}
+
+export type ClientCreateOrConnectWithoutDeathRecordsInput = {
+  where: Prisma.ClientWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientCreateWithoutDeathRecordsInput, Prisma.ClientUncheckedCreateWithoutDeathRecordsInput>
+}
+
+export type ClientUpsertWithoutDeathRecordsInput = {
+  update: Prisma.XOR<Prisma.ClientUpdateWithoutDeathRecordsInput, Prisma.ClientUncheckedUpdateWithoutDeathRecordsInput>
+  create: Prisma.XOR<Prisma.ClientCreateWithoutDeathRecordsInput, Prisma.ClientUncheckedCreateWithoutDeathRecordsInput>
+  where?: Prisma.ClientWhereInput
+}
+
+export type ClientUpdateToOneWithWhereWithoutDeathRecordsInput = {
+  where?: Prisma.ClientWhereInput
+  data: Prisma.XOR<Prisma.ClientUpdateWithoutDeathRecordsInput, Prisma.ClientUncheckedUpdateWithoutDeathRecordsInput>
+}
+
+export type ClientUpdateWithoutDeathRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
+  cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
+}
+
+export type ClientUncheckedUpdateWithoutDeathRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cobradorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type ClientCreateWithoutEventsInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
+  carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
+  cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
+  collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
+}
+
+export type ClientUncheckedCreateWithoutEventsInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  cobradorId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
+  carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
+}
+
+export type ClientCreateOrConnectWithoutEventsInput = {
+  where: Prisma.ClientWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientCreateWithoutEventsInput, Prisma.ClientUncheckedCreateWithoutEventsInput>
+}
+
+export type ClientUpsertWithoutEventsInput = {
+  update: Prisma.XOR<Prisma.ClientUpdateWithoutEventsInput, Prisma.ClientUncheckedUpdateWithoutEventsInput>
+  create: Prisma.XOR<Prisma.ClientCreateWithoutEventsInput, Prisma.ClientUncheckedCreateWithoutEventsInput>
+  where?: Prisma.ClientWhereInput
+}
+
+export type ClientUpdateToOneWithWhereWithoutEventsInput = {
+  where?: Prisma.ClientWhereInput
+  data: Prisma.XOR<Prisma.ClientUpdateWithoutEventsInput, Prisma.ClientUncheckedUpdateWithoutEventsInput>
+}
+
+export type ClientUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
+  cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
+}
+
+export type ClientUncheckedUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cobradorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type ClientCreateWithoutBudgetsInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
+  carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
+  cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
+  collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutClientInput
+}
+
+export type ClientUncheckedCreateWithoutBudgetsInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  cobradorId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
+  carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutClientInput
+}
+
+export type ClientCreateOrConnectWithoutBudgetsInput = {
+  where: Prisma.ClientWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientCreateWithoutBudgetsInput, Prisma.ClientUncheckedCreateWithoutBudgetsInput>
+}
+
+export type ClientUpsertWithoutBudgetsInput = {
+  update: Prisma.XOR<Prisma.ClientUpdateWithoutBudgetsInput, Prisma.ClientUncheckedUpdateWithoutBudgetsInput>
+  create: Prisma.XOR<Prisma.ClientCreateWithoutBudgetsInput, Prisma.ClientUncheckedCreateWithoutBudgetsInput>
+  where?: Prisma.ClientWhereInput
+}
+
+export type ClientUpdateToOneWithWhereWithoutBudgetsInput = {
+  where?: Prisma.ClientWhereInput
+  data: Prisma.XOR<Prisma.ClientUpdateWithoutBudgetsInput, Prisma.ClientUncheckedUpdateWithoutBudgetsInput>
+}
+
+export type ClientUpdateWithoutBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
+  cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
+}
+
+export type ClientUncheckedUpdateWithoutBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cobradorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type ClientCreateWithoutDocumentsInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanCreateNestedOneWithoutClientInput
+  carnes?: Prisma.CarneCreateNestedManyWithoutClientInput
+  cobrador?: Prisma.UserCreateNestedOneWithoutAssignedClientsInput
+  collectionRouteStops?: Prisma.CollectionRouteStopCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutClientInput
+  events?: Prisma.EventCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutClientInput
+}
+
+export type ClientUncheckedCreateWithoutDocumentsInput = {
+  id?: string
+  code?: string | null
+  name: string
+  cpf?: string | null
+  rg?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  cellphone?: string | null
+  email?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  neighborhood?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  civilStatus?: string | null
+  profession?: string | null
+  workplace?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  dueDay?: number | null
+  paymentLocation?: $Enums.PaymentLocation | null
+  contractDate?: Date | string | null
+  cancelDate?: Date | string | null
+  cancelReason?: string | null
+  status?: $Enums.ClientStatus
+  monthlyValue?: number | null
+  notes?: string | null
+  notes2?: string | null
+  cobradorId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latitude?: number | null
+  longitude?: number | null
+  billingAddress?: string | null
+  billingAddressSame?: boolean
+  billingCity?: string | null
+  billingComplement?: string | null
+  billingLatitude?: number | null
+  billingLongitude?: number | null
+  billingNeighborhood?: string | null
+  billingNumber?: string | null
+  billingReference?: string | null
+  billingState?: string | null
+  billingZipCode?: string | null
+  isAssured?: boolean
+  zone?: string | null
+  routeOrder?: number | null
+  routeMode?: $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedCreateNestedOneWithoutClientInput
+  carnes?: Prisma.CarneUncheckedCreateNestedManyWithoutClientInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedCreateNestedManyWithoutClientInput
+  dependents?: Prisma.DependentUncheckedCreateNestedManyWithoutClientInput
+  transactions?: Prisma.FinancialTransactionUncheckedCreateNestedManyWithoutClientInput
+  serviceSales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutClientInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutClientInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutClientInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutClientInput
+}
+
+export type ClientCreateOrConnectWithoutDocumentsInput = {
+  where: Prisma.ClientWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientCreateWithoutDocumentsInput, Prisma.ClientUncheckedCreateWithoutDocumentsInput>
+}
+
+export type ClientUpsertWithoutDocumentsInput = {
+  update: Prisma.XOR<Prisma.ClientUpdateWithoutDocumentsInput, Prisma.ClientUncheckedUpdateWithoutDocumentsInput>
+  create: Prisma.XOR<Prisma.ClientCreateWithoutDocumentsInput, Prisma.ClientUncheckedCreateWithoutDocumentsInput>
+  where?: Prisma.ClientWhereInput
+}
+
+export type ClientUpdateToOneWithWhereWithoutDocumentsInput = {
+  where?: Prisma.ClientWhereInput
+  data: Prisma.XOR<Prisma.ClientUpdateWithoutDocumentsInput, Prisma.ClientUncheckedUpdateWithoutDocumentsInput>
+}
+
+export type ClientUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
+  cobrador?: Prisma.UserUpdateOneWithoutAssignedClientsNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+}
+
+export type ClientUncheckedUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cellphone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  complement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  civilStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dueDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentLocation?: Prisma.NullableEnumPaymentLocationFieldUpdateOperationsInput | $Enums.PaymentLocation | null
+  contractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumClientStatusFieldUpdateOperationsInput | $Enums.ClientStatus
+  monthlyValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cobradorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingAddressSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingComplement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingLatitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingLongitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  billingNeighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingZipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAssured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
+  carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
+  collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
+  dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
+  transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
+  serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateManyCobradorInput = {
@@ -3491,12 +5463,18 @@ export type ClientUpdateWithoutCobradorInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUpdateManyWithoutClientNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutCobradorInput = {
@@ -3551,12 +5529,18 @@ export type ClientUncheckedUpdateWithoutCobradorInput = {
   zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routeOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   routeMode?: Prisma.EnumRouteModeFieldUpdateOperationsInput | $Enums.RouteMode
+  assuredPlan?: Prisma.AssuredPlanUncheckedUpdateOneWithoutClientNestedInput
   carnes?: Prisma.CarneUncheckedUpdateManyWithoutClientNestedInput
   collectionRouteStops?: Prisma.CollectionRouteStopUncheckedUpdateManyWithoutClientNestedInput
   dependents?: Prisma.DependentUncheckedUpdateManyWithoutClientNestedInput
   transactions?: Prisma.FinancialTransactionUncheckedUpdateManyWithoutClientNestedInput
   serviceSales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutClientNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutClientNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutClientNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutClientNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateManyWithoutCobradorInput = {
@@ -3624,7 +5608,12 @@ export type ClientCountOutputType = {
   dependents: number
   transactions: number
   serviceSales: number
+  sales: number
   visitLogs: number
+  deathRecords: number
+  events: number
+  budgets: number
+  documents: number
 }
 
 export type ClientCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3633,7 +5622,12 @@ export type ClientCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   dependents?: boolean | ClientCountOutputTypeCountDependentsArgs
   transactions?: boolean | ClientCountOutputTypeCountTransactionsArgs
   serviceSales?: boolean | ClientCountOutputTypeCountServiceSalesArgs
+  sales?: boolean | ClientCountOutputTypeCountSalesArgs
   visitLogs?: boolean | ClientCountOutputTypeCountVisitLogsArgs
+  deathRecords?: boolean | ClientCountOutputTypeCountDeathRecordsArgs
+  events?: boolean | ClientCountOutputTypeCountEventsArgs
+  budgets?: boolean | ClientCountOutputTypeCountBudgetsArgs
+  documents?: boolean | ClientCountOutputTypeCountDocumentsArgs
 }
 
 /**
@@ -3684,8 +5678,43 @@ export type ClientCountOutputTypeCountServiceSalesArgs<ExtArgs extends runtime.T
 /**
  * ClientCountOutputType without action
  */
+export type ClientCountOutputTypeCountSalesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SaleWhereInput
+}
+
+/**
+ * ClientCountOutputType without action
+ */
 export type ClientCountOutputTypeCountVisitLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.VisitLogWhereInput
+}
+
+/**
+ * ClientCountOutputType without action
+ */
+export type ClientCountOutputTypeCountDeathRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeathRecordWhereInput
+}
+
+/**
+ * ClientCountOutputType without action
+ */
+export type ClientCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventWhereInput
+}
+
+/**
+ * ClientCountOutputType without action
+ */
+export type ClientCountOutputTypeCountBudgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BudgetWhereInput
+}
+
+/**
+ * ClientCountOutputType without action
+ */
+export type ClientCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DocumentWhereInput
 }
 
 
@@ -3742,13 +5771,19 @@ export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   zone?: boolean
   routeOrder?: boolean
   routeMode?: boolean
+  assuredPlan?: boolean | Prisma.Client$assuredPlanArgs<ExtArgs>
   carnes?: boolean | Prisma.Client$carnesArgs<ExtArgs>
   cobrador?: boolean | Prisma.Client$cobradorArgs<ExtArgs>
   collectionRouteStops?: boolean | Prisma.Client$collectionRouteStopsArgs<ExtArgs>
   dependents?: boolean | Prisma.Client$dependentsArgs<ExtArgs>
   transactions?: boolean | Prisma.Client$transactionsArgs<ExtArgs>
   serviceSales?: boolean | Prisma.Client$serviceSalesArgs<ExtArgs>
+  sales?: boolean | Prisma.Client$salesArgs<ExtArgs>
   visitLogs?: boolean | Prisma.Client$visitLogsArgs<ExtArgs>
+  deathRecords?: boolean | Prisma.Client$deathRecordsArgs<ExtArgs>
+  events?: boolean | Prisma.Client$eventsArgs<ExtArgs>
+  budgets?: boolean | Prisma.Client$budgetsArgs<ExtArgs>
+  documents?: boolean | Prisma.Client$documentsArgs<ExtArgs>
   _count?: boolean | Prisma.ClientCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["client"]>
 
@@ -3921,13 +5956,19 @@ export type ClientSelectScalar = {
 
 export type ClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "cpf" | "rg" | "birthDate" | "phone" | "cellphone" | "email" | "address" | "number" | "complement" | "neighborhood" | "city" | "state" | "zipCode" | "civilStatus" | "profession" | "workplace" | "fatherName" | "motherName" | "spouseName" | "dueDay" | "paymentLocation" | "contractDate" | "cancelDate" | "cancelReason" | "status" | "monthlyValue" | "notes" | "notes2" | "cobradorId" | "active" | "createdAt" | "updatedAt" | "latitude" | "longitude" | "billingAddress" | "billingAddressSame" | "billingCity" | "billingComplement" | "billingLatitude" | "billingLongitude" | "billingNeighborhood" | "billingNumber" | "billingReference" | "billingState" | "billingZipCode" | "isAssured" | "zone" | "routeOrder" | "routeMode", ExtArgs["result"]["client"]>
 export type ClientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assuredPlan?: boolean | Prisma.Client$assuredPlanArgs<ExtArgs>
   carnes?: boolean | Prisma.Client$carnesArgs<ExtArgs>
   cobrador?: boolean | Prisma.Client$cobradorArgs<ExtArgs>
   collectionRouteStops?: boolean | Prisma.Client$collectionRouteStopsArgs<ExtArgs>
   dependents?: boolean | Prisma.Client$dependentsArgs<ExtArgs>
   transactions?: boolean | Prisma.Client$transactionsArgs<ExtArgs>
   serviceSales?: boolean | Prisma.Client$serviceSalesArgs<ExtArgs>
+  sales?: boolean | Prisma.Client$salesArgs<ExtArgs>
   visitLogs?: boolean | Prisma.Client$visitLogsArgs<ExtArgs>
+  deathRecords?: boolean | Prisma.Client$deathRecordsArgs<ExtArgs>
+  events?: boolean | Prisma.Client$eventsArgs<ExtArgs>
+  budgets?: boolean | Prisma.Client$budgetsArgs<ExtArgs>
+  documents?: boolean | Prisma.Client$documentsArgs<ExtArgs>
   _count?: boolean | Prisma.ClientCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClientIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3940,13 +5981,19 @@ export type ClientIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Client"
   objects: {
+    assuredPlan: Prisma.$AssuredPlanPayload<ExtArgs> | null
     carnes: Prisma.$CarnePayload<ExtArgs>[]
     cobrador: Prisma.$UserPayload<ExtArgs> | null
     collectionRouteStops: Prisma.$CollectionRouteStopPayload<ExtArgs>[]
     dependents: Prisma.$DependentPayload<ExtArgs>[]
     transactions: Prisma.$FinancialTransactionPayload<ExtArgs>[]
     serviceSales: Prisma.$ServiceSalePayload<ExtArgs>[]
+    sales: Prisma.$SalePayload<ExtArgs>[]
     visitLogs: Prisma.$VisitLogPayload<ExtArgs>[]
+    deathRecords: Prisma.$DeathRecordPayload<ExtArgs>[]
+    events: Prisma.$EventPayload<ExtArgs>[]
+    budgets: Prisma.$BudgetPayload<ExtArgs>[]
+    documents: Prisma.$DocumentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4395,13 +6442,19 @@ readonly fields: ClientFieldRefs;
  */
 export interface Prisma__ClientClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  assuredPlan<T extends Prisma.Client$assuredPlanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$assuredPlanArgs<ExtArgs>>): Prisma.Prisma__AssuredPlanClient<runtime.Types.Result.GetResult<Prisma.$AssuredPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   carnes<T extends Prisma.Client$carnesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$carnesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CarnePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cobrador<T extends Prisma.Client$cobradorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$cobradorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   collectionRouteStops<T extends Prisma.Client$collectionRouteStopsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$collectionRouteStopsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollectionRouteStopPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dependents<T extends Prisma.Client$dependentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$dependentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DependentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.Client$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinancialTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   serviceSales<T extends Prisma.Client$serviceSalesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$serviceSalesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServiceSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sales<T extends Prisma.Client$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   visitLogs<T extends Prisma.Client$visitLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$visitLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VisitLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deathRecords<T extends Prisma.Client$deathRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$deathRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeathRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  events<T extends Prisma.Client$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  budgets<T extends Prisma.Client$budgetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$budgetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  documents<T extends Prisma.Client$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4884,6 +6937,25 @@ export type ClientDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * Client.assuredPlan
+ */
+export type Client$assuredPlanArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssuredPlan
+   */
+  select?: Prisma.AssuredPlanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssuredPlan
+   */
+  omit?: Prisma.AssuredPlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssuredPlanInclude<ExtArgs> | null
+  where?: Prisma.AssuredPlanWhereInput
+}
+
+/**
  * Client.carnes
  */
 export type Client$carnesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5023,6 +7095,30 @@ export type Client$serviceSalesArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
+ * Client.sales
+ */
+export type Client$salesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Sale
+   */
+  select?: Prisma.SaleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Sale
+   */
+  omit?: Prisma.SaleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SaleInclude<ExtArgs> | null
+  where?: Prisma.SaleWhereInput
+  orderBy?: Prisma.SaleOrderByWithRelationInput | Prisma.SaleOrderByWithRelationInput[]
+  cursor?: Prisma.SaleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SaleScalarFieldEnum | Prisma.SaleScalarFieldEnum[]
+}
+
+/**
  * Client.visitLogs
  */
 export type Client$visitLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5044,6 +7140,102 @@ export type Client$visitLogsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.VisitLogScalarFieldEnum | Prisma.VisitLogScalarFieldEnum[]
+}
+
+/**
+ * Client.deathRecords
+ */
+export type Client$deathRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DeathRecord
+   */
+  select?: Prisma.DeathRecordSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DeathRecord
+   */
+  omit?: Prisma.DeathRecordOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeathRecordInclude<ExtArgs> | null
+  where?: Prisma.DeathRecordWhereInput
+  orderBy?: Prisma.DeathRecordOrderByWithRelationInput | Prisma.DeathRecordOrderByWithRelationInput[]
+  cursor?: Prisma.DeathRecordWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeathRecordScalarFieldEnum | Prisma.DeathRecordScalarFieldEnum[]
+}
+
+/**
+ * Client.events
+ */
+export type Client$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Event
+   */
+  select?: Prisma.EventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Event
+   */
+  omit?: Prisma.EventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventInclude<ExtArgs> | null
+  where?: Prisma.EventWhereInput
+  orderBy?: Prisma.EventOrderByWithRelationInput | Prisma.EventOrderByWithRelationInput[]
+  cursor?: Prisma.EventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventScalarFieldEnum | Prisma.EventScalarFieldEnum[]
+}
+
+/**
+ * Client.budgets
+ */
+export type Client$budgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Budget
+   */
+  select?: Prisma.BudgetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Budget
+   */
+  omit?: Prisma.BudgetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BudgetInclude<ExtArgs> | null
+  where?: Prisma.BudgetWhereInput
+  orderBy?: Prisma.BudgetOrderByWithRelationInput | Prisma.BudgetOrderByWithRelationInput[]
+  cursor?: Prisma.BudgetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BudgetScalarFieldEnum | Prisma.BudgetScalarFieldEnum[]
+}
+
+/**
+ * Client.documents
+ */
+export type Client$documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Document
+   */
+  select?: Prisma.DocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Document
+   */
+  omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
+  where?: Prisma.DocumentWhereInput
+  orderBy?: Prisma.DocumentOrderByWithRelationInput | Prisma.DocumentOrderByWithRelationInput[]
+  cursor?: Prisma.DocumentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DocumentScalarFieldEnum | Prisma.DocumentScalarFieldEnum[]
 }
 
 /**

@@ -127,7 +127,132 @@ export type VisitLog = Prisma.VisitLogModel
  */
 export type PaymentReceipt = Prisma.PaymentReceiptModel
 /**
+ * Model CashRegister
+ * 
+ */
+export type CashRegister = Prisma.CashRegisterModel
+/**
+ * Model CashRegisterMovement
+ * 
+ */
+export type CashRegisterMovement = Prisma.CashRegisterMovementModel
+/**
+ * Model Sale
+ * 
+ */
+export type Sale = Prisma.SaleModel
+/**
+ * Model SaleItem
+ * 
+ */
+export type SaleItem = Prisma.SaleItemModel
+/**
  * Model PushSubscription
  * 
  */
 export type PushSubscription = Prisma.PushSubscriptionModel
+/**
+ * Model Vehicle
+ * 
+ */
+export type Vehicle = Prisma.VehicleModel
+/**
+ * Model Driver
+ * 
+ */
+export type Driver = Prisma.DriverModel
+/**
+ * Model FuelRecord
+ * 
+ */
+export type FuelRecord = Prisma.FuelRecordModel
+/**
+ * Model Maintenance
+ * 
+ */
+export type Maintenance = Prisma.MaintenanceModel
+/**
+ * Model Ticket
+ * 
+ */
+export type Ticket = Prisma.TicketModel
+/**
+ * Model VehicleDocument
+ * 
+ */
+export type VehicleDocument = Prisma.VehicleDocumentModel
+/**
+ * Model AssuredPlan
+ * 
+ */
+export type AssuredPlan = Prisma.AssuredPlanModel
+/**
+ * Model PlanCoverage
+ * 
+ */
+export type PlanCoverage = Prisma.PlanCoverageModel
+/**
+ * Model PlanUsage
+ * 
+ */
+export type PlanUsage = Prisma.PlanUsageModel
+/**
+ * Model AssuredPlanHistory
+ * 
+ */
+export type AssuredPlanHistory = Prisma.AssuredPlanHistoryModel
+/**
+ * Model DeathRecord
+ * 
+ */
+export type DeathRecord = Prisma.DeathRecordModel
+/**
+ * Model DeathRecordHistory
+ * 
+ */
+export type DeathRecordHistory = Prisma.DeathRecordHistoryModel
+/**
+ * Model DeathRecordService
+ * 
+ */
+export type DeathRecordService = Prisma.DeathRecordServiceModel
+/**
+ * Model CommissionRule
+ * 
+ */
+export type CommissionRule = Prisma.CommissionRuleModel
+/**
+ * Model Commission
+ * 
+ */
+export type Commission = Prisma.CommissionModel
+/**
+ * Model Resource
+ * 
+ */
+export type Resource = Prisma.ResourceModel
+/**
+ * Model Event
+ * 
+ */
+export type Event = Prisma.EventModel
+/**
+ * Model EventResource
+ * 
+ */
+export type EventResource = Prisma.EventResourceModel
+/**
+ * Model Budget
+ * 
+ */
+export type Budget = Prisma.BudgetModel
+/**
+ * Model BudgetItem
+ * 
+ */
+export type BudgetItem = Prisma.BudgetItemModel
+/**
+ * Model Document
+ * 
+ */
+export type Document = Prisma.DocumentModel

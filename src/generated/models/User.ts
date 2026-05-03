@@ -228,6 +228,16 @@ export type UserWhereInput = {
   paymentReceipts?: Prisma.PaymentReceiptListRelationFilter
   pushSubscriptions?: Prisma.PushSubscriptionListRelationFilter
   visitLogs?: Prisma.VisitLogListRelationFilter
+  openedCashRegisters?: Prisma.CashRegisterListRelationFilter
+  closedCashRegisters?: Prisma.CashRegisterListRelationFilter
+  cashRegisterMovements?: Prisma.CashRegisterMovementListRelationFilter
+  sales?: Prisma.SaleListRelationFilter
+  stockMovements?: Prisma.StockMovementListRelationFilter
+  deathRecords?: Prisma.DeathRecordListRelationFilter
+  commissions?: Prisma.CommissionListRelationFilter
+  budgets?: Prisma.BudgetListRelationFilter
+  documents?: Prisma.DocumentListRelationFilter
+  events?: Prisma.EventListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -247,6 +257,16 @@ export type UserOrderByWithRelationInput = {
   paymentReceipts?: Prisma.PaymentReceiptOrderByRelationAggregateInput
   pushSubscriptions?: Prisma.PushSubscriptionOrderByRelationAggregateInput
   visitLogs?: Prisma.VisitLogOrderByRelationAggregateInput
+  openedCashRegisters?: Prisma.CashRegisterOrderByRelationAggregateInput
+  closedCashRegisters?: Prisma.CashRegisterOrderByRelationAggregateInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementOrderByRelationAggregateInput
+  sales?: Prisma.SaleOrderByRelationAggregateInput
+  stockMovements?: Prisma.StockMovementOrderByRelationAggregateInput
+  deathRecords?: Prisma.DeathRecordOrderByRelationAggregateInput
+  commissions?: Prisma.CommissionOrderByRelationAggregateInput
+  budgets?: Prisma.BudgetOrderByRelationAggregateInput
+  documents?: Prisma.DocumentOrderByRelationAggregateInput
+  events?: Prisma.EventOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -269,6 +289,16 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   paymentReceipts?: Prisma.PaymentReceiptListRelationFilter
   pushSubscriptions?: Prisma.PushSubscriptionListRelationFilter
   visitLogs?: Prisma.VisitLogListRelationFilter
+  openedCashRegisters?: Prisma.CashRegisterListRelationFilter
+  closedCashRegisters?: Prisma.CashRegisterListRelationFilter
+  cashRegisterMovements?: Prisma.CashRegisterMovementListRelationFilter
+  sales?: Prisma.SaleListRelationFilter
+  stockMovements?: Prisma.StockMovementListRelationFilter
+  deathRecords?: Prisma.DeathRecordListRelationFilter
+  commissions?: Prisma.CommissionListRelationFilter
+  budgets?: Prisma.BudgetListRelationFilter
+  documents?: Prisma.DocumentListRelationFilter
+  events?: Prisma.EventListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -320,6 +350,16 @@ export type UserCreateInput = {
   paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
   pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -339,6 +379,16 @@ export type UserUncheckedCreateInput = {
   paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -358,6 +408,16 @@ export type UserUpdateInput = {
   paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -377,6 +437,16 @@ export type UserUncheckedUpdateInput = {
   paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -487,6 +557,22 @@ export type UserUpdateOneWithoutAssignedClientsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedClientsInput, Prisma.UserUpdateWithoutAssignedClientsInput>, Prisma.UserUncheckedUpdateWithoutAssignedClientsInput>
 }
 
+export type UserCreateNestedOneWithoutStockMovementsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStockMovementsInput, Prisma.UserUncheckedCreateWithoutStockMovementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStockMovementsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutStockMovementsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStockMovementsInput, Prisma.UserUncheckedCreateWithoutStockMovementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStockMovementsInput
+  upsert?: Prisma.UserUpsertWithoutStockMovementsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStockMovementsInput, Prisma.UserUpdateWithoutStockMovementsInput>, Prisma.UserUncheckedUpdateWithoutStockMovementsInput>
+}
+
 export type UserCreateNestedOneWithoutPaymentsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentsInput
@@ -545,6 +631,64 @@ export type UserUpdateOneRequiredWithoutPaymentReceiptsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPaymentReceiptsInput, Prisma.UserUpdateWithoutPaymentReceiptsInput>, Prisma.UserUncheckedUpdateWithoutPaymentReceiptsInput>
 }
 
+export type UserCreateNestedOneWithoutOpenedCashRegistersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOpenedCashRegistersInput, Prisma.UserUncheckedCreateWithoutOpenedCashRegistersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOpenedCashRegistersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutClosedCashRegistersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClosedCashRegistersInput, Prisma.UserUncheckedCreateWithoutClosedCashRegistersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClosedCashRegistersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOpenedCashRegistersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOpenedCashRegistersInput, Prisma.UserUncheckedCreateWithoutOpenedCashRegistersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOpenedCashRegistersInput
+  upsert?: Prisma.UserUpsertWithoutOpenedCashRegistersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOpenedCashRegistersInput, Prisma.UserUpdateWithoutOpenedCashRegistersInput>, Prisma.UserUncheckedUpdateWithoutOpenedCashRegistersInput>
+}
+
+export type UserUpdateOneWithoutClosedCashRegistersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClosedCashRegistersInput, Prisma.UserUncheckedCreateWithoutClosedCashRegistersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClosedCashRegistersInput
+  upsert?: Prisma.UserUpsertWithoutClosedCashRegistersInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutClosedCashRegistersInput, Prisma.UserUpdateWithoutClosedCashRegistersInput>, Prisma.UserUncheckedUpdateWithoutClosedCashRegistersInput>
+}
+
+export type UserCreateNestedOneWithoutCashRegisterMovementsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCashRegisterMovementsInput, Prisma.UserUncheckedCreateWithoutCashRegisterMovementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCashRegisterMovementsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCashRegisterMovementsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCashRegisterMovementsInput, Prisma.UserUncheckedCreateWithoutCashRegisterMovementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCashRegisterMovementsInput
+  upsert?: Prisma.UserUpsertWithoutCashRegisterMovementsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCashRegisterMovementsInput, Prisma.UserUpdateWithoutCashRegisterMovementsInput>, Prisma.UserUncheckedUpdateWithoutCashRegisterMovementsInput>
+}
+
+export type UserCreateNestedOneWithoutSalesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSalesInput, Prisma.UserUncheckedCreateWithoutSalesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSalesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSalesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSalesInput, Prisma.UserUncheckedCreateWithoutSalesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSalesInput
+  upsert?: Prisma.UserUpsertWithoutSalesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSalesInput, Prisma.UserUpdateWithoutSalesInput>, Prisma.UserUncheckedUpdateWithoutSalesInput>
+}
+
 export type UserCreateNestedOneWithoutPushSubscriptionsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutPushSubscriptionsInput, Prisma.UserUncheckedCreateWithoutPushSubscriptionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutPushSubscriptionsInput
@@ -557,6 +701,76 @@ export type UserUpdateOneRequiredWithoutPushSubscriptionsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutPushSubscriptionsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPushSubscriptionsInput, Prisma.UserUpdateWithoutPushSubscriptionsInput>, Prisma.UserUncheckedUpdateWithoutPushSubscriptionsInput>
+}
+
+export type UserCreateNestedOneWithoutDeathRecordsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeathRecordsInput, Prisma.UserUncheckedCreateWithoutDeathRecordsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeathRecordsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutDeathRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeathRecordsInput, Prisma.UserUncheckedCreateWithoutDeathRecordsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeathRecordsInput
+  upsert?: Prisma.UserUpsertWithoutDeathRecordsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeathRecordsInput, Prisma.UserUpdateWithoutDeathRecordsInput>, Prisma.UserUncheckedUpdateWithoutDeathRecordsInput>
+}
+
+export type UserCreateNestedOneWithoutCommissionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCommissionsInput, Prisma.UserUncheckedCreateWithoutCommissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCommissionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCommissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCommissionsInput, Prisma.UserUncheckedCreateWithoutCommissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCommissionsInput
+  upsert?: Prisma.UserUpsertWithoutCommissionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommissionsInput, Prisma.UserUpdateWithoutCommissionsInput>, Prisma.UserUncheckedUpdateWithoutCommissionsInput>
+}
+
+export type UserCreateNestedOneWithoutEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEventsInput, Prisma.UserUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEventsInput, Prisma.UserUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEventsInput
+  upsert?: Prisma.UserUpsertWithoutEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEventsInput, Prisma.UserUpdateWithoutEventsInput>, Prisma.UserUncheckedUpdateWithoutEventsInput>
+}
+
+export type UserCreateNestedOneWithoutBudgetsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBudgetsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBudgetsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBudgetsInput
+  upsert?: Prisma.UserUpsertWithoutBudgetsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBudgetsInput, Prisma.UserUpdateWithoutBudgetsInput>, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
+}
+
+export type UserCreateNestedOneWithoutDocumentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDocumentsInput, Prisma.UserUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDocumentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDocumentsInput, Prisma.UserUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDocumentsInput
+  upsert?: Prisma.UserUpsertWithoutDocumentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDocumentsInput, Prisma.UserUpdateWithoutDocumentsInput>, Prisma.UserUncheckedUpdateWithoutDocumentsInput>
 }
 
 export type UserCreateWithoutAssignedClientsInput = {
@@ -575,6 +789,16 @@ export type UserCreateWithoutAssignedClientsInput = {
   paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
   pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAssignedClientsInput = {
@@ -593,6 +817,16 @@ export type UserUncheckedCreateWithoutAssignedClientsInput = {
   paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAssignedClientsInput = {
@@ -627,6 +861,16 @@ export type UserUpdateWithoutAssignedClientsInput = {
   paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignedClientsInput = {
@@ -645,6 +889,144 @@ export type UserUncheckedUpdateWithoutAssignedClientsInput = {
   paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutStockMovementsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutStockMovementsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutStockMovementsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutStockMovementsInput, Prisma.UserUncheckedCreateWithoutStockMovementsInput>
+}
+
+export type UserUpsertWithoutStockMovementsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutStockMovementsInput, Prisma.UserUncheckedUpdateWithoutStockMovementsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutStockMovementsInput, Prisma.UserUncheckedCreateWithoutStockMovementsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutStockMovementsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutStockMovementsInput, Prisma.UserUncheckedUpdateWithoutStockMovementsInput>
+}
+
+export type UserUpdateWithoutStockMovementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutStockMovementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUncheckedUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutPaymentsInput = {
@@ -663,6 +1045,16 @@ export type UserCreateWithoutPaymentsInput = {
   paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
   pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutPaymentsInput = {
@@ -681,6 +1073,16 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -715,6 +1117,16 @@ export type UserUpdateWithoutPaymentsInput = {
   paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentsInput = {
@@ -733,6 +1145,16 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCollectionRoutesInput = {
@@ -751,6 +1173,16 @@ export type UserCreateWithoutCollectionRoutesInput = {
   paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
   pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCollectionRoutesInput = {
@@ -769,6 +1201,16 @@ export type UserUncheckedCreateWithoutCollectionRoutesInput = {
   paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCollectionRoutesInput = {
@@ -803,6 +1245,16 @@ export type UserUpdateWithoutCollectionRoutesInput = {
   paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCollectionRoutesInput = {
@@ -821,6 +1273,16 @@ export type UserUncheckedUpdateWithoutCollectionRoutesInput = {
   paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutVisitLogsInput = {
@@ -839,6 +1301,16 @@ export type UserCreateWithoutVisitLogsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
   paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
   pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutVisitLogsInput = {
@@ -857,6 +1329,16 @@ export type UserUncheckedCreateWithoutVisitLogsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
   paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutVisitLogsInput = {
@@ -891,6 +1373,16 @@ export type UserUpdateWithoutVisitLogsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
   paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVisitLogsInput = {
@@ -909,6 +1401,16 @@ export type UserUncheckedUpdateWithoutVisitLogsInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
   paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutPaymentReceiptsInput = {
@@ -927,6 +1429,16 @@ export type UserCreateWithoutPaymentReceiptsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
   pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutPaymentReceiptsInput = {
@@ -945,6 +1457,16 @@ export type UserUncheckedCreateWithoutPaymentReceiptsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutPaymentReceiptsInput = {
@@ -979,6 +1501,16 @@ export type UserUpdateWithoutPaymentReceiptsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentReceiptsInput = {
@@ -997,6 +1529,528 @@ export type UserUncheckedUpdateWithoutPaymentReceiptsInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
   pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutOpenedCashRegistersInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutOpenedCashRegistersInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutOpenedCashRegistersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOpenedCashRegistersInput, Prisma.UserUncheckedCreateWithoutOpenedCashRegistersInput>
+}
+
+export type UserCreateWithoutClosedCashRegistersInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutClosedCashRegistersInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutClosedCashRegistersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutClosedCashRegistersInput, Prisma.UserUncheckedCreateWithoutClosedCashRegistersInput>
+}
+
+export type UserUpsertWithoutOpenedCashRegistersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOpenedCashRegistersInput, Prisma.UserUncheckedUpdateWithoutOpenedCashRegistersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOpenedCashRegistersInput, Prisma.UserUncheckedCreateWithoutOpenedCashRegistersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOpenedCashRegistersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOpenedCashRegistersInput, Prisma.UserUncheckedUpdateWithoutOpenedCashRegistersInput>
+}
+
+export type UserUpdateWithoutOpenedCashRegistersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOpenedCashRegistersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUncheckedUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUpsertWithoutClosedCashRegistersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutClosedCashRegistersInput, Prisma.UserUncheckedUpdateWithoutClosedCashRegistersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutClosedCashRegistersInput, Prisma.UserUncheckedCreateWithoutClosedCashRegistersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutClosedCashRegistersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutClosedCashRegistersInput, Prisma.UserUncheckedUpdateWithoutClosedCashRegistersInput>
+}
+
+export type UserUpdateWithoutClosedCashRegistersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutClosedCashRegistersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUncheckedUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutCashRegisterMovementsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCashRegisterMovementsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCashRegisterMovementsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCashRegisterMovementsInput, Prisma.UserUncheckedCreateWithoutCashRegisterMovementsInput>
+}
+
+export type UserUpsertWithoutCashRegisterMovementsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCashRegisterMovementsInput, Prisma.UserUncheckedUpdateWithoutCashRegisterMovementsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCashRegisterMovementsInput, Prisma.UserUncheckedCreateWithoutCashRegisterMovementsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCashRegisterMovementsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCashRegisterMovementsInput, Prisma.UserUncheckedUpdateWithoutCashRegisterMovementsInput>
+}
+
+export type UserUpdateWithoutCashRegisterMovementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCashRegisterMovementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUncheckedUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutSalesInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutSalesInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutSalesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSalesInput, Prisma.UserUncheckedCreateWithoutSalesInput>
+}
+
+export type UserUpsertWithoutSalesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSalesInput, Prisma.UserUncheckedUpdateWithoutSalesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSalesInput, Prisma.UserUncheckedCreateWithoutSalesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSalesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSalesInput, Prisma.UserUncheckedUpdateWithoutSalesInput>
+}
+
+export type UserUpdateWithoutSalesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSalesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUncheckedUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutPushSubscriptionsInput = {
@@ -1015,6 +2069,16 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
   paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
   visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
@@ -1033,6 +2097,16 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
   paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
   visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutPushSubscriptionsInput = {
@@ -1067,6 +2141,16 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
   paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
   visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
@@ -1085,6 +2169,656 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
   paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
   visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutDeathRecordsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutDeathRecordsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutDeathRecordsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeathRecordsInput, Prisma.UserUncheckedCreateWithoutDeathRecordsInput>
+}
+
+export type UserUpsertWithoutDeathRecordsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDeathRecordsInput, Prisma.UserUncheckedUpdateWithoutDeathRecordsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeathRecordsInput, Prisma.UserUncheckedCreateWithoutDeathRecordsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDeathRecordsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDeathRecordsInput, Prisma.UserUncheckedUpdateWithoutDeathRecordsInput>
+}
+
+export type UserUpdateWithoutDeathRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDeathRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUncheckedUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutCommissionsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCommissionsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCommissionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCommissionsInput, Prisma.UserUncheckedCreateWithoutCommissionsInput>
+}
+
+export type UserUpsertWithoutCommissionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCommissionsInput, Prisma.UserUncheckedUpdateWithoutCommissionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCommissionsInput, Prisma.UserUncheckedCreateWithoutCommissionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCommissionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCommissionsInput, Prisma.UserUncheckedUpdateWithoutCommissionsInput>
+}
+
+export type UserUpdateWithoutCommissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCommissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUncheckedUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutEventsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+}
+
+export type UserUncheckedCreateWithoutEventsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+}
+
+export type UserCreateOrConnectWithoutEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEventsInput, Prisma.UserUncheckedCreateWithoutEventsInput>
+}
+
+export type UserUpsertWithoutEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEventsInput, Prisma.UserUncheckedUpdateWithoutEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEventsInput, Prisma.UserUncheckedCreateWithoutEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEventsInput, Prisma.UserUncheckedUpdateWithoutEventsInput>
+}
+
+export type UserUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUncheckedUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+}
+
+export type UserCreateWithoutBudgetsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutBudgetsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutBudgetsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
+}
+
+export type UserUpsertWithoutBudgetsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBudgetsInput, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBudgetsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBudgetsInput, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
+}
+
+export type UserUpdateWithoutBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUncheckedUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutDocumentsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutCreatedByInput
+  events?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutDocumentsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pin?: string | null
+  zone?: string | null
+  assignedClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCobradorInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedCreateNestedManyWithoutCollectorInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutReceivedByInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedCreateNestedManyWithoutUploaderInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  visitLogs?: Prisma.VisitLogUncheckedCreateNestedManyWithoutCollectorInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutOpenedByInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedCreateNestedManyWithoutClosedByInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutCreatedByInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCreatedByInput
+  deathRecords?: Prisma.DeathRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  commissions?: Prisma.CommissionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutCreatedByInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutDocumentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDocumentsInput, Prisma.UserUncheckedCreateWithoutDocumentsInput>
+}
+
+export type UserUpsertWithoutDocumentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDocumentsInput, Prisma.UserUncheckedUpdateWithoutDocumentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDocumentsInput, Prisma.UserUncheckedCreateWithoutDocumentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDocumentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDocumentsInput, Prisma.UserUncheckedUpdateWithoutDocumentsInput>
+}
+
+export type UserUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutCreatedByNestedInput
+  events?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedClients?: Prisma.ClientUncheckedUpdateManyWithoutCobradorNestedInput
+  collectionRoutes?: Prisma.CollectionRouteUncheckedUpdateManyWithoutCollectorNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  paymentReceipts?: Prisma.PaymentReceiptUncheckedUpdateManyWithoutUploaderNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  visitLogs?: Prisma.VisitLogUncheckedUpdateManyWithoutCollectorNestedInput
+  openedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutOpenedByNestedInput
+  closedCashRegisters?: Prisma.CashRegisterUncheckedUpdateManyWithoutClosedByNestedInput
+  cashRegisterMovements?: Prisma.CashRegisterMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutCreatedByNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCreatedByNestedInput
+  deathRecords?: Prisma.DeathRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  commissions?: Prisma.CommissionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutCreatedByNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 
@@ -1099,6 +2833,16 @@ export type UserCountOutputType = {
   paymentReceipts: number
   pushSubscriptions: number
   visitLogs: number
+  openedCashRegisters: number
+  closedCashRegisters: number
+  cashRegisterMovements: number
+  sales: number
+  stockMovements: number
+  deathRecords: number
+  commissions: number
+  budgets: number
+  documents: number
+  events: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1108,6 +2852,16 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   paymentReceipts?: boolean | UserCountOutputTypeCountPaymentReceiptsArgs
   pushSubscriptions?: boolean | UserCountOutputTypeCountPushSubscriptionsArgs
   visitLogs?: boolean | UserCountOutputTypeCountVisitLogsArgs
+  openedCashRegisters?: boolean | UserCountOutputTypeCountOpenedCashRegistersArgs
+  closedCashRegisters?: boolean | UserCountOutputTypeCountClosedCashRegistersArgs
+  cashRegisterMovements?: boolean | UserCountOutputTypeCountCashRegisterMovementsArgs
+  sales?: boolean | UserCountOutputTypeCountSalesArgs
+  stockMovements?: boolean | UserCountOutputTypeCountStockMovementsArgs
+  deathRecords?: boolean | UserCountOutputTypeCountDeathRecordsArgs
+  commissions?: boolean | UserCountOutputTypeCountCommissionsArgs
+  budgets?: boolean | UserCountOutputTypeCountBudgetsArgs
+  documents?: boolean | UserCountOutputTypeCountDocumentsArgs
+  events?: boolean | UserCountOutputTypeCountEventsArgs
 }
 
 /**
@@ -1162,6 +2916,76 @@ export type UserCountOutputTypeCountVisitLogsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.VisitLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOpenedCashRegistersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CashRegisterWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountClosedCashRegistersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CashRegisterWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCashRegisterMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CashRegisterMovementWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSalesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SaleWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountStockMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockMovementWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDeathRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeathRecordWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCommissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommissionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBudgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BudgetWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DocumentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1180,6 +3004,16 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   paymentReceipts?: boolean | Prisma.User$paymentReceiptsArgs<ExtArgs>
   pushSubscriptions?: boolean | Prisma.User$pushSubscriptionsArgs<ExtArgs>
   visitLogs?: boolean | Prisma.User$visitLogsArgs<ExtArgs>
+  openedCashRegisters?: boolean | Prisma.User$openedCashRegistersArgs<ExtArgs>
+  closedCashRegisters?: boolean | Prisma.User$closedCashRegistersArgs<ExtArgs>
+  cashRegisterMovements?: boolean | Prisma.User$cashRegisterMovementsArgs<ExtArgs>
+  sales?: boolean | Prisma.User$salesArgs<ExtArgs>
+  stockMovements?: boolean | Prisma.User$stockMovementsArgs<ExtArgs>
+  deathRecords?: boolean | Prisma.User$deathRecordsArgs<ExtArgs>
+  commissions?: boolean | Prisma.User$commissionsArgs<ExtArgs>
+  budgets?: boolean | Prisma.User$budgetsArgs<ExtArgs>
+  documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
+  events?: boolean | Prisma.User$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1230,6 +3064,16 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   paymentReceipts?: boolean | Prisma.User$paymentReceiptsArgs<ExtArgs>
   pushSubscriptions?: boolean | Prisma.User$pushSubscriptionsArgs<ExtArgs>
   visitLogs?: boolean | Prisma.User$visitLogsArgs<ExtArgs>
+  openedCashRegisters?: boolean | Prisma.User$openedCashRegistersArgs<ExtArgs>
+  closedCashRegisters?: boolean | Prisma.User$closedCashRegistersArgs<ExtArgs>
+  cashRegisterMovements?: boolean | Prisma.User$cashRegisterMovementsArgs<ExtArgs>
+  sales?: boolean | Prisma.User$salesArgs<ExtArgs>
+  stockMovements?: boolean | Prisma.User$stockMovementsArgs<ExtArgs>
+  deathRecords?: boolean | Prisma.User$deathRecordsArgs<ExtArgs>
+  commissions?: boolean | Prisma.User$commissionsArgs<ExtArgs>
+  budgets?: boolean | Prisma.User$budgetsArgs<ExtArgs>
+  documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
+  events?: boolean | Prisma.User$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1244,6 +3088,16 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     paymentReceipts: Prisma.$PaymentReceiptPayload<ExtArgs>[]
     pushSubscriptions: Prisma.$PushSubscriptionPayload<ExtArgs>[]
     visitLogs: Prisma.$VisitLogPayload<ExtArgs>[]
+    openedCashRegisters: Prisma.$CashRegisterPayload<ExtArgs>[]
+    closedCashRegisters: Prisma.$CashRegisterPayload<ExtArgs>[]
+    cashRegisterMovements: Prisma.$CashRegisterMovementPayload<ExtArgs>[]
+    sales: Prisma.$SalePayload<ExtArgs>[]
+    stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
+    deathRecords: Prisma.$DeathRecordPayload<ExtArgs>[]
+    commissions: Prisma.$CommissionPayload<ExtArgs>[]
+    budgets: Prisma.$BudgetPayload<ExtArgs>[]
+    documents: Prisma.$DocumentPayload<ExtArgs>[]
+    events: Prisma.$EventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1656,6 +3510,16 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   paymentReceipts<T extends Prisma.User$paymentReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pushSubscriptions<T extends Prisma.User$pushSubscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pushSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   visitLogs<T extends Prisma.User$visitLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$visitLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VisitLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  openedCashRegisters<T extends Prisma.User$openedCashRegistersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$openedCashRegistersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CashRegisterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  closedCashRegisters<T extends Prisma.User$closedCashRegistersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$closedCashRegistersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CashRegisterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cashRegisterMovements<T extends Prisma.User$cashRegisterMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cashRegisterMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CashRegisterMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sales<T extends Prisma.User$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stockMovements<T extends Prisma.User$stockMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deathRecords<T extends Prisma.User$deathRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deathRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeathRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  commissions<T extends Prisma.User$commissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  budgets<T extends Prisma.User$budgetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$budgetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  documents<T extends Prisma.User$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  events<T extends Prisma.User$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2229,6 +4093,246 @@ export type User$visitLogsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.VisitLogScalarFieldEnum | Prisma.VisitLogScalarFieldEnum[]
+}
+
+/**
+ * User.openedCashRegisters
+ */
+export type User$openedCashRegistersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CashRegister
+   */
+  select?: Prisma.CashRegisterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CashRegister
+   */
+  omit?: Prisma.CashRegisterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CashRegisterInclude<ExtArgs> | null
+  where?: Prisma.CashRegisterWhereInput
+  orderBy?: Prisma.CashRegisterOrderByWithRelationInput | Prisma.CashRegisterOrderByWithRelationInput[]
+  cursor?: Prisma.CashRegisterWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CashRegisterScalarFieldEnum | Prisma.CashRegisterScalarFieldEnum[]
+}
+
+/**
+ * User.closedCashRegisters
+ */
+export type User$closedCashRegistersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CashRegister
+   */
+  select?: Prisma.CashRegisterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CashRegister
+   */
+  omit?: Prisma.CashRegisterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CashRegisterInclude<ExtArgs> | null
+  where?: Prisma.CashRegisterWhereInput
+  orderBy?: Prisma.CashRegisterOrderByWithRelationInput | Prisma.CashRegisterOrderByWithRelationInput[]
+  cursor?: Prisma.CashRegisterWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CashRegisterScalarFieldEnum | Prisma.CashRegisterScalarFieldEnum[]
+}
+
+/**
+ * User.cashRegisterMovements
+ */
+export type User$cashRegisterMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CashRegisterMovement
+   */
+  select?: Prisma.CashRegisterMovementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CashRegisterMovement
+   */
+  omit?: Prisma.CashRegisterMovementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CashRegisterMovementInclude<ExtArgs> | null
+  where?: Prisma.CashRegisterMovementWhereInput
+  orderBy?: Prisma.CashRegisterMovementOrderByWithRelationInput | Prisma.CashRegisterMovementOrderByWithRelationInput[]
+  cursor?: Prisma.CashRegisterMovementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CashRegisterMovementScalarFieldEnum | Prisma.CashRegisterMovementScalarFieldEnum[]
+}
+
+/**
+ * User.sales
+ */
+export type User$salesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Sale
+   */
+  select?: Prisma.SaleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Sale
+   */
+  omit?: Prisma.SaleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SaleInclude<ExtArgs> | null
+  where?: Prisma.SaleWhereInput
+  orderBy?: Prisma.SaleOrderByWithRelationInput | Prisma.SaleOrderByWithRelationInput[]
+  cursor?: Prisma.SaleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SaleScalarFieldEnum | Prisma.SaleScalarFieldEnum[]
+}
+
+/**
+ * User.stockMovements
+ */
+export type User$stockMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockMovement
+   */
+  select?: Prisma.StockMovementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockMovement
+   */
+  omit?: Prisma.StockMovementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockMovementInclude<ExtArgs> | null
+  where?: Prisma.StockMovementWhereInput
+  orderBy?: Prisma.StockMovementOrderByWithRelationInput | Prisma.StockMovementOrderByWithRelationInput[]
+  cursor?: Prisma.StockMovementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockMovementScalarFieldEnum | Prisma.StockMovementScalarFieldEnum[]
+}
+
+/**
+ * User.deathRecords
+ */
+export type User$deathRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DeathRecord
+   */
+  select?: Prisma.DeathRecordSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DeathRecord
+   */
+  omit?: Prisma.DeathRecordOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeathRecordInclude<ExtArgs> | null
+  where?: Prisma.DeathRecordWhereInput
+  orderBy?: Prisma.DeathRecordOrderByWithRelationInput | Prisma.DeathRecordOrderByWithRelationInput[]
+  cursor?: Prisma.DeathRecordWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeathRecordScalarFieldEnum | Prisma.DeathRecordScalarFieldEnum[]
+}
+
+/**
+ * User.commissions
+ */
+export type User$commissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Commission
+   */
+  select?: Prisma.CommissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Commission
+   */
+  omit?: Prisma.CommissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommissionInclude<ExtArgs> | null
+  where?: Prisma.CommissionWhereInput
+  orderBy?: Prisma.CommissionOrderByWithRelationInput | Prisma.CommissionOrderByWithRelationInput[]
+  cursor?: Prisma.CommissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommissionScalarFieldEnum | Prisma.CommissionScalarFieldEnum[]
+}
+
+/**
+ * User.budgets
+ */
+export type User$budgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Budget
+   */
+  select?: Prisma.BudgetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Budget
+   */
+  omit?: Prisma.BudgetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BudgetInclude<ExtArgs> | null
+  where?: Prisma.BudgetWhereInput
+  orderBy?: Prisma.BudgetOrderByWithRelationInput | Prisma.BudgetOrderByWithRelationInput[]
+  cursor?: Prisma.BudgetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BudgetScalarFieldEnum | Prisma.BudgetScalarFieldEnum[]
+}
+
+/**
+ * User.documents
+ */
+export type User$documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Document
+   */
+  select?: Prisma.DocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Document
+   */
+  omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
+  where?: Prisma.DocumentWhereInput
+  orderBy?: Prisma.DocumentOrderByWithRelationInput | Prisma.DocumentOrderByWithRelationInput[]
+  cursor?: Prisma.DocumentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DocumentScalarFieldEnum | Prisma.DocumentScalarFieldEnum[]
+}
+
+/**
+ * User.events
+ */
+export type User$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Event
+   */
+  select?: Prisma.EventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Event
+   */
+  omit?: Prisma.EventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventInclude<ExtArgs> | null
+  where?: Prisma.EventWhereInput
+  orderBy?: Prisma.EventOrderByWithRelationInput | Prisma.EventOrderByWithRelationInput[]
+  cursor?: Prisma.EventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventScalarFieldEnum | Prisma.EventScalarFieldEnum[]
 }
 
 /**

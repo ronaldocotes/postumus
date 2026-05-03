@@ -127,3 +127,257 @@ export const StockMovementType = {
 } as const
 
 export type StockMovementType = (typeof StockMovementType)[keyof typeof StockMovementType]
+
+
+export const CashRegisterStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED'
+} as const
+
+export type CashRegisterStatus = (typeof CashRegisterStatus)[keyof typeof CashRegisterStatus]
+
+
+export const CashRegisterMovementType = {
+  SANGRIA: 'SANGRIA',
+  REFORCO: 'REFORCO'
+} as const
+
+export type CashRegisterMovementType = (typeof CashRegisterMovementType)[keyof typeof CashRegisterMovementType]
+
+
+export const VehicleType = {
+  CARRO: 'CARRO',
+  MOTO: 'MOTO',
+  CAMINHAO: 'CAMINHAO',
+  VAN: 'VAN',
+  ONIBUS: 'ONIBUS',
+  UTILITARIO: 'UTILITARIO',
+  OUTRO: 'OUTRO'
+} as const
+
+export type VehicleType = (typeof VehicleType)[keyof typeof VehicleType]
+
+
+export const VehicleStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  MAINTENANCE: 'MAINTENANCE',
+  SOLD: 'SOLD',
+  SCRAPPED: 'SCRAPPED'
+} as const
+
+export type VehicleStatus = (typeof VehicleStatus)[keyof typeof VehicleStatus]
+
+
+export const DriverStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  SUSPENDED: 'SUSPENDED'
+} as const
+
+export type DriverStatus = (typeof DriverStatus)[keyof typeof DriverStatus]
+
+
+export const FuelType = {
+  GASOLINA: 'GASOLINA',
+  ETANOL: 'ETANOL',
+  DIESEL: 'DIESEL',
+  GNV: 'GNV',
+  FLEX: 'FLEX',
+  ELETRICO: 'ELETRICO'
+} as const
+
+export type FuelType = (typeof FuelType)[keyof typeof FuelType]
+
+
+export const MaintenanceType = {
+  PREVENTIVA: 'PREVENTIVA',
+  CORRETIVA: 'CORRETIVA',
+  TROCA_PECA: 'TROCA_PECA',
+  REVISAO: 'REVISAO',
+  OUTRO: 'OUTRO'
+} as const
+
+export type MaintenanceType = (typeof MaintenanceType)[keyof typeof MaintenanceType]
+
+
+export const MaintenanceStatus = {
+  SCHEDULED: 'SCHEDULED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type MaintenanceStatus = (typeof MaintenanceStatus)[keyof typeof MaintenanceStatus]
+
+
+export const TicketStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  APPEALED: 'APPEALED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type TicketStatus = (typeof TicketStatus)[keyof typeof TicketStatus]
+
+
+export const DocumentType = {
+  IPVA: 'IPVA',
+  LICENCIAMENTO: 'LICENCIAMENTO',
+  SEGURO: 'SEGURO',
+  DPVAT: 'DPVAT',
+  CRLV: 'CRLV',
+  OUTRO: 'OUTRO'
+} as const
+
+export type DocumentType = (typeof DocumentType)[keyof typeof DocumentType]
+
+
+export const DocumentStatus = {
+  VALID: 'VALID',
+  EXPIRING: 'EXPIRING',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type DocumentStatus = (typeof DocumentStatus)[keyof typeof DocumentStatus]
+
+
+export const AssuredPlanType = {
+  INDIVIDUAL: 'INDIVIDUAL',
+  FAMILIAR: 'FAMILIAR',
+  PET: 'PET'
+} as const
+
+export type AssuredPlanType = (typeof AssuredPlanType)[keyof typeof AssuredPlanType]
+
+
+export const AssuredPlanStatus = {
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED',
+  SUSPENDED: 'SUSPENDED',
+  RENOVACAO_PENDENTE: 'RENOVACAO_PENDENTE'
+} as const
+
+export type AssuredPlanStatus = (typeof AssuredPlanStatus)[keyof typeof AssuredPlanStatus]
+
+
+export const CoverageItemType = {
+  URNA: 'URNA',
+  CAIXAO: 'CAIXAO',
+  CAIXAO_PREMIUM: 'CAIXAO_PREMIUM',
+  SERVICO: 'SERVICO',
+  TRANSPORTE: 'TRANSPORTE',
+  FLORAL: 'FLORAL',
+  VELORIO: 'VELORIO',
+  CREMACAO: 'CREMACAO',
+  OUTRO: 'OUTRO'
+} as const
+
+export type CoverageItemType = (typeof CoverageItemType)[keyof typeof CoverageItemType]
+
+
+export const DeathStatus = {
+  LIBERACAO_PENDENTE: 'LIBERACAO_PENDENTE',
+  EM_TRASLADO: 'EM_TRASLADO',
+  VELORIO: 'VELORIO',
+  SEPULTAMENTO: 'SEPULTAMENTO',
+  CREMACAO: 'CREMACAO',
+  CONCLUIDO: 'CONCLUIDO',
+  CANCELADO: 'CANCELADO'
+} as const
+
+export type DeathStatus = (typeof DeathStatus)[keyof typeof DeathStatus]
+
+
+export const DeathPlace = {
+  HOSPITAL: 'HOSPITAL',
+  RESIDENCIA: 'RESIDENCIA',
+  ACIDENTE: 'ACIDENTE',
+  OUTRO: 'OUTRO'
+} as const
+
+export type DeathPlace = (typeof DeathPlace)[keyof typeof DeathPlace]
+
+
+export const CommissionTargetType = {
+  VENDEDOR: 'VENDEDOR',
+  COBRADOR: 'COBRADOR',
+  GERENTE: 'GERENTE',
+  ATENDENTE: 'ATENDENTE'
+} as const
+
+export type CommissionTargetType = (typeof CommissionTargetType)[keyof typeof CommissionTargetType]
+
+
+export const CommissionBasis = {
+  VENDA_TOTAL: 'VENDA_TOTAL',
+  VENDA_PRODUTO: 'VENDA_PRODUTO',
+  VENDA_SERVICO: 'VENDA_SERVICO',
+  RECEBIMENTO: 'RECEBIMENTO',
+  PLANO_NOVO: 'PLANO_NOVO',
+  UPGRADE_PLANO: 'UPGRADE_PLANO'
+} as const
+
+export type CommissionBasis = (typeof CommissionBasis)[keyof typeof CommissionBasis]
+
+
+export const CommissionStatus = {
+  PENDENTE: 'PENDENTE',
+  APROVADA: 'APROVADA',
+  PAGA: 'PAGA',
+  CANCELADA: 'CANCELADA'
+} as const
+
+export type CommissionStatus = (typeof CommissionStatus)[keyof typeof CommissionStatus]
+
+
+export const EventType = {
+  VELORIO: 'VELORIO',
+  SEPULTAMENTO: 'SEPULTAMENTO',
+  CREMACAO: 'CREMACAO',
+  REUNIAO: 'REUNIAO',
+  VISITA: 'VISITA',
+  MANUTENCAO: 'MANUTENCAO',
+  COBRANCA: 'COBRANCA',
+  OUTRO: 'OUTRO'
+} as const
+
+export type EventType = (typeof EventType)[keyof typeof EventType]
+
+
+export const EventStatus = {
+  AGENDADO: 'AGENDADO',
+  EM_ANDAMENTO: 'EM_ANDAMENTO',
+  CONCLUIDO: 'CONCLUIDO',
+  CANCELADO: 'CANCELADO'
+} as const
+
+export type EventStatus = (typeof EventStatus)[keyof typeof EventStatus]
+
+
+export const BudgetStatus = {
+  PENDENTE: 'PENDENTE',
+  APROVADO: 'APROVADO',
+  REJEITADO: 'REJEITADO',
+  EXPIRADO: 'EXPIRADO',
+  CONVERTIDO: 'CONVERTIDO'
+} as const
+
+export type BudgetStatus = (typeof BudgetStatus)[keyof typeof BudgetStatus]
+
+
+export const DocumentCategory = {
+  CONTRATO: 'CONTRATO',
+  RG: 'RG',
+  CPF: 'CPF',
+  CERTIDAO: 'CERTIDAO',
+  COMPROVANTE_RESIDENCIA: 'COMPROVANTE_RESIDENCIA',
+  COMPROVANTE_PAGAMENTO: 'COMPROVANTE_PAGAMENTO',
+  CERTIDAO_OBITO: 'CERTIDAO_OBITO',
+  LAUDO_MEDICO: 'LAUDO_MEDICO',
+  AUTORIZACAO: 'AUTORIZACAO',
+  OUTRO: 'OUTRO'
+} as const
+
+export type DocumentCategory = (typeof DocumentCategory)[keyof typeof DocumentCategory]

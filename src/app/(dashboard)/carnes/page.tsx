@@ -186,106 +186,21 @@ export default function CarnesPage() {
   async function handlePrint(carneId: string) {
     const toastId = toastLoading("Gerando carnê para impressão...");
     try {
-      const { default: jsPDF } = await import("jspdf");
-      
-      const carne = showDetail;
-      if (!carne) throw new Error("Carnê não carregado");
-
-      const doc = new jsPDF();
-      const client = carne.client;
-      const installments = carne.installments;
-      
-      const fmtMoney = (v: number) => "R$ " + v.toFixed(2).replace(".", ",");
-      const fmtDate = (d: string) => new Intl.DateTimeFormat("pt-BR").format(new Date(d));
-
-      // Header
-      doc.setFontSize(16);
-      doc.setFont("helvetica", "bold");
-      doc.text("CARNÊ DE PAGAMENTO", 105, 20, { align: "center" });
-      
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      doc.text("Posthumous - Gestão de Serviços Póstumos", 105, 28, { align: "center" });
-      
-      // Linha
-      doc.setDrawColor(200);
-      doc.line(20, 35, 190, 35);
-
-      // Info do cliente
-      doc.setFontSize(10);
-      let y = 45;
-      doc.setFont("helvetica", "bold");
-      doc.text("Cliente:", 20, y);
-      doc.setFont("helvetica", "normal");
-      doc.text(client.name, 50, y);
-      
-      y += 7;
-      doc.setFont("helvetica", "bold");
-      doc.text("Ano:", 20, y);
-      doc.setFont("helvetica", "normal");
-      doc.text(`${carne.year} | ${installments.length}x de ${fmtMoney(installments[0]?.valor || 0)}`, 50, y);
-      
-      y += 7;
-      doc.setFont("helvetica", "bold");
-      doc.text("Total:", 20, y);
-      doc.setFont("helvetica", "normal");
-      doc.text(fmtMoney(carne.totalValue), 50, y);
-      
-      // Tabela
-      y += 15;
-      doc.setDrawColor(200);
-      doc.line(20, y, 190, y);
-      y += 7;
-      
-      // Header tabela
-      doc.setFontSize(8);
-      doc.setFont("helvetica", "bold");
-      doc.text("PARCELA", 20, y);
-      doc.text("VENCIMENTO", 55, y);
-      doc.text("VALOR", 100, y);
-      doc.text("STATUS", 145, y);
-      y += 3;
-      doc.line(20, y, 190, y);
-      y += 7;
-
-      // Parcelas
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(9);
-      
-      for (const inst of installments) {
-        if (y > 275) {
-          doc.addPage();
-          y = 20;
-        }
-        
-        const status = inst.payment ? "PAGO" : "PENDENTE";
-        
-        doc.text(`${String(inst.numero).padStart(2, "0")}/${installments.length}`, 20, y);
-        doc.text(fmtDate(inst.dueDate), 55, y);
-        doc.setFont("helvetica", "bold");
-        doc.text(fmtMoney(inst.valor), 100, y);
-        doc.setFont("helvetica", "normal");
-        
-        if (status === "PAGO") {
-          doc.setTextColor(22, 163, 74); // green
-        } else {
-          doc.setTextColor(217, 119, 6); // amber
-        }
-        doc.text(status, 145, y);
-        doc.setTextColor(0);
-        
-        y += 8;
-      }
-
-      // Footer
-      doc.setFontSize(7);
-      doc.setTextColor(150);
-      doc.text(
-        `Gerado em ${new Date().toLocaleDateString("pt-BR")} - Posthumous`,
-        105, 290, { align: "center" }
-      );
-
-      doc.save(`carne_${client.name.replace(/\s+/g, "_")}_${carne.year}.pdf`);
+      const params = new URLSearchParams({
+        paleta: selectedPaleta,
+        pendentesOnly: String(printOptions.pendentesOnly),
+      });
+      const res = await fetch(`/api/carnes/${carneId}/pdf?${params}`);
+      if (!res.ok) throw new Error("Erro ao gerar PDF");
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `carne_${showDetail?.client.name.replace(/\s+/g, "_")}_${showDetail?.year}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
       update(toastId, "Carnê gerado com sucesso! ✅", "success");
     } catch (err: any) {
       console.error("Erro ao gerar PDF:", err);

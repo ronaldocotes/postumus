@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Search, Edit, Trash2, X, Eye, Users, MapPin, FileText, CreditCard } from "lucide-react";
+import { Plus, Search, Edit, Trash2, X, Eye, Users, MapPin, FileText, CreditCard, IdCard, Shield } from "lucide-react";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useToast } from "@/components/ui/Toast";
 import { estados, cidadesPorEstado, bairrosPorCidade, estadosCivis, getCidades, getBairros } from "@/lib/location-data";
 import PaymentModal from "@/components/carnes/PaymentModal";
+import ClientCard from "@/components/clientes/ClientCard";
 
 interface Client {
   id: string;
@@ -59,6 +60,10 @@ export default function ClientesPage() {
   const [selectedInstallment, setSelectedInstallment] = useState<any>(null);
   const [selectedCarne, setSelectedCarne] = useState<any>(null);
   const [pixData, setPixData] = useState<any>(null);
+  
+  // Client card state
+  const [showCard, setShowCard] = useState(false);
+  const [cardClient, setCardClient] = useState<any>(null);
   
   // Geolocalização
   const { cidade: geoCidade, estado: geoEstado, loading: geoLoading } = useGeolocation();
@@ -227,9 +232,13 @@ export default function ClientesPage() {
   }
 
   async function handleDetail(id: string) {
-    const res = await fetch(`/api/clientes/${id}`);
-    const data = await res.json();
-    setShowDetail(data);
+    const [clientRes, planRes] = await Promise.all([
+      fetch(`/api/clientes/${id}`),
+      fetch(`/api/planos/cliente/${id}`),
+    ]);
+    const data = await clientRes.json();
+    const planData = planRes.ok ? await planRes.json() : null;
+    setShowDetail({ ...data, assuredPlan: planData });
     // Load PIX data for payment modal
     if (!pixData) {
       try {
@@ -243,6 +252,13 @@ export default function ClientesPage() {
         }
       } catch {}
     }
+  }
+
+  async function handleShowCard(id: string) {
+    const res = await fetch(`/api/clientes/${id}`);
+    const data = await res.json();
+    setCardClient(data);
+    setShowCard(true);
   }
 
   async function handlePayFromClient(clientData: any) {
@@ -401,7 +417,16 @@ export default function ClientesPage() {
             {clients.map((c) => (
               <tr key={c.id} className="hover:bg-[#d4e4f7]">
                 <td className="px-4 py-3 text-sm text-gray-600">{c.code || "-"}</td>
-                <td className="px-4 py-3 text-sm font-medium text-gray-900">{c.name}</td>
+                <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                  <span className="flex items-center gap-2">
+                    {c.name}
+                    {c.hasActiveCarne && (
+                      <span title="Possui carnê ativo" className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-700">
+                        <FileText size={10} /> Carnê
+                      </span>
+                    )}
+                  </span>
+                </td>
                 <td className="px-4 py-3 text-sm text-gray-600">{c.cellphone || c.phone || "-"}</td>
                 <td className="px-4 py-3 text-sm text-gray-600">{c.neighborhood || "-"}</td>
                 <td className="px-4 py-3 text-sm text-gray-600">
@@ -430,6 +455,7 @@ export default function ClientesPage() {
                 </td>
                 <td className="px-4 py-3 text-right space-x-1">
                   <button onClick={() => handleDetail(c.id)} className="text-emerald-600 hover:text-emerald-800" title="Visualizar"><Eye size={16} /></button>
+                  <button onClick={() => handleShowCard(c.id)} className="text-violet-600 hover:text-violet-800" title="Carteirinha"><IdCard size={16} /></button>
                   {c.hasActiveCarne && (
                     <a href="/carnes" className="text-blue-600 hover:text-blue-800 inline-block" title="Ver Carnê"><FileText size={16} /></a>
                   )}
@@ -485,6 +511,50 @@ export default function ClientesPage() {
                   {showDetail.isAssured ? "✓ Sim" : "Não"}
                 </span>
               </div>
+
+              {/* Plano vinculado */}
+              {showDetail.assuredPlan && (
+                <div className="col-span-2 bg-blue-50 border border-blue-200 rounded-lg p-3 mt-2">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-bold text-blue-800 flex items-center gap-2">
+                      <Shield size={16} /> Plano Funerário
+                    </h4>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                      showDetail.assuredPlan.status === 'ACTIVE' ? 'bg-green-100 text-green-700' :
+                      showDetail.assuredPlan.status === 'EXPIRED' ? 'bg-gray-100 text-gray-600' :
+                      showDetail.assuredPlan.status === 'CANCELLED' ? 'bg-red-100 text-red-700' :
+                      'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {showDetail.assuredPlan.status === 'ACTIVE' ? 'Ativo' :
+                       showDetail.assuredPlan.status === 'EXPIRED' ? 'Expirado' :
+                       showDetail.assuredPlan.status === 'CANCELLED' ? 'Cancelado' :
+                       showDetail.assuredPlan.status === 'SUSPENDED' ? 'Suspenso' : 'Renovação Pendente'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div><span className="text-blue-600 font-medium">Tipo:</span> {showDetail.assuredPlan.type === 'INDIVIDUAL' ? 'Individual' : showDetail.assuredPlan.type === 'FAMILIAR' ? 'Familiar' : 'Pet'}</div>
+                    <div><span className="text-blue-600 font-medium">Valor Mensal:</span> {parseFloat(showDetail.assuredPlan.monthlyValue).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
+                    <div><span className="text-blue-600 font-medium">Início:</span> {new Date(showDetail.assuredPlan.startDate).toLocaleDateString('pt-BR')}</div>
+                    {showDetail.assuredPlan.endDate && <div><span className="text-blue-600 font-medium">Término:</span> {new Date(showDetail.assuredPlan.endDate).toLocaleDateString('pt-BR')}</div>}
+                    <div><span className="text-blue-600 font-medium">Dependentes:</span> {showDetail.assuredPlan.maxDependents}</div>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {showDetail.assuredPlan.coverageUrn && <span className="px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">Urna</span>}
+                    {showDetail.assuredPlan.coverageCoffin && <span className="px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">Caixão</span>}
+                    {showDetail.assuredPlan.coverageService && <span className="px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">Serviço</span>}
+                    {showDetail.assuredPlan.coverageTransport && <span className="px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">Transporte</span>}
+                  </div>
+                  <div className="mt-2 flex gap-2">
+                    <a
+                      href={`/planos`}
+                      className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                      Ver todos os planos →
+                    </a>
+                  </div>
+                </div>
+              )}
+
               <div><span className="text-[#4a6fa5] font-medium">Pai:</span> <span className="text-gray-900">{showDetail.fatherName || "-"}</span></div>
               <div><span className="text-[#4a6fa5] font-medium">Mãe:</span> <span className="text-gray-900">{showDetail.motherName || "-"}</span></div>
             </div>
@@ -872,6 +942,13 @@ export default function ClientesPage() {
             </form>
           </div>
         </div>
+      )}
+      {/* Client Card Modal */}
+      {showCard && cardClient && (
+        <ClientCard
+          client={cardClient}
+          onClose={() => { setShowCard(false); setCardClient(null); }}
+        />
       )}
     </div>
   );

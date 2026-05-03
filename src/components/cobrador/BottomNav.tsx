@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 const tabs = [
   {
-    href: "/cobrador",
+    href: "/mobile/cobrador",
     label: "Hoje",
     icon: (active: boolean) => (
       <svg
@@ -26,7 +26,7 @@ const tabs = [
     ),
   },
   {
-    href: "/cobrador/clientes",
+    href: "/mobile/cobrador/clientes",
     label: "Clientes",
     icon: (active: boolean) => (
       <svg
@@ -47,7 +47,7 @@ const tabs = [
     ),
   },
   {
-    href: "/cobrador/mapa",
+    href: "/mobile/cobrador/mapa",
     label: "Mapa",
     icon: (active: boolean) => (
       <svg
@@ -67,7 +67,7 @@ const tabs = [
     ),
   },
   {
-    href: "/cobrador/perfil",
+    href: "/mobile/cobrador/perfil",
     label: "Perfil",
     icon: (active: boolean) => (
       <svg
@@ -98,18 +98,18 @@ export default function BottomNav() {
         boxShadow: "0 -2px 12px rgba(0,0,0,0.08)",
       }}
     >
-      <div className="flex items-stretch h-16">
+      <div className="flex items-stretch h-16 relative">
         {tabs.map((tab) => {
           const isActive =
-            tab.href === "/cobrador"
-              ? pathname === "/cobrador"
+            tab.href === "/mobile/cobrador"
+              ? pathname === "/mobile/cobrador"
               : pathname.startsWith(tab.href);
 
           return (
             <Link
               key={tab.href}
               href={tab.href}
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 min-w-0 active:bg-gray-50 transition-colors"
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 min-w-0 active:bg-gray-50 transition-colors relative"
             >
               {tab.icon(isActive)}
               <span
@@ -120,7 +120,7 @@ export default function BottomNav() {
               </span>
               {isActive && (
                 <span
-                  className="absolute bottom-0 block h-0.5 w-8 rounded-t-full"
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 block h-0.5 w-8 rounded-t-full"
                   style={{ background: "#2563eb" }}
                 />
               )}

@@ -11,11 +11,15 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function MobileLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-md mx-auto min-h-screen" style={{ overscrollBehavior: "none" }}>
+    <div
+      className="max-w-md mx-auto min-h-screen"
+      style={{ overscrollBehavior: "none", paddingBottom: "env(safe-area-inset-bottom)" }}
+    >
       {children}
     </div>
   );

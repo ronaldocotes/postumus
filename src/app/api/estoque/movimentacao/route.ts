@@ -4,7 +4,18 @@ import { prisma } from "@/lib/prisma";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { productId, type, quantity, reason, reference, unitCost, createdBy } = body;
+    const {
+      productId,
+      type,
+      quantity,
+      reason,
+      reference,
+      unitCost,
+      createdById,
+      sourceId,
+      sourceType,
+      location,
+    } = body;
 
     if (!productId || !type || !quantity || quantity <= 0) {
       return NextResponse.json(
@@ -27,24 +38,57 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let newStock = product.stock;
+    const balanceBefore = product.stock;
+    let balanceAfter = balanceBefore;
+    let newAverageCost = product.cost ?? 0;
+
     if (type === "ENTRADA") {
-      newStock = product.stock + quantity;
+      balanceAfter = balanceBefore + quantity;
+      // Custo Médio Ponderado (CMP)
+      if (unitCost && balanceAfter > 0) {
+        const currentTotal = balanceBefore * (product.cost ?? 0);
+        const entryTotal = quantity * unitCost;
+        newAverageCost = (currentTotal + entryTotal) / balanceAfter;
+      }
     } else if (type === "SAIDA") {
-      newStock = product.stock - quantity;
+      balanceAfter = balanceBefore - quantity;
+      // CMP não muda na saída, mas podemos registrar o custo médio vigente
+      newAverageCost = product.cost ?? 0;
     } else if (type === "AJUSTE") {
-      newStock = quantity; // ajuste define o valor absoluto
+      // Ajuste como delta: quantity representa a diferença (+10 ou -5)
+      balanceAfter = balanceBefore + quantity;
+      if (balanceAfter < 0) {
+        return NextResponse.json(
+          { error: `Ajuste resultaria em estoque negativo: ${balanceAfter}` },
+          { status: 400 }
+        );
+      }
+      newAverageCost = product.cost ?? 0;
     }
 
     const [movement] = await prisma.$transaction([
       prisma.stockMovement.create({
-        data: { productId, type, quantity, reason, reference, unitCost, createdBy },
+        data: {
+          productId,
+          type,
+          quantity: Math.abs(quantity),
+          balanceBefore,
+          balanceAfter,
+          reason,
+          reference,
+          unitCost,
+          averageCost: newAverageCost || null,
+          sourceId,
+          sourceType,
+          location,
+          createdById,
+        },
       }),
       prisma.product.update({
         where: { id: productId },
         data: {
-          stock: newStock,
-          ...(type === "ENTRADA" && unitCost ? { cost: unitCost } : {}),
+          stock: balanceAfter,
+          ...(type === "ENTRADA" && newAverageCost > 0 ? { cost: newAverageCost } : {}),
         },
       }),
     ]);

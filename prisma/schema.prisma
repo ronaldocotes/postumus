@@ -46,6 +46,16 @@ model User {
   paymentReceipts  PaymentReceipt[]
   pushSubscriptions PushSubscription[]
   visitLogs        VisitLog[]
+  openedCashRegisters CashRegister[] @relation("OpenedCashRegisters")
+  closedCashRegisters CashRegister[] @relation("ClosedCashRegisters")
+  cashRegisterMovements CashRegisterMovement[]
+  sales            Sale[]
+  stockMovements   StockMovement[]
+  deathRecords     DeathRecord[]
+  commissions      Commission[]
+  budgets          Budget[]
+  documents        Document[]
+  events           Event[]
 }
 
 model Client {
@@ -98,6 +108,7 @@ model Client {
   billingState         String?
   billingZipCode       String?
   isAssured            Boolean                @default(false)
+  assuredPlan          AssuredPlan?
   zone                 String?
   routeOrder           Int?
   routeMode            RouteMode              @default(AUTO)
@@ -107,7 +118,12 @@ model Client {
   dependents           Dependent[]
   transactions         FinancialTransaction[]
   serviceSales         ServiceSale[]
+  sales                Sale[]
   visitLogs            VisitLog[]
+  deathRecords         DeathRecord[]
+  events               Event[]
+  budgets              Budget[]
+  documents            Document[]
 }
 
 model Dependent {
@@ -158,19 +174,32 @@ model Product {
   updatedAt   DateTime        @updatedAt
   supplier    Supplier?       @relation(fields: [supplierId], references: [id])
   movements   StockMovement[]
+  saleItems   SaleItem[]
+  planUsages  PlanUsage[]
+  deathRecordServices DeathRecordService[]
+  commissionRules CommissionRule[]
+  budgetItems BudgetItem[]
 }
 
 model StockMovement {
-  id        String            @id @default(cuid())
-  productId String
-  type      StockMovementType
-  quantity  Int
-  reason    String?
-  reference String?
-  unitCost  Float?
-  createdBy String?
-  createdAt DateTime          @default(now())
-  product   Product           @relation(fields: [productId], references: [id])
+  id            String            @id @default(cuid())
+  productId     String
+  type          StockMovementType
+  quantity      Int
+  balanceBefore Int
+  balanceAfter  Int
+  reason        String?
+  reference     String?
+  unitCost      Float?
+  averageCost   Float?
+  sourceId      String?
+  sourceType    String?
+  location      String?
+  createdById   String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  product       Product           @relation(fields: [productId], references: [id])
+  createdBy     User?             @relation(fields: [createdById], references: [id])
 }
 
 model Service {
@@ -184,6 +213,11 @@ model Service {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   sales       ServiceSale[]
+  saleItems   SaleItem[]
+  planUsages  PlanUsage[]
+  deathRecordServices DeathRecordService[]
+  commissionRules CommissionRule[]
+  budgetItems BudgetItem[]
 }
 
 model ServiceSale {
@@ -413,6 +447,89 @@ enum StockMovementType {
   AJUSTE
 }
 
+enum CashRegisterStatus {
+  OPEN
+  CLOSED
+}
+
+enum CashRegisterMovementType {
+  SANGRIA
+  REFORCO
+}
+
+model CashRegister {
+  id          String   @id @default(cuid())
+  openedAt    DateTime @default(now())
+  closedAt    DateTime?
+  openedById  String
+  closedById  String?
+  initialAmount Float
+  closedAmount  Float?
+  status      CashRegisterStatus @default(OPEN)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  openedBy    User     @relation("OpenedCashRegisters", fields: [openedById], references: [id])
+  closedBy    User?    @relation("ClosedCashRegisters", fields: [closedById], references: [id])
+  movements   CashRegisterMovement[]
+  sales       Sale[]
+}
+
+model CashRegisterMovement {
+  id             String   @id @default(cuid())
+  cashRegisterId String
+  type           CashRegisterMovementType
+  amount         Float
+  reason         String?
+  createdById    String
+  createdAt      DateTime @default(now())
+
+  cashRegister CashRegister @relation(fields: [cashRegisterId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation(fields: [createdById], references: [id])
+}
+
+model Sale {
+  id                String        @id @default(cuid())
+  cashRegisterId    String
+  clientId          String?
+  clientName        String?
+  totalAmount       Float
+  discount          Float?
+  finalAmount       Float
+  planCoveredAmount Float         @default(0)
+  isPlanUsage       Boolean       @default(false)
+  paymentMethod     PaymentMethod?
+  status            PaymentStatus @default(PENDING)
+  paidAt            DateTime?
+  notes             String?
+  createdById       String
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  cashRegister CashRegister @relation(fields: [cashRegisterId], references: [id])
+  client       Client?      @relation(fields: [clientId], references: [id])
+  createdBy    User         @relation(fields: [createdById], references: [id])
+  items        SaleItem[]
+  planUsages   PlanUsage[]
+  commissions  Commission[]
+}
+
+model SaleItem {
+  id             String   @id @default(cuid())
+  saleId         String
+  productId      String?
+  serviceId      String?
+  name           String
+  quantity       Int
+  unitPrice      Float
+  totalPrice     Float
+  isPlanCovered  Boolean  @default(false)
+
+  sale    Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id])
+  service Service? @relation(fields: [serviceId], references: [id])
+}
+
 // Push Notifications
 model PushSubscription {
   id        String   @id @default(cuid())
@@ -424,4 +541,584 @@ model PushSubscription {
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Frota
+model Vehicle {
+  id              String             @id @default(cuid())
+  plate           String             @unique
+  brand           String
+  model           String
+  year            Int?
+  color           String?
+  type            VehicleType        @default(CARRO)
+  chassis         String?
+  renavam         String?
+  mileage         Int                @default(0)
+  status          VehicleStatus      @default(ACTIVE)
+  acquisitionDate DateTime?
+  notes           String?
+  active          Boolean            @default(true)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  fuelRecords     FuelRecord[]
+  maintenances    Maintenance[]
+  tickets         Ticket[]
+  documents       VehicleDocument[]
+}
+
+model Driver {
+  id          String       @id @default(cuid())
+  name        String
+  cnh         String?      @unique
+  cnhCategory String?
+  cnhExpiry   DateTime?
+  phone       String?
+  email       String?
+  status      DriverStatus @default(ACTIVE)
+  active      Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  tickets Ticket[]
+}
+
+model FuelRecord {
+  id          String   @id @default(cuid())
+  vehicleId   String
+  date        DateTime @default(now())
+  liters      Float
+  totalValue  Float
+  mileage     Int
+  fuelType    FuelType @default(GASOLINA)
+  stationName String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+}
+
+model Maintenance {
+  id          String            @id @default(cuid())
+  vehicleId   String
+  date        DateTime          @default(now())
+  type        MaintenanceType   @default(PREVENTIVA)
+  description String
+  cost        Float?
+  workshop    String?
+  nextKm      Int?
+  nextDate    DateTime?
+  status      MaintenanceStatus @default(COMPLETED)
+  notes       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+}
+
+model Ticket {
+  id         String       @id @default(cuid())
+  vehicleId  String
+  driverId   String?
+  date       DateTime     @default(now())
+  infraction String
+  location   String?
+  value      Float
+  points     Int          @default(0)
+  dueDate    DateTime?
+  paidAt     DateTime?
+  status     TicketStatus @default(PENDING)
+  notes      String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  driver  Driver? @relation(fields: [driverId], references: [id])
+}
+
+model VehicleDocument {
+  id         String         @id @default(cuid())
+  vehicleId  String
+  type       DocumentType
+  number     String?
+  issueDate  DateTime?
+  expiryDate DateTime?
+  status     DocumentStatus @default(VALID)
+  notes      String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+}
+
+enum VehicleType {
+  CARRO
+  MOTO
+  CAMINHAO
+  VAN
+  ONIBUS
+  UTILITARIO
+  OUTRO
+}
+
+enum VehicleStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  SOLD
+  SCRAPPED
+}
+
+enum DriverStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum FuelType {
+  GASOLINA
+  ETANOL
+  DIESEL
+  GNV
+  FLEX
+  ELETRICO
+}
+
+enum MaintenanceType {
+  PREVENTIVA
+  CORRETIVA
+  TROCA_PECA
+  REVISAO
+  OUTRO
+}
+
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum TicketStatus {
+  PENDING
+  PAID
+  APPEALED
+  CANCELLED
+}
+
+enum DocumentType {
+  IPVA
+  LICENCIAMENTO
+  SEGURO
+  DPVAT
+  CRLV
+  OUTRO
+}
+
+enum DocumentStatus {
+  VALID
+  EXPIRING
+  EXPIRED
+}
+
+// ─── Planos Funerários ───────────────────────────────────────────────────────
+
+enum AssuredPlanType {
+  INDIVIDUAL
+  FAMILIAR
+  PET
+}
+
+enum AssuredPlanStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  SUSPENDED
+  RENOVACAO_PENDENTE
+}
+
+enum CoverageItemType {
+  URNA
+  CAIXAO
+  CAIXAO_PREMIUM
+  SERVICO
+  TRANSPORTE
+  FLORAL
+  VELORIO
+  CREMACAO
+  OUTRO
+}
+
+model AssuredPlan {
+  id                String            @id @default(cuid())
+  clientId          String            @unique
+  type              AssuredPlanType   @default(INDIVIDUAL)
+  status            AssuredPlanStatus @default(ACTIVE)
+  startDate         DateTime
+  endDate           DateTime?
+  monthlyValue      Float
+  coverageUrn       Boolean           @default(true)
+  coverageCoffin    Boolean           @default(true)
+  coverageService   Boolean           @default(true)
+  coverageTransport Boolean           @default(true)
+  maxDependents     Int               @default(0)
+  notes             String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  client   Client      @relation(fields: [clientId], references: [id])
+  coverages PlanCoverage[]
+  usages    PlanUsage[]
+  history   AssuredPlanHistory[]
+}
+
+model PlanCoverage {
+  id          String          @id @default(cuid())
+  planId      String
+  itemType    CoverageItemType
+  itemName    String
+  quantity    Int             @default(1)
+  isUnlimited Boolean         @default(false)
+  notes       String?
+
+  plan AssuredPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+}
+
+model PlanUsage {
+  id          String   @id @default(cuid())
+  planId      String
+  saleId      String?
+  productId   String?
+  serviceId   String?
+  description String
+  quantity    Int      @default(1)
+  costToPlan  Float    // custo que o plano absorveu
+  upgradeAmount Float? // valor pago a mais
+  usedAt      DateTime @default(now())
+  notes       String?
+
+  plan    AssuredPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  sale    Sale?       @relation(fields: [saleId], references: [id])
+  product Product?    @relation(fields: [productId], references: [id])
+  service Service?    @relation(fields: [serviceId], references: [id])
+}
+
+model AssuredPlanHistory {
+  id          String   @id @default(cuid())
+  planId      String
+  action      String   // RENOVACAO, REAJUSTE, CANCELAMENTO, UPGRADE, SUSPENSAO
+  oldValue    String?
+  newValue    String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  createdById String?
+
+  plan AssuredPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+}
+
+// ─── Registro de Óbito ───────────────────────────────────────────────────────
+
+enum DeathStatus {
+  LIBERACAO_PENDENTE
+  EM_TRASLADO
+  VELORIO
+  SEPULTAMENTO
+  CREMACAO
+  CONCLUIDO
+  CANCELADO
+}
+
+enum DeathPlace {
+  HOSPITAL
+  RESIDENCIA
+  ACIDENTE
+  OUTRO
+}
+
+model DeathRecord {
+  id                String      @id @default(cuid())
+  clientId          String?     // contratante do plano (se houver)
+  deceasedName      String
+  deceasedBirthDate DateTime?
+  deceasedCpf       String?
+  deceasedRg        String?
+  dateOfDeath       DateTime
+  timeOfDeath       String?     // HH:MM
+  placeOfDeath      DeathPlace  @default(HOSPITAL)
+  placeName         String?     // nome do hospital/local
+  deathCertificate  String?     // número da certidão
+  causeOfDeath      String?
+  doctorName        String?
+  doctorCrm         String?
+  releaseTime       DateTime?   // horário de liberação do corpo
+  arrivalTime       DateTime?   // horário de chegada na funerária
+  funeralDate       DateTime?   // data do velório
+  burialDate        DateTime?   // data do sepultamento/cremação
+  burialType        String?     // SEPULTAMENTO / CREMACAO
+  cemeteryName      String?
+  graveLocation     String?     // setor/quadra/lote
+  responsibleName   String      // nome do responsável pelo atendimento
+  responsiblePhone  String?
+  responsibleRelation String?   // parentesco
+  status            DeathStatus @default(LIBERACAO_PENDENTE)
+  notes             String?
+  createdById       String
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  client    Client?            @relation(fields: [clientId], references: [id])
+  createdBy User               @relation(fields: [createdById], references: [id])
+  history   DeathRecordHistory[]
+  services  DeathRecordService[]
+  events    Event[]
+  documents Document[]
+}
+
+model DeathRecordHistory {
+  id          String   @id @default(cuid())
+  deathRecordId String
+  action      String   // MUDANCA_STATUS, LIBERACAO, CHEGADA, INICIO_VELORIO, SEPULTAMENTO
+  oldValue    String?
+  newValue    String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  createdById String?
+
+  deathRecord DeathRecord @relation(fields: [deathRecordId], references: [id], onDelete: Cascade)
+}
+
+model DeathRecordService {
+  id            String   @id @default(cuid())
+  deathRecordId String
+  serviceId     String?
+  productId     String?
+  name          String   // snapshot do nome
+  quantity      Int      @default(1)
+  unitPrice     Float
+  totalPrice    Float
+  isPlanCovered Boolean  @default(false)
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  deathRecord DeathRecord @relation(fields: [deathRecordId], references: [id], onDelete: Cascade)
+  service     Service?    @relation(fields: [serviceId], references: [id])
+  product     Product?    @relation(fields: [productId], references: [id])
+}
+
+// ─── Comissões ───────────────────────────────────────────────────────────────
+
+enum CommissionTargetType {
+  VENDEDOR
+  COBRADOR
+  GERENTE
+  ATENDENTE
+}
+
+enum CommissionBasis {
+  VENDA_TOTAL
+  VENDA_PRODUTO
+  VENDA_SERVICO
+  RECEBIMENTO
+  PLANO_NOVO
+  UPGRADE_PLANO
+}
+
+enum CommissionStatus {
+  PENDENTE
+  APROVADA
+  PAGA
+  CANCELADA
+}
+
+model CommissionRule {
+  id          String           @id @default(cuid())
+  name        String
+  targetType  CommissionTargetType @default(VENDEDOR)
+  basis       CommissionBasis  @default(VENDA_TOTAL)
+  percentage  Float            // percentual de comissão (ex: 5.0 = 5%)
+  fixedAmount Float?           // valor fixo por venda (opcional)
+  minValue    Float?           // valor mínimo da venda para aplicar
+  maxValue    Float?           // valor máximo da venda para aplicar
+  productId   String?          // se aplicar só a um produto específico
+  serviceId   String?          // se aplicar só a um serviço específico
+  active      Boolean          @default(true)
+  startDate   DateTime         @default(now())
+  endDate     DateTime?
+  notes       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  product Product? @relation(fields: [productId], references: [id])
+  service Service? @relation(fields: [serviceId], references: [id])
+}
+
+model Commission {
+  id          String           @id @default(cuid())
+  userId      String           // quem recebe a comissão
+  saleId      String?          // venda que gerou (se houver)
+  ruleId      String?          // regra aplicada
+  basis       CommissionBasis
+  amount      Float            // valor calculado da comissão
+  saleAmount  Float            // valor base da venda/recebimento
+  percentage  Float?           // percentual aplicado
+  fixedAmount Float?           // valor fixo aplicado
+  status      CommissionStatus @default(PENDENTE)
+  paidAt      DateTime?
+  notes       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  user User   @relation(fields: [userId], references: [id])
+  sale Sale?  @relation(fields: [saleId], references: [id])
+}
+
+// ─── Agenda / Calendário ─────────────────────────────────────────────────────
+
+enum EventType {
+  VELORIO
+  SEPULTAMENTO
+  CREMACAO
+  REUNIAO
+  VISITA
+  MANUTENCAO
+  COBRANCA
+  OUTRO
+}
+
+enum EventStatus {
+  AGENDADO
+  EM_ANDAMENTO
+  CONCLUIDO
+  CANCELADO
+}
+
+model Resource {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // CAPELA / SALA / VEICULO / EQUIPAMENTO
+  description String?
+  capacity    Int?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  events EventResource[]
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  type        EventType   @default(VELORIO)
+  status      EventStatus @default(AGENDADO)
+  startDate   DateTime
+  endDate     DateTime?
+  allDay      Boolean     @default(false)
+  clientId    String?     // contratante
+  deathRecordId String?   // vínculo com óbito
+  location    String?     // local textual
+  description String?
+  color       String?     // cor no calendário (hex)
+  createdById String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  client      Client?       @relation(fields: [clientId], references: [id])
+  deathRecord DeathRecord?  @relation(fields: [deathRecordId], references: [id])
+  createdBy   User          @relation(fields: [createdById], references: [id])
+  resources   EventResource[]
+}
+
+model EventResource {
+  id         String @id @default(cuid())
+  eventId    String
+  resourceId String
+
+  event    Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, resourceId])
+}
+
+// ─── Orçamentos ──────────────────────────────────────────────────────────────
+
+enum BudgetStatus {
+  PENDENTE
+  APROVADO
+  REJEITADO
+  EXPIRADO
+  CONVERTIDO
+}
+
+model Budget {
+  id          String       @id @default(cuid())
+  clientId    String?
+  clientName  String?      // nome do cliente se não cadastrado
+  title       String
+  description String?
+  subtotal    Float
+  discount    Float?
+  total       Float
+  validUntil  DateTime?    // data de validade do orçamento
+  status      BudgetStatus @default(PENDENTE)
+  saleId      String?      // venda convertida
+  notes       String?
+  createdById String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  client    Client?       @relation(fields: [clientId], references: [id])
+  createdBy User          @relation(fields: [createdById], references: [id])
+  items     BudgetItem[]
+}
+
+model BudgetItem {
+  id          String   @id @default(cuid())
+  budgetId    String
+  productId   String?
+  serviceId   String?
+  name        String   // snapshot do nome
+  quantity    Int      @default(1)
+  unitPrice   Float
+  totalPrice  Float
+  notes       String?
+
+  budget  Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id])
+  service Service? @relation(fields: [serviceId], references: [id])
+}
+
+// ─── Documentos / Anexos ─────────────────────────────────────────────────────
+
+enum DocumentCategory {
+  CONTRATO
+  RG
+  CPF
+  CERTIDAO
+  COMPROVANTE_RESIDENCIA
+  COMPROVANTE_PAGAMENTO
+  CERTIDAO_OBITO
+  LAUDO_MEDICO
+  AUTORIZACAO
+  OUTRO
+}
+
+model Document {
+  id          String           @id @default(cuid())
+  clientId    String?
+  deathRecordId String?
+  name        String
+  filename    String
+  url         String
+  size        Int?             // tamanho em bytes
+  mimeType    String?
+  category    DocumentCategory @default(OUTRO)
+  notes       String?
+  uploadedById String
+  uploadedAt  DateTime         @default(now())
+
+  client      Client?       @relation(fields: [clientId], references: [id])
+  deathRecord DeathRecord?  @relation(fields: [deathRecordId], references: [id])
+  uploadedBy  User          @relation(fields: [uploadedById], references: [id])
 }

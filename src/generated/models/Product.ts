@@ -286,6 +286,11 @@ export type ProductWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   supplier?: Prisma.XOR<Prisma.SupplierNullableScalarRelationFilter, Prisma.SupplierWhereInput> | null
   movements?: Prisma.StockMovementListRelationFilter
+  saleItems?: Prisma.SaleItemListRelationFilter
+  planUsages?: Prisma.PlanUsageListRelationFilter
+  deathRecordServices?: Prisma.DeathRecordServiceListRelationFilter
+  commissionRules?: Prisma.CommissionRuleListRelationFilter
+  budgetItems?: Prisma.BudgetItemListRelationFilter
 }
 
 export type ProductOrderByWithRelationInput = {
@@ -303,6 +308,11 @@ export type ProductOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   supplier?: Prisma.SupplierOrderByWithRelationInput
   movements?: Prisma.StockMovementOrderByRelationAggregateInput
+  saleItems?: Prisma.SaleItemOrderByRelationAggregateInput
+  planUsages?: Prisma.PlanUsageOrderByRelationAggregateInput
+  deathRecordServices?: Prisma.DeathRecordServiceOrderByRelationAggregateInput
+  commissionRules?: Prisma.CommissionRuleOrderByRelationAggregateInput
+  budgetItems?: Prisma.BudgetItemOrderByRelationAggregateInput
 }
 
 export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -323,6 +333,11 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   supplier?: Prisma.XOR<Prisma.SupplierNullableScalarRelationFilter, Prisma.SupplierWhereInput> | null
   movements?: Prisma.StockMovementListRelationFilter
+  saleItems?: Prisma.SaleItemListRelationFilter
+  planUsages?: Prisma.PlanUsageListRelationFilter
+  deathRecordServices?: Prisma.DeathRecordServiceListRelationFilter
+  commissionRules?: Prisma.CommissionRuleListRelationFilter
+  budgetItems?: Prisma.BudgetItemListRelationFilter
 }, "id" | "sku">
 
 export type ProductOrderByWithAggregationInput = {
@@ -377,6 +392,11 @@ export type ProductCreateInput = {
   updatedAt?: Date | string
   supplier?: Prisma.SupplierCreateNestedOneWithoutProductsInput
   movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateInput = {
@@ -393,6 +413,11 @@ export type ProductUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductUpdateInput = {
@@ -409,6 +434,11 @@ export type ProductUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplier?: Prisma.SupplierUpdateOneWithoutProductsNestedInput
   movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateInput = {
@@ -425,6 +455,11 @@ export type ProductUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateManyInput = {
@@ -545,6 +580,11 @@ export type ProductScalarRelationFilter = {
   isNot?: Prisma.ProductWhereInput
 }
 
+export type ProductNullableScalarRelationFilter = {
+  is?: Prisma.ProductWhereInput | null
+  isNot?: Prisma.ProductWhereInput | null
+}
+
 export type ProductCreateNestedManyWithoutSupplierInput = {
   create?: Prisma.XOR<Prisma.ProductCreateWithoutSupplierInput, Prisma.ProductUncheckedCreateWithoutSupplierInput> | Prisma.ProductCreateWithoutSupplierInput[] | Prisma.ProductUncheckedCreateWithoutSupplierInput[]
   connectOrCreate?: Prisma.ProductCreateOrConnectWithoutSupplierInput | Prisma.ProductCreateOrConnectWithoutSupplierInput[]
@@ -617,6 +657,86 @@ export type ProductUpdateOneRequiredWithoutMovementsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutMovementsInput, Prisma.ProductUpdateWithoutMovementsInput>, Prisma.ProductUncheckedUpdateWithoutMovementsInput>
 }
 
+export type ProductCreateNestedOneWithoutSaleItemsInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutSaleItemsInput, Prisma.ProductUncheckedCreateWithoutSaleItemsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutSaleItemsInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneWithoutSaleItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutSaleItemsInput, Prisma.ProductUncheckedCreateWithoutSaleItemsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutSaleItemsInput
+  upsert?: Prisma.ProductUpsertWithoutSaleItemsInput
+  disconnect?: Prisma.ProductWhereInput | boolean
+  delete?: Prisma.ProductWhereInput | boolean
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutSaleItemsInput, Prisma.ProductUpdateWithoutSaleItemsInput>, Prisma.ProductUncheckedUpdateWithoutSaleItemsInput>
+}
+
+export type ProductCreateNestedOneWithoutPlanUsagesInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutPlanUsagesInput, Prisma.ProductUncheckedCreateWithoutPlanUsagesInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutPlanUsagesInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneWithoutPlanUsagesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutPlanUsagesInput, Prisma.ProductUncheckedCreateWithoutPlanUsagesInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutPlanUsagesInput
+  upsert?: Prisma.ProductUpsertWithoutPlanUsagesInput
+  disconnect?: Prisma.ProductWhereInput | boolean
+  delete?: Prisma.ProductWhereInput | boolean
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutPlanUsagesInput, Prisma.ProductUpdateWithoutPlanUsagesInput>, Prisma.ProductUncheckedUpdateWithoutPlanUsagesInput>
+}
+
+export type ProductCreateNestedOneWithoutDeathRecordServicesInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutDeathRecordServicesInput, Prisma.ProductUncheckedCreateWithoutDeathRecordServicesInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutDeathRecordServicesInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneWithoutDeathRecordServicesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutDeathRecordServicesInput, Prisma.ProductUncheckedCreateWithoutDeathRecordServicesInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutDeathRecordServicesInput
+  upsert?: Prisma.ProductUpsertWithoutDeathRecordServicesInput
+  disconnect?: Prisma.ProductWhereInput | boolean
+  delete?: Prisma.ProductWhereInput | boolean
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutDeathRecordServicesInput, Prisma.ProductUpdateWithoutDeathRecordServicesInput>, Prisma.ProductUncheckedUpdateWithoutDeathRecordServicesInput>
+}
+
+export type ProductCreateNestedOneWithoutCommissionRulesInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutCommissionRulesInput, Prisma.ProductUncheckedCreateWithoutCommissionRulesInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutCommissionRulesInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneWithoutCommissionRulesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutCommissionRulesInput, Prisma.ProductUncheckedCreateWithoutCommissionRulesInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutCommissionRulesInput
+  upsert?: Prisma.ProductUpsertWithoutCommissionRulesInput
+  disconnect?: Prisma.ProductWhereInput | boolean
+  delete?: Prisma.ProductWhereInput | boolean
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutCommissionRulesInput, Prisma.ProductUpdateWithoutCommissionRulesInput>, Prisma.ProductUncheckedUpdateWithoutCommissionRulesInput>
+}
+
+export type ProductCreateNestedOneWithoutBudgetItemsInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutBudgetItemsInput, Prisma.ProductUncheckedCreateWithoutBudgetItemsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutBudgetItemsInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneWithoutBudgetItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutBudgetItemsInput, Prisma.ProductUncheckedCreateWithoutBudgetItemsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutBudgetItemsInput
+  upsert?: Prisma.ProductUpsertWithoutBudgetItemsInput
+  disconnect?: Prisma.ProductWhereInput | boolean
+  delete?: Prisma.ProductWhereInput | boolean
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutBudgetItemsInput, Prisma.ProductUpdateWithoutBudgetItemsInput>, Prisma.ProductUncheckedUpdateWithoutBudgetItemsInput>
+}
+
 export type ProductCreateWithoutSupplierInput = {
   id?: string
   name: string
@@ -630,6 +750,11 @@ export type ProductCreateWithoutSupplierInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutSupplierInput = {
@@ -645,6 +770,11 @@ export type ProductUncheckedCreateWithoutSupplierInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutSupplierInput = {
@@ -704,6 +834,11 @@ export type ProductCreateWithoutMovementsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   supplier?: Prisma.SupplierCreateNestedOneWithoutProductsInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutMovementsInput = {
@@ -719,6 +854,11 @@ export type ProductUncheckedCreateWithoutMovementsInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutMovementsInput = {
@@ -750,6 +890,11 @@ export type ProductUpdateWithoutMovementsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplier?: Prisma.SupplierUpdateOneWithoutProductsNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutMovementsInput = {
@@ -765,6 +910,491 @@ export type ProductUncheckedUpdateWithoutMovementsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutSaleItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sku?: string | null
+  price: number
+  cost?: number | null
+  stock?: number
+  minStock?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  supplier?: Prisma.SupplierCreateNestedOneWithoutProductsInput
+  movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutSaleItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sku?: string | null
+  price: number
+  cost?: number | null
+  stock?: number
+  minStock?: number
+  supplierId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutSaleItemsInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutSaleItemsInput, Prisma.ProductUncheckedCreateWithoutSaleItemsInput>
+}
+
+export type ProductUpsertWithoutSaleItemsInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutSaleItemsInput, Prisma.ProductUncheckedUpdateWithoutSaleItemsInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutSaleItemsInput, Prisma.ProductUncheckedCreateWithoutSaleItemsInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutSaleItemsInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutSaleItemsInput, Prisma.ProductUncheckedUpdateWithoutSaleItemsInput>
+}
+
+export type ProductUpdateWithoutSaleItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplier?: Prisma.SupplierUpdateOneWithoutProductsNestedInput
+  movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutSaleItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutPlanUsagesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sku?: string | null
+  price: number
+  cost?: number | null
+  stock?: number
+  minStock?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  supplier?: Prisma.SupplierCreateNestedOneWithoutProductsInput
+  movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutPlanUsagesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sku?: string | null
+  price: number
+  cost?: number | null
+  stock?: number
+  minStock?: number
+  supplierId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutPlanUsagesInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutPlanUsagesInput, Prisma.ProductUncheckedCreateWithoutPlanUsagesInput>
+}
+
+export type ProductUpsertWithoutPlanUsagesInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutPlanUsagesInput, Prisma.ProductUncheckedUpdateWithoutPlanUsagesInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutPlanUsagesInput, Prisma.ProductUncheckedCreateWithoutPlanUsagesInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutPlanUsagesInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutPlanUsagesInput, Prisma.ProductUncheckedUpdateWithoutPlanUsagesInput>
+}
+
+export type ProductUpdateWithoutPlanUsagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplier?: Prisma.SupplierUpdateOneWithoutProductsNestedInput
+  movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutPlanUsagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutDeathRecordServicesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sku?: string | null
+  price: number
+  cost?: number | null
+  stock?: number
+  minStock?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  supplier?: Prisma.SupplierCreateNestedOneWithoutProductsInput
+  movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutDeathRecordServicesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sku?: string | null
+  price: number
+  cost?: number | null
+  stock?: number
+  minStock?: number
+  supplierId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutDeathRecordServicesInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutDeathRecordServicesInput, Prisma.ProductUncheckedCreateWithoutDeathRecordServicesInput>
+}
+
+export type ProductUpsertWithoutDeathRecordServicesInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutDeathRecordServicesInput, Prisma.ProductUncheckedUpdateWithoutDeathRecordServicesInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutDeathRecordServicesInput, Prisma.ProductUncheckedCreateWithoutDeathRecordServicesInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutDeathRecordServicesInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutDeathRecordServicesInput, Prisma.ProductUncheckedUpdateWithoutDeathRecordServicesInput>
+}
+
+export type ProductUpdateWithoutDeathRecordServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplier?: Prisma.SupplierUpdateOneWithoutProductsNestedInput
+  movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutDeathRecordServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutCommissionRulesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sku?: string | null
+  price: number
+  cost?: number | null
+  stock?: number
+  minStock?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  supplier?: Prisma.SupplierCreateNestedOneWithoutProductsInput
+  movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutCommissionRulesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sku?: string | null
+  price: number
+  cost?: number | null
+  stock?: number
+  minStock?: number
+  supplierId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutProductInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutCommissionRulesInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutCommissionRulesInput, Prisma.ProductUncheckedCreateWithoutCommissionRulesInput>
+}
+
+export type ProductUpsertWithoutCommissionRulesInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutCommissionRulesInput, Prisma.ProductUncheckedUpdateWithoutCommissionRulesInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutCommissionRulesInput, Prisma.ProductUncheckedCreateWithoutCommissionRulesInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutCommissionRulesInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutCommissionRulesInput, Prisma.ProductUncheckedUpdateWithoutCommissionRulesInput>
+}
+
+export type ProductUpdateWithoutCommissionRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplier?: Prisma.SupplierUpdateOneWithoutProductsNestedInput
+  movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutCommissionRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutBudgetItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sku?: string | null
+  price: number
+  cost?: number | null
+  stock?: number
+  minStock?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  supplier?: Prisma.SupplierCreateNestedOneWithoutProductsInput
+  movements?: Prisma.StockMovementCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutBudgetItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sku?: string | null
+  price: number
+  cost?: number | null
+  stock?: number
+  minStock?: number
+  supplierId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  movements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutProductInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutProductInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutProductInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutProductInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutBudgetItemsInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutBudgetItemsInput, Prisma.ProductUncheckedCreateWithoutBudgetItemsInput>
+}
+
+export type ProductUpsertWithoutBudgetItemsInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutBudgetItemsInput, Prisma.ProductUncheckedUpdateWithoutBudgetItemsInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutBudgetItemsInput, Prisma.ProductUncheckedCreateWithoutBudgetItemsInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutBudgetItemsInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutBudgetItemsInput, Prisma.ProductUncheckedUpdateWithoutBudgetItemsInput>
+}
+
+export type ProductUpdateWithoutBudgetItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supplier?: Prisma.SupplierUpdateOneWithoutProductsNestedInput
+  movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutBudgetItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateManySupplierInput = {
@@ -794,6 +1424,11 @@ export type ProductUpdateWithoutSupplierInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   movements?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutSupplierInput = {
@@ -809,6 +1444,11 @@ export type ProductUncheckedUpdateWithoutSupplierInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   movements?: Prisma.StockMovementUncheckedUpdateManyWithoutProductNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutProductNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutProductNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutProductNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateManyWithoutSupplierInput = {
@@ -832,10 +1472,20 @@ export type ProductUncheckedUpdateManyWithoutSupplierInput = {
 
 export type ProductCountOutputType = {
   movements: number
+  saleItems: number
+  planUsages: number
+  deathRecordServices: number
+  commissionRules: number
+  budgetItems: number
 }
 
 export type ProductCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   movements?: boolean | ProductCountOutputTypeCountMovementsArgs
+  saleItems?: boolean | ProductCountOutputTypeCountSaleItemsArgs
+  planUsages?: boolean | ProductCountOutputTypeCountPlanUsagesArgs
+  deathRecordServices?: boolean | ProductCountOutputTypeCountDeathRecordServicesArgs
+  commissionRules?: boolean | ProductCountOutputTypeCountCommissionRulesArgs
+  budgetItems?: boolean | ProductCountOutputTypeCountBudgetItemsArgs
 }
 
 /**
@@ -855,6 +1505,41 @@ export type ProductCountOutputTypeCountMovementsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.StockMovementWhereInput
 }
 
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountSaleItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SaleItemWhereInput
+}
+
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountPlanUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlanUsageWhereInput
+}
+
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountDeathRecordServicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeathRecordServiceWhereInput
+}
+
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountCommissionRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommissionRuleWhereInput
+}
+
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountBudgetItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BudgetItemWhereInput
+}
+
 
 export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -871,6 +1556,11 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   supplier?: boolean | Prisma.Product$supplierArgs<ExtArgs>
   movements?: boolean | Prisma.Product$movementsArgs<ExtArgs>
+  saleItems?: boolean | Prisma.Product$saleItemsArgs<ExtArgs>
+  planUsages?: boolean | Prisma.Product$planUsagesArgs<ExtArgs>
+  deathRecordServices?: boolean | Prisma.Product$deathRecordServicesArgs<ExtArgs>
+  commissionRules?: boolean | Prisma.Product$commissionRulesArgs<ExtArgs>
+  budgetItems?: boolean | Prisma.Product$budgetItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["product"]>
 
@@ -925,6 +1615,11 @@ export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   supplier?: boolean | Prisma.Product$supplierArgs<ExtArgs>
   movements?: boolean | Prisma.Product$movementsArgs<ExtArgs>
+  saleItems?: boolean | Prisma.Product$saleItemsArgs<ExtArgs>
+  planUsages?: boolean | Prisma.Product$planUsagesArgs<ExtArgs>
+  deathRecordServices?: boolean | Prisma.Product$deathRecordServicesArgs<ExtArgs>
+  commissionRules?: boolean | Prisma.Product$commissionRulesArgs<ExtArgs>
+  budgetItems?: boolean | Prisma.Product$budgetItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProductIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -939,6 +1634,11 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     supplier: Prisma.$SupplierPayload<ExtArgs> | null
     movements: Prisma.$StockMovementPayload<ExtArgs>[]
+    saleItems: Prisma.$SaleItemPayload<ExtArgs>[]
+    planUsages: Prisma.$PlanUsagePayload<ExtArgs>[]
+    deathRecordServices: Prisma.$DeathRecordServicePayload<ExtArgs>[]
+    commissionRules: Prisma.$CommissionRulePayload<ExtArgs>[]
+    budgetItems: Prisma.$BudgetItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1349,6 +2049,11 @@ export interface Prisma__ProductClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   supplier<T extends Prisma.Product$supplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$supplierArgs<ExtArgs>>): Prisma.Prisma__SupplierClient<runtime.Types.Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   movements<T extends Prisma.Product$movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  saleItems<T extends Prisma.Product$saleItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$saleItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  planUsages<T extends Prisma.Product$planUsagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$planUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deathRecordServices<T extends Prisma.Product$deathRecordServicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$deathRecordServicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeathRecordServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  commissionRules<T extends Prisma.Product$commissionRulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$commissionRulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommissionRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  budgetItems<T extends Prisma.Product$budgetItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$budgetItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1831,6 +2536,126 @@ export type Product$movementsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.StockMovementScalarFieldEnum | Prisma.StockMovementScalarFieldEnum[]
+}
+
+/**
+ * Product.saleItems
+ */
+export type Product$saleItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SaleItem
+   */
+  select?: Prisma.SaleItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SaleItem
+   */
+  omit?: Prisma.SaleItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SaleItemInclude<ExtArgs> | null
+  where?: Prisma.SaleItemWhereInput
+  orderBy?: Prisma.SaleItemOrderByWithRelationInput | Prisma.SaleItemOrderByWithRelationInput[]
+  cursor?: Prisma.SaleItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SaleItemScalarFieldEnum | Prisma.SaleItemScalarFieldEnum[]
+}
+
+/**
+ * Product.planUsages
+ */
+export type Product$planUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanUsage
+   */
+  select?: Prisma.PlanUsageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlanUsage
+   */
+  omit?: Prisma.PlanUsageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanUsageInclude<ExtArgs> | null
+  where?: Prisma.PlanUsageWhereInput
+  orderBy?: Prisma.PlanUsageOrderByWithRelationInput | Prisma.PlanUsageOrderByWithRelationInput[]
+  cursor?: Prisma.PlanUsageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlanUsageScalarFieldEnum | Prisma.PlanUsageScalarFieldEnum[]
+}
+
+/**
+ * Product.deathRecordServices
+ */
+export type Product$deathRecordServicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DeathRecordService
+   */
+  select?: Prisma.DeathRecordServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DeathRecordService
+   */
+  omit?: Prisma.DeathRecordServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeathRecordServiceInclude<ExtArgs> | null
+  where?: Prisma.DeathRecordServiceWhereInput
+  orderBy?: Prisma.DeathRecordServiceOrderByWithRelationInput | Prisma.DeathRecordServiceOrderByWithRelationInput[]
+  cursor?: Prisma.DeathRecordServiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeathRecordServiceScalarFieldEnum | Prisma.DeathRecordServiceScalarFieldEnum[]
+}
+
+/**
+ * Product.commissionRules
+ */
+export type Product$commissionRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommissionRule
+   */
+  select?: Prisma.CommissionRuleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommissionRule
+   */
+  omit?: Prisma.CommissionRuleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommissionRuleInclude<ExtArgs> | null
+  where?: Prisma.CommissionRuleWhereInput
+  orderBy?: Prisma.CommissionRuleOrderByWithRelationInput | Prisma.CommissionRuleOrderByWithRelationInput[]
+  cursor?: Prisma.CommissionRuleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommissionRuleScalarFieldEnum | Prisma.CommissionRuleScalarFieldEnum[]
+}
+
+/**
+ * Product.budgetItems
+ */
+export type Product$budgetItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BudgetItem
+   */
+  select?: Prisma.BudgetItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BudgetItem
+   */
+  omit?: Prisma.BudgetItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BudgetItemInclude<ExtArgs> | null
+  where?: Prisma.BudgetItemWhereInput
+  orderBy?: Prisma.BudgetItemOrderByWithRelationInput | Prisma.BudgetItemOrderByWithRelationInput[]
+  cursor?: Prisma.BudgetItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BudgetItemScalarFieldEnum | Prisma.BudgetItemScalarFieldEnum[]
 }
 
 /**

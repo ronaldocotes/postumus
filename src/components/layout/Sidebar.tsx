@@ -27,6 +27,14 @@ import {
   Navigation,
   ShoppingCart,
   BarChart3,
+  ShoppingBag,
+  Landmark,
+  Car,
+  Shield,
+  Cross,
+  Award,
+  CalendarDays,
+  FileText,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { signOut } from "next-auth/react";
@@ -48,6 +56,12 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/clientes", label: "Clientes", icon: Users },
+  { href: "/planos", label: "Planos", icon: Shield },
+  { href: "/obitos", label: "Óbitos", icon: Cross },
+  { href: "/agenda", label: "Agenda", icon: CalendarDays },
+  { href: "/orcamentos", label: "Orçamentos", icon: FileText },
+  { href: "/comissoes", label: "Comissões", icon: Award },
+  { href: "/frota", label: "Frota", icon: Car },
   {
     label: "Cobrança",
     icon: Bike,
@@ -65,7 +79,9 @@ const menuItems: MenuItem[] = [
       { href: "/estoque", label: "Controle de Estoque", icon: BarChart3 },
       { href: "/servicos", label: "Serviços", icon: Wrench },
       { href: "/vendas", label: "Vendas", icon: ShoppingCart },
+      { href: "/pdv", label: "PDV", icon: ShoppingBag },
       { href: "/fornecedores", label: "Fornecedores", icon: Truck },
+      { href: "/documentos", label: "Documentos", icon: FileText },
     ],
   },
   {
@@ -73,6 +89,7 @@ const menuItems: MenuItem[] = [
     icon: Wallet,
     children: [
       { href: "/financeiro", label: "Fluxo de Caixa", icon: DollarSign },
+      { href: "/caixa", label: "Caixa", icon: Landmark },
       { href: "/relatorios", label: "Relatórios", icon: PieChart },
     ],
   },

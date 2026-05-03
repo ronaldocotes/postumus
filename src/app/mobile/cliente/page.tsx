@@ -16,6 +16,7 @@ import {
   ArrowLeft,
   Copy,
   Check,
+  Lock,
 } from "lucide-react";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -335,6 +336,7 @@ function CarneCard({ carne, clienteNome }: { carne: CarneData; clienteNome: stri
 
 function LoginScreen({ onLogin }: { onLogin: (data: PortalData) => void }) {
   const [cpf, setCpf] = useState("");
+  const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -354,13 +356,21 @@ function LoginScreen({ onLogin }: { onLogin: (data: PortalData) => void }) {
       setError("Digite um CPF válido (11 dígitos)");
       return;
     }
+    if (senha.length < 4) {
+      setError("Digite sua senha");
+      return;
+    }
     try {
       setLoading(true);
       setError("");
-      const res = await fetch(`/api/mobile/cliente-portal?cpf=${cpfClean}`);
+      const res = await fetch("/api/mobile/cliente-portal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cpf: cpfClean, senha }),
+      });
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "CPF não encontrado no sistema");
+        setError(data.error || "CPF ou senha incorretos");
         return;
       }
       const data: PortalData = await res.json();
@@ -387,7 +397,7 @@ function LoginScreen({ onLogin }: { onLogin: (data: PortalData) => void }) {
       <div className="bg-white rounded-t-3xl px-6 pt-8 pb-10">
         <h2 className="text-xl font-bold text-slate-800 mb-1">Consultar meu carnê</h2>
         <p className="text-slate-500 text-sm mb-6">
-          Digite seu CPF para ver suas parcelas e fazer pagamentos via PIX.
+          Digite seu CPF e senha para ver suas parcelas e fazer pagamentos via PIX.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -410,6 +420,27 @@ function LoginScreen({ onLogin }: { onLogin: (data: PortalData) => void }) {
                 autoComplete="off"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              Senha
+            </label>
+            <div className="relative">
+              <Lock
+                size={18}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+              />
+              <input
+                type="password"
+                inputMode="numeric"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                placeholder="Últimos 4 dígitos do CPF"
+                className="w-full pl-10 pr-4 py-3.5 border border-slate-200 rounded-xl text-slate-800 text-base focus:outline-none focus:ring-2 focus:ring-[#4a6fa5] focus:border-transparent"
+                autoComplete="off"
+              />
+            </div>
             {error && (
               <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
                 <AlertCircle size={14} />
@@ -428,13 +459,16 @@ function LoginScreen({ onLogin }: { onLogin: (data: PortalData) => void }) {
             ) : (
               <>
                 <Search size={18} />
-                Consultar
+                Entrar
               </>
             )}
           </button>
         </form>
 
         <p className="text-xs text-slate-400 text-center mt-6">
+          Senha padrão: últimos 4 dígitos do CPF.
+        </p>
+        <p className="text-xs text-slate-400 text-center mt-1">
           Seus dados são protegidos conforme a LGPD.
         </p>
       </div>

@@ -253,6 +253,11 @@ export type ServiceWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Service"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Service"> | Date | string
   sales?: Prisma.ServiceSaleListRelationFilter
+  saleItems?: Prisma.SaleItemListRelationFilter
+  planUsages?: Prisma.PlanUsageListRelationFilter
+  deathRecordServices?: Prisma.DeathRecordServiceListRelationFilter
+  commissionRules?: Prisma.CommissionRuleListRelationFilter
+  budgetItems?: Prisma.BudgetItemListRelationFilter
 }
 
 export type ServiceOrderByWithRelationInput = {
@@ -266,6 +271,11 @@ export type ServiceOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sales?: Prisma.ServiceSaleOrderByRelationAggregateInput
+  saleItems?: Prisma.SaleItemOrderByRelationAggregateInput
+  planUsages?: Prisma.PlanUsageOrderByRelationAggregateInput
+  deathRecordServices?: Prisma.DeathRecordServiceOrderByRelationAggregateInput
+  commissionRules?: Prisma.CommissionRuleOrderByRelationAggregateInput
+  budgetItems?: Prisma.BudgetItemOrderByRelationAggregateInput
 }
 
 export type ServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -282,6 +292,11 @@ export type ServiceWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Service"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Service"> | Date | string
   sales?: Prisma.ServiceSaleListRelationFilter
+  saleItems?: Prisma.SaleItemListRelationFilter
+  planUsages?: Prisma.PlanUsageListRelationFilter
+  deathRecordServices?: Prisma.DeathRecordServiceListRelationFilter
+  commissionRules?: Prisma.CommissionRuleListRelationFilter
+  budgetItems?: Prisma.BudgetItemListRelationFilter
 }, "id">
 
 export type ServiceOrderByWithAggregationInput = {
@@ -327,6 +342,11 @@ export type ServiceCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sales?: Prisma.ServiceSaleCreateNestedManyWithoutServiceInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutServiceInput
 }
 
 export type ServiceUncheckedCreateInput = {
@@ -340,6 +360,11 @@ export type ServiceUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutServiceInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutServiceInput
 }
 
 export type ServiceUpdateInput = {
@@ -353,6 +378,11 @@ export type ServiceUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sales?: Prisma.ServiceSaleUpdateManyWithoutServiceNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateInput = {
@@ -366,6 +396,11 @@ export type ServiceUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutServiceNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutServiceNestedInput
 }
 
 export type ServiceCreateManyInput = {
@@ -455,6 +490,11 @@ export type ServiceScalarRelationFilter = {
   isNot?: Prisma.ServiceWhereInput
 }
 
+export type ServiceNullableScalarRelationFilter = {
+  is?: Prisma.ServiceWhereInput | null
+  isNot?: Prisma.ServiceWhereInput | null
+}
+
 export type ServiceCreateNestedOneWithoutSalesInput = {
   create?: Prisma.XOR<Prisma.ServiceCreateWithoutSalesInput, Prisma.ServiceUncheckedCreateWithoutSalesInput>
   connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutSalesInput
@@ -469,6 +509,86 @@ export type ServiceUpdateOneRequiredWithoutSalesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutSalesInput, Prisma.ServiceUpdateWithoutSalesInput>, Prisma.ServiceUncheckedUpdateWithoutSalesInput>
 }
 
+export type ServiceCreateNestedOneWithoutSaleItemsInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutSaleItemsInput, Prisma.ServiceUncheckedCreateWithoutSaleItemsInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutSaleItemsInput
+  connect?: Prisma.ServiceWhereUniqueInput
+}
+
+export type ServiceUpdateOneWithoutSaleItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutSaleItemsInput, Prisma.ServiceUncheckedCreateWithoutSaleItemsInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutSaleItemsInput
+  upsert?: Prisma.ServiceUpsertWithoutSaleItemsInput
+  disconnect?: Prisma.ServiceWhereInput | boolean
+  delete?: Prisma.ServiceWhereInput | boolean
+  connect?: Prisma.ServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutSaleItemsInput, Prisma.ServiceUpdateWithoutSaleItemsInput>, Prisma.ServiceUncheckedUpdateWithoutSaleItemsInput>
+}
+
+export type ServiceCreateNestedOneWithoutPlanUsagesInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutPlanUsagesInput, Prisma.ServiceUncheckedCreateWithoutPlanUsagesInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutPlanUsagesInput
+  connect?: Prisma.ServiceWhereUniqueInput
+}
+
+export type ServiceUpdateOneWithoutPlanUsagesNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutPlanUsagesInput, Prisma.ServiceUncheckedCreateWithoutPlanUsagesInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutPlanUsagesInput
+  upsert?: Prisma.ServiceUpsertWithoutPlanUsagesInput
+  disconnect?: Prisma.ServiceWhereInput | boolean
+  delete?: Prisma.ServiceWhereInput | boolean
+  connect?: Prisma.ServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutPlanUsagesInput, Prisma.ServiceUpdateWithoutPlanUsagesInput>, Prisma.ServiceUncheckedUpdateWithoutPlanUsagesInput>
+}
+
+export type ServiceCreateNestedOneWithoutDeathRecordServicesInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutDeathRecordServicesInput, Prisma.ServiceUncheckedCreateWithoutDeathRecordServicesInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutDeathRecordServicesInput
+  connect?: Prisma.ServiceWhereUniqueInput
+}
+
+export type ServiceUpdateOneWithoutDeathRecordServicesNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutDeathRecordServicesInput, Prisma.ServiceUncheckedCreateWithoutDeathRecordServicesInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutDeathRecordServicesInput
+  upsert?: Prisma.ServiceUpsertWithoutDeathRecordServicesInput
+  disconnect?: Prisma.ServiceWhereInput | boolean
+  delete?: Prisma.ServiceWhereInput | boolean
+  connect?: Prisma.ServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutDeathRecordServicesInput, Prisma.ServiceUpdateWithoutDeathRecordServicesInput>, Prisma.ServiceUncheckedUpdateWithoutDeathRecordServicesInput>
+}
+
+export type ServiceCreateNestedOneWithoutCommissionRulesInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutCommissionRulesInput, Prisma.ServiceUncheckedCreateWithoutCommissionRulesInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutCommissionRulesInput
+  connect?: Prisma.ServiceWhereUniqueInput
+}
+
+export type ServiceUpdateOneWithoutCommissionRulesNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutCommissionRulesInput, Prisma.ServiceUncheckedCreateWithoutCommissionRulesInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutCommissionRulesInput
+  upsert?: Prisma.ServiceUpsertWithoutCommissionRulesInput
+  disconnect?: Prisma.ServiceWhereInput | boolean
+  delete?: Prisma.ServiceWhereInput | boolean
+  connect?: Prisma.ServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutCommissionRulesInput, Prisma.ServiceUpdateWithoutCommissionRulesInput>, Prisma.ServiceUncheckedUpdateWithoutCommissionRulesInput>
+}
+
+export type ServiceCreateNestedOneWithoutBudgetItemsInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutBudgetItemsInput, Prisma.ServiceUncheckedCreateWithoutBudgetItemsInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutBudgetItemsInput
+  connect?: Prisma.ServiceWhereUniqueInput
+}
+
+export type ServiceUpdateOneWithoutBudgetItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutBudgetItemsInput, Prisma.ServiceUncheckedCreateWithoutBudgetItemsInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutBudgetItemsInput
+  upsert?: Prisma.ServiceUpsertWithoutBudgetItemsInput
+  disconnect?: Prisma.ServiceWhereInput | boolean
+  delete?: Prisma.ServiceWhereInput | boolean
+  connect?: Prisma.ServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutBudgetItemsInput, Prisma.ServiceUpdateWithoutBudgetItemsInput>, Prisma.ServiceUncheckedUpdateWithoutBudgetItemsInput>
+}
+
 export type ServiceCreateWithoutSalesInput = {
   id?: string
   name: string
@@ -479,6 +599,11 @@ export type ServiceCreateWithoutSalesInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutSalesInput = {
@@ -491,6 +616,11 @@ export type ServiceUncheckedCreateWithoutSalesInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutSalesInput = {
@@ -519,6 +649,11 @@ export type ServiceUpdateWithoutSalesInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saleItems?: Prisma.SaleItemUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutSalesInput = {
@@ -531,6 +666,431 @@ export type ServiceUncheckedUpdateWithoutSalesInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceCreateWithoutSaleItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  price: number
+  cost?: number | null
+  category?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.ServiceSaleCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceUncheckedCreateWithoutSaleItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  price: number
+  cost?: number | null
+  category?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceCreateOrConnectWithoutSaleItemsInput = {
+  where: Prisma.ServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutSaleItemsInput, Prisma.ServiceUncheckedCreateWithoutSaleItemsInput>
+}
+
+export type ServiceUpsertWithoutSaleItemsInput = {
+  update: Prisma.XOR<Prisma.ServiceUpdateWithoutSaleItemsInput, Prisma.ServiceUncheckedUpdateWithoutSaleItemsInput>
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutSaleItemsInput, Prisma.ServiceUncheckedCreateWithoutSaleItemsInput>
+  where?: Prisma.ServiceWhereInput
+}
+
+export type ServiceUpdateToOneWithWhereWithoutSaleItemsInput = {
+  where?: Prisma.ServiceWhereInput
+  data: Prisma.XOR<Prisma.ServiceUpdateWithoutSaleItemsInput, Prisma.ServiceUncheckedUpdateWithoutSaleItemsInput>
+}
+
+export type ServiceUpdateWithoutSaleItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.ServiceSaleUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceUncheckedUpdateWithoutSaleItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceCreateWithoutPlanUsagesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  price: number
+  cost?: number | null
+  category?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.ServiceSaleCreateNestedManyWithoutServiceInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceUncheckedCreateWithoutPlanUsagesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  price: number
+  cost?: number | null
+  category?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutServiceInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceCreateOrConnectWithoutPlanUsagesInput = {
+  where: Prisma.ServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutPlanUsagesInput, Prisma.ServiceUncheckedCreateWithoutPlanUsagesInput>
+}
+
+export type ServiceUpsertWithoutPlanUsagesInput = {
+  update: Prisma.XOR<Prisma.ServiceUpdateWithoutPlanUsagesInput, Prisma.ServiceUncheckedUpdateWithoutPlanUsagesInput>
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutPlanUsagesInput, Prisma.ServiceUncheckedCreateWithoutPlanUsagesInput>
+  where?: Prisma.ServiceWhereInput
+}
+
+export type ServiceUpdateToOneWithWhereWithoutPlanUsagesInput = {
+  where?: Prisma.ServiceWhereInput
+  data: Prisma.XOR<Prisma.ServiceUpdateWithoutPlanUsagesInput, Prisma.ServiceUncheckedUpdateWithoutPlanUsagesInput>
+}
+
+export type ServiceUpdateWithoutPlanUsagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.ServiceSaleUpdateManyWithoutServiceNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceUncheckedUpdateWithoutPlanUsagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutServiceNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceCreateWithoutDeathRecordServicesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  price: number
+  cost?: number | null
+  category?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.ServiceSaleCreateNestedManyWithoutServiceInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceUncheckedCreateWithoutDeathRecordServicesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  price: number
+  cost?: number | null
+  category?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutServiceInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceCreateOrConnectWithoutDeathRecordServicesInput = {
+  where: Prisma.ServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutDeathRecordServicesInput, Prisma.ServiceUncheckedCreateWithoutDeathRecordServicesInput>
+}
+
+export type ServiceUpsertWithoutDeathRecordServicesInput = {
+  update: Prisma.XOR<Prisma.ServiceUpdateWithoutDeathRecordServicesInput, Prisma.ServiceUncheckedUpdateWithoutDeathRecordServicesInput>
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutDeathRecordServicesInput, Prisma.ServiceUncheckedCreateWithoutDeathRecordServicesInput>
+  where?: Prisma.ServiceWhereInput
+}
+
+export type ServiceUpdateToOneWithWhereWithoutDeathRecordServicesInput = {
+  where?: Prisma.ServiceWhereInput
+  data: Prisma.XOR<Prisma.ServiceUpdateWithoutDeathRecordServicesInput, Prisma.ServiceUncheckedUpdateWithoutDeathRecordServicesInput>
+}
+
+export type ServiceUpdateWithoutDeathRecordServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.ServiceSaleUpdateManyWithoutServiceNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceUncheckedUpdateWithoutDeathRecordServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutServiceNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceCreateWithoutCommissionRulesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  price: number
+  cost?: number | null
+  category?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.ServiceSaleCreateNestedManyWithoutServiceInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceUncheckedCreateWithoutCommissionRulesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  price: number
+  cost?: number | null
+  category?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutServiceInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutServiceInput
+  budgetItems?: Prisma.BudgetItemUncheckedCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceCreateOrConnectWithoutCommissionRulesInput = {
+  where: Prisma.ServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutCommissionRulesInput, Prisma.ServiceUncheckedCreateWithoutCommissionRulesInput>
+}
+
+export type ServiceUpsertWithoutCommissionRulesInput = {
+  update: Prisma.XOR<Prisma.ServiceUpdateWithoutCommissionRulesInput, Prisma.ServiceUncheckedUpdateWithoutCommissionRulesInput>
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutCommissionRulesInput, Prisma.ServiceUncheckedCreateWithoutCommissionRulesInput>
+  where?: Prisma.ServiceWhereInput
+}
+
+export type ServiceUpdateToOneWithWhereWithoutCommissionRulesInput = {
+  where?: Prisma.ServiceWhereInput
+  data: Prisma.XOR<Prisma.ServiceUpdateWithoutCommissionRulesInput, Prisma.ServiceUncheckedUpdateWithoutCommissionRulesInput>
+}
+
+export type ServiceUpdateWithoutCommissionRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.ServiceSaleUpdateManyWithoutServiceNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceUncheckedUpdateWithoutCommissionRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutServiceNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutServiceNestedInput
+  budgetItems?: Prisma.BudgetItemUncheckedUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceCreateWithoutBudgetItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  price: number
+  cost?: number | null
+  category?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.ServiceSaleCreateNestedManyWithoutServiceInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceUncheckedCreateWithoutBudgetItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  price: number
+  cost?: number | null
+  category?: string | null
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.ServiceSaleUncheckedCreateNestedManyWithoutServiceInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutServiceInput
+  planUsages?: Prisma.PlanUsageUncheckedCreateNestedManyWithoutServiceInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedCreateNestedManyWithoutServiceInput
+  commissionRules?: Prisma.CommissionRuleUncheckedCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceCreateOrConnectWithoutBudgetItemsInput = {
+  where: Prisma.ServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutBudgetItemsInput, Prisma.ServiceUncheckedCreateWithoutBudgetItemsInput>
+}
+
+export type ServiceUpsertWithoutBudgetItemsInput = {
+  update: Prisma.XOR<Prisma.ServiceUpdateWithoutBudgetItemsInput, Prisma.ServiceUncheckedUpdateWithoutBudgetItemsInput>
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutBudgetItemsInput, Prisma.ServiceUncheckedCreateWithoutBudgetItemsInput>
+  where?: Prisma.ServiceWhereInput
+}
+
+export type ServiceUpdateToOneWithWhereWithoutBudgetItemsInput = {
+  where?: Prisma.ServiceWhereInput
+  data: Prisma.XOR<Prisma.ServiceUpdateWithoutBudgetItemsInput, Prisma.ServiceUncheckedUpdateWithoutBudgetItemsInput>
+}
+
+export type ServiceUpdateWithoutBudgetItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.ServiceSaleUpdateManyWithoutServiceNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceUncheckedUpdateWithoutBudgetItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  cost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.ServiceSaleUncheckedUpdateManyWithoutServiceNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutServiceNestedInput
+  planUsages?: Prisma.PlanUsageUncheckedUpdateManyWithoutServiceNestedInput
+  deathRecordServices?: Prisma.DeathRecordServiceUncheckedUpdateManyWithoutServiceNestedInput
+  commissionRules?: Prisma.CommissionRuleUncheckedUpdateManyWithoutServiceNestedInput
 }
 
 
@@ -540,10 +1100,20 @@ export type ServiceUncheckedUpdateWithoutSalesInput = {
 
 export type ServiceCountOutputType = {
   sales: number
+  saleItems: number
+  planUsages: number
+  deathRecordServices: number
+  commissionRules: number
+  budgetItems: number
 }
 
 export type ServiceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sales?: boolean | ServiceCountOutputTypeCountSalesArgs
+  saleItems?: boolean | ServiceCountOutputTypeCountSaleItemsArgs
+  planUsages?: boolean | ServiceCountOutputTypeCountPlanUsagesArgs
+  deathRecordServices?: boolean | ServiceCountOutputTypeCountDeathRecordServicesArgs
+  commissionRules?: boolean | ServiceCountOutputTypeCountCommissionRulesArgs
+  budgetItems?: boolean | ServiceCountOutputTypeCountBudgetItemsArgs
 }
 
 /**
@@ -563,6 +1133,41 @@ export type ServiceCountOutputTypeCountSalesArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.ServiceSaleWhereInput
 }
 
+/**
+ * ServiceCountOutputType without action
+ */
+export type ServiceCountOutputTypeCountSaleItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SaleItemWhereInput
+}
+
+/**
+ * ServiceCountOutputType without action
+ */
+export type ServiceCountOutputTypeCountPlanUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlanUsageWhereInput
+}
+
+/**
+ * ServiceCountOutputType without action
+ */
+export type ServiceCountOutputTypeCountDeathRecordServicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeathRecordServiceWhereInput
+}
+
+/**
+ * ServiceCountOutputType without action
+ */
+export type ServiceCountOutputTypeCountCommissionRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommissionRuleWhereInput
+}
+
+/**
+ * ServiceCountOutputType without action
+ */
+export type ServiceCountOutputTypeCountBudgetItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BudgetItemWhereInput
+}
+
 
 export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -575,6 +1180,11 @@ export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   sales?: boolean | Prisma.Service$salesArgs<ExtArgs>
+  saleItems?: boolean | Prisma.Service$saleItemsArgs<ExtArgs>
+  planUsages?: boolean | Prisma.Service$planUsagesArgs<ExtArgs>
+  deathRecordServices?: boolean | Prisma.Service$deathRecordServicesArgs<ExtArgs>
+  commissionRules?: boolean | Prisma.Service$commissionRulesArgs<ExtArgs>
+  budgetItems?: boolean | Prisma.Service$budgetItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["service"]>
 
@@ -617,6 +1227,11 @@ export type ServiceSelectScalar = {
 export type ServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "cost" | "category" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["service"]>
 export type ServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sales?: boolean | Prisma.Service$salesArgs<ExtArgs>
+  saleItems?: boolean | Prisma.Service$saleItemsArgs<ExtArgs>
+  planUsages?: boolean | Prisma.Service$planUsagesArgs<ExtArgs>
+  deathRecordServices?: boolean | Prisma.Service$deathRecordServicesArgs<ExtArgs>
+  commissionRules?: boolean | Prisma.Service$commissionRulesArgs<ExtArgs>
+  budgetItems?: boolean | Prisma.Service$budgetItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ServiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -626,6 +1241,11 @@ export type $ServicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Service"
   objects: {
     sales: Prisma.$ServiceSalePayload<ExtArgs>[]
+    saleItems: Prisma.$SaleItemPayload<ExtArgs>[]
+    planUsages: Prisma.$PlanUsagePayload<ExtArgs>[]
+    deathRecordServices: Prisma.$DeathRecordServicePayload<ExtArgs>[]
+    commissionRules: Prisma.$CommissionRulePayload<ExtArgs>[]
+    budgetItems: Prisma.$BudgetItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1032,6 +1652,11 @@ readonly fields: ServiceFieldRefs;
 export interface Prisma__ServiceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   sales<T extends Prisma.Service$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServiceSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  saleItems<T extends Prisma.Service$saleItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$saleItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  planUsages<T extends Prisma.Service$planUsagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$planUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deathRecordServices<T extends Prisma.Service$deathRecordServicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$deathRecordServicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeathRecordServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  commissionRules<T extends Prisma.Service$commissionRulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$commissionRulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommissionRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  budgetItems<T extends Prisma.Service$budgetItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$budgetItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1484,6 +2109,126 @@ export type Service$salesArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.ServiceSaleScalarFieldEnum | Prisma.ServiceSaleScalarFieldEnum[]
+}
+
+/**
+ * Service.saleItems
+ */
+export type Service$saleItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SaleItem
+   */
+  select?: Prisma.SaleItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SaleItem
+   */
+  omit?: Prisma.SaleItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SaleItemInclude<ExtArgs> | null
+  where?: Prisma.SaleItemWhereInput
+  orderBy?: Prisma.SaleItemOrderByWithRelationInput | Prisma.SaleItemOrderByWithRelationInput[]
+  cursor?: Prisma.SaleItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SaleItemScalarFieldEnum | Prisma.SaleItemScalarFieldEnum[]
+}
+
+/**
+ * Service.planUsages
+ */
+export type Service$planUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanUsage
+   */
+  select?: Prisma.PlanUsageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlanUsage
+   */
+  omit?: Prisma.PlanUsageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanUsageInclude<ExtArgs> | null
+  where?: Prisma.PlanUsageWhereInput
+  orderBy?: Prisma.PlanUsageOrderByWithRelationInput | Prisma.PlanUsageOrderByWithRelationInput[]
+  cursor?: Prisma.PlanUsageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlanUsageScalarFieldEnum | Prisma.PlanUsageScalarFieldEnum[]
+}
+
+/**
+ * Service.deathRecordServices
+ */
+export type Service$deathRecordServicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DeathRecordService
+   */
+  select?: Prisma.DeathRecordServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DeathRecordService
+   */
+  omit?: Prisma.DeathRecordServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeathRecordServiceInclude<ExtArgs> | null
+  where?: Prisma.DeathRecordServiceWhereInput
+  orderBy?: Prisma.DeathRecordServiceOrderByWithRelationInput | Prisma.DeathRecordServiceOrderByWithRelationInput[]
+  cursor?: Prisma.DeathRecordServiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeathRecordServiceScalarFieldEnum | Prisma.DeathRecordServiceScalarFieldEnum[]
+}
+
+/**
+ * Service.commissionRules
+ */
+export type Service$commissionRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommissionRule
+   */
+  select?: Prisma.CommissionRuleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommissionRule
+   */
+  omit?: Prisma.CommissionRuleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommissionRuleInclude<ExtArgs> | null
+  where?: Prisma.CommissionRuleWhereInput
+  orderBy?: Prisma.CommissionRuleOrderByWithRelationInput | Prisma.CommissionRuleOrderByWithRelationInput[]
+  cursor?: Prisma.CommissionRuleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommissionRuleScalarFieldEnum | Prisma.CommissionRuleScalarFieldEnum[]
+}
+
+/**
+ * Service.budgetItems
+ */
+export type Service$budgetItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BudgetItem
+   */
+  select?: Prisma.BudgetItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BudgetItem
+   */
+  omit?: Prisma.BudgetItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BudgetItemInclude<ExtArgs> | null
+  where?: Prisma.BudgetItemWhereInput
+  orderBy?: Prisma.BudgetItemOrderByWithRelationInput | Prisma.BudgetItemOrderByWithRelationInput[]
+  cursor?: Prisma.BudgetItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BudgetItemScalarFieldEnum | Prisma.BudgetItemScalarFieldEnum[]
 }
 
 /**

@@ -14,6 +14,7 @@ import {
   RefreshCw,
   ChevronLeft,
   ChevronRight,
+  ArrowRightLeft,
 } from "lucide-react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -34,15 +35,25 @@ interface Product {
   _count: { movements: number };
 }
 
+interface CreatedBy {
+  name: string | null;
+}
+
 interface StockMovement {
   id: string;
   productId: string;
   type: "ENTRADA" | "SAIDA" | "AJUSTE";
   quantity: number;
+  balanceBefore: number;
+  balanceAfter: number;
   reason: string | null;
   reference: string | null;
   unitCost: number | null;
-  createdBy: string | null;
+  averageCost: number | null;
+  sourceId: string | null;
+  sourceType: string | null;
+  location: string | null;
+  createdBy: CreatedBy | null;
   createdAt: string;
 }
 
@@ -114,6 +125,7 @@ function MovimentacaoModal({
   const [reason, setReason] = useState("");
   const [reference, setReference] = useState("");
   const [unitCost, setUnitCost] = useState("");
+  const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -121,8 +133,18 @@ function MovimentacaoModal({
     e.preventDefault();
     setError("");
     const qty = parseInt(quantity);
-    if (!qty || qty <= 0) {
-      setError("Quantidade deve ser maior que zero.");
+    if (isNaN(qty) || qty === 0) {
+      setError("Quantidade deve ser diferente de zero.");
+      return;
+    }
+
+    // Para ENTRADA/SAIDA, quantity deve ser positiva
+    // Para AJUSTE, quantity pode ser positiva (aumento) ou negativa (redução)
+    const absQty = Math.abs(qty);
+    const movQty = type === "AJUSTE" ? qty : absQty;
+
+    if ((type === "ENTRADA" || type === "SAIDA") && qty <= 0) {
+      setError("Quantidade deve ser maior que zero para entrada ou saída.");
       return;
     }
 
@@ -134,10 +156,11 @@ function MovimentacaoModal({
         body: JSON.stringify({
           productId: product.id,
           type,
-          quantity: qty,
+          quantity: movQty,
           reason: reason || null,
           reference: reference || null,
           unitCost: unitCost ? parseFloat(unitCost) : null,
+          location: location || null,
         }),
       });
       const data = await res.json();
@@ -205,23 +228,22 @@ function MovimentacaoModal({
           <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-600">
             Estoque atual: <strong>{product.stock}</strong> unidades
             {type === "AJUSTE" && (
-              <span className="ml-2 text-yellow-700">(ajuste define valor absoluto)</span>
+              <span className="ml-2 text-yellow-700">(use + ou - para aumentar/diminuir)</span>
             )}
           </div>
 
           {/* Quantidade */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {type === "AJUSTE" ? "Nova Quantidade Total" : "Quantidade"}
+              {type === "AJUSTE" ? "Quantidade do Ajuste (+ ou -)" : "Quantidade"}
             </label>
             <input
               type="number"
-              min="1"
               required
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="0"
+              placeholder={type === "AJUSTE" ? "Ex: +10 ou -5" : "0"}
             />
           </div>
 
@@ -254,6 +276,20 @@ function MovimentacaoModal({
             />
           </div>
 
+          {/* Local */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Local <span className="text-gray-400">(opcional)</span>
+            </label>
+            <input
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Loja, Almoxarifado, Capela..."
+            />
+          </div>
+
           {/* Custo unitário (só para entrada) */}
           {type === "ENTRADA" && (
             <div>
@@ -269,6 +305,9 @@ function MovimentacaoModal({
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="0,00"
               />
+              <p className="text-xs text-gray-400 mt-1">
+                Será calculado o custo médio ponderado automaticamente.
+              </p>
             </div>
           )}
 
@@ -340,12 +379,17 @@ function HistoricoModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="p-5 border-b border-gray-200 flex items-center justify-between">
           <div>
             <h2 className="font-bold text-lg text-gray-900">Histórico de Movimentações</h2>
-            <p className="text-sm text-gray-500">{product.name} · Estoque atual: {product.stock}</p>
+            <p className="text-sm text-gray-500">
+              {product.name} · Estoque atual: {product.stock}
+              {product.cost && (
+                <span className="ml-2 text-gray-400">· Custo médio: {formatCurrency(product.cost)}</span>
+              )}
+            </p>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X size={22} />
@@ -395,31 +439,43 @@ function HistoricoModal({
             <table className="w-full text-sm">
               <thead className="bg-gray-50 sticky top-0">
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Data</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Tipo</th>
-                  <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">Qtd</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Motivo</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Referência</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Quem</th>
+                  <th className="text-left px-3 py-3 text-xs font-medium text-gray-500 uppercase">Data</th>
+                  <th className="text-left px-3 py-3 text-xs font-medium text-gray-500 uppercase">Tipo</th>
+                  <th className="text-right px-3 py-3 text-xs font-medium text-gray-500 uppercase">Qtd</th>
+                  <th className="text-center px-3 py-3 text-xs font-medium text-gray-500 uppercase">Saldo</th>
+                  <th className="text-left px-3 py-3 text-xs font-medium text-gray-500 uppercase">Motivo</th>
+                  <th className="text-left px-3 py-3 text-xs font-medium text-gray-500 uppercase">Ref</th>
+                  <th className="text-right px-3 py-3 text-xs font-medium text-gray-500 uppercase">Custo Médio</th>
+                  <th className="text-left px-3 py-3 text-xs font-medium text-gray-500 uppercase">Quem</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {movements.map((m) => (
                   <tr key={m.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{formatDate(m.createdAt)}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-3 py-3 text-gray-600 whitespace-nowrap text-xs">{formatDate(m.createdAt)}</td>
+                    <td className="px-3 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${MOV_CLASSES[m.type]}`}>
                         {m.type}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-medium">
+                    <td className="px-3 py-3 text-right font-medium">
                       <span className={m.type === "ENTRADA" ? "text-green-700" : m.type === "SAIDA" ? "text-red-700" : "text-yellow-700"}>
-                        {m.type === "SAIDA" ? "-" : "+"}{m.quantity}
+                        {m.type === "SAIDA" ? "-" : m.type === "ENTRADA" ? "+" : ""}{m.quantity}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-600">{m.reason ?? "—"}</td>
-                    <td className="px-4 py-3 text-gray-500">{m.reference ?? "—"}</td>
-                    <td className="px-4 py-3 text-gray-500">{m.createdBy ?? "—"}</td>
+                    <td className="px-3 py-3 text-center">
+                      <div className="flex items-center justify-center gap-1 text-xs text-gray-500">
+                        <span>{m.balanceBefore}</span>
+                        <ArrowRightLeft size={10} className="text-gray-400" />
+                        <span className="font-medium text-gray-700">{m.balanceAfter}</span>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3 text-gray-600">{m.reason ?? "—"}</td>
+                    <td className="px-3 py-3 text-gray-500 text-xs">{m.reference ?? "—"}</td>
+                    <td className="px-3 py-3 text-right text-gray-600 text-xs">
+                      {m.averageCost ? formatCurrency(m.averageCost) : "—"}
+                    </td>
+                    <td className="px-3 py-3 text-gray-500 text-xs">{m.createdBy?.name ?? "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -603,6 +659,7 @@ export default function EstoquePage() {
                   <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">Estoque</th>
                   <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">Mínimo</th>
                   <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
+                  <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">Custo Médio</th>
                   <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">Valor Estoque</th>
                   <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">Ações</th>
                 </tr>
@@ -641,6 +698,9 @@ export default function EstoquePage() {
                         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_CLASSES[status]}`}>
                           {STATUS_LABEL[status]}
                         </span>
+                      </td>
+                      <td className="px-4 py-3 text-right text-gray-600 text-xs">
+                        {p.cost ? formatCurrency(p.cost) : "—"}
                       </td>
                       <td className="px-4 py-3 text-right text-gray-600">
                         {formatCurrency(valorEstoque)}

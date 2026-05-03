@@ -58,16 +58,62 @@ export default function RootLayout({
         <meta name="color-scheme" content="only light" />
         <link rel="icon" href="/logo-oficial.png" type="image/png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
         {/* iOS Splash Screens */}
+        <link
+          rel="apple-touch-startup-image"
+          href="/icon-512x512.png"
+          media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/icon-512x512.png"
+          media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/icon-512x512.png"
+          media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/icon-512x512.png"
+          media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/icon-512x512.png"
+          media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/icon-512x512.png"
+          media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/icon-512x512.png"
+          media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/icon-512x512.png"
+          media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+        />
+
+        {/* iOS / Safari PWA */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Posthumous" />
+
         {/* Android / Chrome */}
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="application-name" content="Posthumous" />
+
         {/* MS Tiles */}
         <meta name="msapplication-TileColor" content="#4a6fa5" />
         <meta name="msapplication-TileImage" content="/icon-192x192.png" />
+
         {/* Service Worker Registration */}
         <script
           dangerouslySetInnerHTML={{
@@ -83,7 +129,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-white text-gray-900" style={{ backgroundColor: "#ffffff", color: "#111827", colorScheme: "only light" }}>
+      <body
+        className="min-h-full flex flex-col bg-white text-gray-900"
+        style={{ backgroundColor: "#ffffff", color: "#111827", colorScheme: "only light" }}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>

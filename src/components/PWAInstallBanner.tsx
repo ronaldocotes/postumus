@@ -14,8 +14,11 @@ export default function PWAInstallBanner() {
   const [showBanner, setShowBanner] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
     // Don't show if already installed as PWA
     const isStandalone =
       window.matchMedia("(display-mode: standalone)").matches ||
@@ -68,12 +71,12 @@ export default function PWAInstallBanner() {
     localStorage.setItem("pwa-banner-dismissed", Date.now().toString());
   };
 
-  if (!showBanner || dismissed) return null;
+  if (!mounted || !showBanner || dismissed) return null;
 
   return (
     <div
       className="fixed bottom-0 left-0 right-0 z-50 p-4 animate-slide-up"
-      style={{ maxWidth: "100vw" }}
+      style={{ maxWidth: "100vw", paddingBottom: "max(16px, env(safe-area-inset-bottom))" }}
     >
       <div
         className="bg-white rounded-2xl shadow-xl border border-slate-200 p-4 flex items-center gap-3"
